@@ -3,11 +3,14 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
+var mongoose = require('mongoose');
+const uri = 'mongodb://localhost:27017/products';
 
 // var indexRouter = require('./routes/index');
 // var usersRouter = require('./routes/users');
 var apiRouter = require('./api/routes/products');
-
+mongoose.Promise = global.Promise;
+mongoose.connect(uri);
 var app = express();
 
 // view engine setup
