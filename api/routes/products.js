@@ -1,15 +1,25 @@
 var express = require('express');
 var router = express.Router();
-// var mongoose = require('mongoose');
 var Product = require('../models/productsModel');
 
 router.get('/products', function(req, res) {
-    Product.find().exec()
+    Product.find().select('name price _id').exec()
     .then(docs => {
-            res.json({
-                mssg: 'Products list, Index action',
-                products: docs
-            });
+        const response = {
+            count: docs.length,
+            products: docs.map(doc => {
+                return {
+                    _id : doc._id,
+                    name: doc.name,
+                    price : doc.price,
+                    request : {
+                        type: 'GET',
+                        url: "http://localhost:3000/api/v1/products/"+doc._id
+                    }
+                }
+            })
+        }
+            res.json(response);
         }
     )
     .catch(err => {
@@ -25,8 +35,16 @@ router.post('/products', function(req, res) {
     .save()
     .then(result => {
             res.json({
-                message:'Create product, store action',
-                product: result
+                message:'Product created successfuly',
+                product: {
+                    _id : result._id,
+                    name : result.name,
+                    price : result.price,
+                    request : {
+                        type: 'GET',
+                        url: 'http://localhost:3000/api/v1/products/'+result._id
+                    }       
+                }
             });
         }
     )
@@ -43,6 +61,7 @@ router.post('/products', function(req, res) {
 router.get('/products/:id', function(req, res) {
     const id = req.params.id;
     Product.findById(id)
+    .select('name price _id')
     .exec()
     .then(doc => {
         if (doc) {
@@ -58,17 +77,19 @@ router.get('/products/:id', function(req, res) {
         }
     );
 });
-
 router.post('/products/:id', function(req, res) {
     let body = req.body;
-    console.log(body);
-    Product.update({_id: req.params.id}, {body})
+    let id = req.params.id;
+    Product.update({_id: id}, {$set: body })
     .exec()
     .then(
         result => res.status(200).json(
             {
                 message: "Product updated",
-                response: result
+                request: {
+                    type: 'GET',
+                    url : "http://localhost:3000/api/v1/products/"+id
+                }
             }
         )
     )
@@ -77,20 +98,17 @@ router.post('/products/:id', function(req, res) {
             {error:err}
         )
     )
-    res.json({
-        mssg: "update product, update action",
-        value : par
-    });
 });
 
 router.delete('/products/:id', function(req, res) {
     let id = req.params.id;
-    console.log(id);
     Product.deleteOne( {_id: id} )
     .exec() 
     .then(
         result => res.status(200).json({
-            response: result
+            response: {
+                message: "Successfuly deleted"
+            }
         })
     )
     .catch(
