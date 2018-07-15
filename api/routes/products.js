@@ -2,7 +2,7 @@ var express = require('express');
 var router = express.Router();
 var Product = require('../models/productsModel');
 
-router.get('/products', function(req, res) {
+router.get('/', function(req, res) {
     Product.find().select('name price _id').exec()
     .then(docs => {
         const response = {
@@ -29,7 +29,7 @@ router.get('/products', function(req, res) {
     });
 });
 
-router.post('/products', function(req, res) {
+router.post('/', function(req, res) {
     const product = new Product(req.body);
     product
     .save()
@@ -58,7 +58,7 @@ router.post('/products', function(req, res) {
     
 });
 
-router.get('/products/:id', function(req, res) {
+router.get('/:id', function(req, res) {
     const id = req.params.id;
     Product.findById(id)
     .select('name price _id')
@@ -77,7 +77,7 @@ router.get('/products/:id', function(req, res) {
         }
     );
 });
-router.post('/products/:id', function(req, res) {
+router.post('/:id', function(req, res) {
     let body = req.body;
     let id = req.params.id;
     Product.update({_id: id}, {$set: body })
@@ -100,7 +100,7 @@ router.post('/products/:id', function(req, res) {
     )
 });
 
-router.delete('/products/:id', function(req, res) {
+router.delete('/:id', function(req, res) {
     let id = req.params.id;
     Product.deleteOne( {_id: id} )
     .exec() 
