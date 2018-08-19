@@ -1,4 +1,5 @@
 import React, {Component} from 'react';
+import { Paper, InputLabel, Button, Input, FormControl, Typography } from '@material-ui/core';
 
 export default class Register extends Component {
     constructor(props) {
@@ -35,25 +36,42 @@ export default class Register extends Component {
         console.log(this.state);
     }
     render() {
-        let ret= (
+        return (
             <div>
                 <form onSubmit = {this.registerSubmit}>
-                    <label>
-                        Name:
-                    </label>
-                    <input type='text' value = {this.state.name} onChange = {this.handleNameChange}/>
-                    <label>
-                        Email:
-                        <input type= 'email' value= {this.state.email} onChange = {this.handleEmailChange} />
-                    </label>
-                    <label>
-                        Password:
-                        <input type= 'password' value= {this.state.password} onChange = {this.handlePasswordChange} />
-                    </label>
-                    <input type='submit'/>
+                    <Paper className = "entrypaper">
+                    <Typography variant='headline'>Register</Typography>
+                        <FormControl margin = 'normal' required fullWidth>
+                            <InputLabel htmlFor = 'name'>Name</InputLabel>
+                            <Input
+                                type='text'
+                                name='name'
+                                value = {this.state.name}
+                                onChange = {this.handleNameChange} />
+                        </FormControl>
+                            
+                        <FormControl margin = 'normal' required fullWidth>
+                            <InputLabel htmlFor = 'email'>Email</InputLabel>
+                            <Input
+                                type='email'
+                                name='email'
+                                value = {this.state.email}
+                                onChange = {this.handleEmailChange} />
+                        </FormControl>
+                        
+                        <FormControl margin = 'normal' required fullWidth>
+                            <InputLabel htmlFor = 'password'>Password</InputLabel>
+                            <Input
+                                type='password'
+                                name='password'
+                                value = {this.state.password}
+                                onChange = {this.handlePasswordChange} />
+                        </FormControl>
+                        
+                        <Button type = 'submit' color='primary' variant='raised' fullWidth>Register</Button>
+                    </Paper>
                 </form>
             </div>
         );
-        return ret;
     }
 };
