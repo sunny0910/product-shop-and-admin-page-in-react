@@ -5,7 +5,7 @@ var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 var mongoose = require('mongoose');
 const uri = 'mongodb://localhost:27017/products';
-process.env.JWT_KEY = '12345';
+require('dotenv').config();
 
 var productRouter = require('./api/routes/products');
 var userRouter = require('./api/routes/user');

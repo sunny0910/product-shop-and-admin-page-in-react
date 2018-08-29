@@ -13,29 +13,36 @@ router.post('/signup', function(req, res) {
                 message: 'Email exists'
             });
         } else {
-            bcrypt.hash(req.body.password, 10, (err, hash) => {
+            bcrypt.genSalt(parseInt(process.env.JWT_KEY), (err, salt) => {
                 if (err) {
                     return res.status(500).json({
                         error: err
                     });
-                } else {
-                    const user = new User(
-                        {
-                            email : req.body.email,
-                            password : hash
-                        });
-                    user.save()
-                    .then(result => {
-                        res.status(201).json({
-                            message: 'User created'
-                        });
-                    })
-                    .catch(err => {
+                }
+                bcrypt.hash(req.body.password, salt, (err, hash) => {
+                    if (err) {
                         return res.status(500).json({
                             error: err
                         });
-                    });
-                }
+                    } else {
+                        const user = new User(
+                            {
+                                email : req.body.email,
+                                password : hash
+                            });
+                        user.save()
+                        .then(result => {
+                            res.status(201).json({
+                                message: 'User created'
+                            });
+                        })
+                        .catch(err => {
+                            return res.status(500).json({
+                                error: err
+                            });
+                        });
+                    }
+                });
             });
         }
     })
@@ -68,18 +75,22 @@ router.post('/login', (req, res) => {
         .then((resp)=> {
             const token = jwt.sign({
                 email: user.email,
-                userId: user._id, 
+                userId: user._id,
             }, process.env.JWT_KEY,
             {
                 expiresIn: '1h'
             }
             );
-            
+
             if (resp) {
 
                 return res.status(200).json({
                     messsage: 'Auth succ',
                     token: token
+                });
+            } else {
+                return res.status(401).json({
+                    message: 'Auth failed'
                 });
             }
         })
