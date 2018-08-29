@@ -1,7 +1,10 @@
 var express = require('express');
 var router = express.Router();
 var Product = require('../models/productsModel');
+<<<<<<< HEAD
+=======
 const checkAuth = require('../middleware/check-auth');
+>>>>>>> 7dae87653edff582c521b84ff04d91623e2f4e8d
 
 router.get('/', function(req, res) {
     Product.find().select('name price _id').exec()
@@ -15,7 +18,11 @@ router.get('/', function(req, res) {
                     price : doc.price,
                     request : {
                         type: 'GET',
+<<<<<<< HEAD
                         url: "http://localhost:3000/api/v1/products/"+doc._id
+=======
+                        url: "http://localhost:3001/api/v1/products/"+doc._id
+>>>>>>> 7dae87653edff582c521b84ff04d91623e2f4e8d
                     }
                 }
             })
@@ -30,7 +37,11 @@ router.get('/', function(req, res) {
     });
 });
 
+<<<<<<< HEAD
+router.post('/', function(req, res) {
+=======
 router.post('/', checkAuth, function(req, res) {
+>>>>>>> 7dae87653edff582c521b84ff04d91623e2f4e8d
     const product = new Product(req.body);
     product
     .save()
@@ -43,8 +54,13 @@ router.post('/', checkAuth, function(req, res) {
                     price : result.price,
                     request : {
                         type: 'GET',
+<<<<<<< HEAD
+                        url: 'http://localhost:3000/api/v1/products/'+result._id
+                    }       
+=======
                         url: 'http://localhost:3001/api/v1/products/'+result._id
                     }
+>>>>>>> 7dae87653edff582c521b84ff04d91623e2f4e8d
                 }
             });
         }
@@ -56,7 +72,11 @@ router.post('/', checkAuth, function(req, res) {
             });
         }
     );
+<<<<<<< HEAD
+    
+=======
 
+>>>>>>> 7dae87653edff582c521b84ff04d91623e2f4e8d
 });
 
 router.get('/:id', function(req, res) {
@@ -78,7 +98,11 @@ router.get('/:id', function(req, res) {
         }
     );
 });
+<<<<<<< HEAD
+router.post('/:id', function(req, res) {
+=======
 router.post('/:id', checkAuth, function(req, res) {
+>>>>>>> 7dae87653edff582c521b84ff04d91623e2f4e8d
     let body = req.body;
     let id = req.params.id;
     Product.update({_id: id}, {$set: body })
@@ -89,7 +113,11 @@ router.post('/:id', checkAuth, function(req, res) {
                 message: "Product updated",
                 request: {
                     type: 'GET',
+<<<<<<< HEAD
+                    url : "http://localhost:3000/api/v1/products/"+id
+=======
                     url : "http://localhost:3001/api/v1/products/"+id
+>>>>>>> 7dae87653edff582c521b84ff04d91623e2f4e8d
                 }
             }
         )
@@ -101,10 +129,17 @@ router.post('/:id', checkAuth, function(req, res) {
     )
 });
 
+<<<<<<< HEAD
+router.delete('/:id', function(req, res) {
+    let id = req.params.id;
+    Product.deleteOne( {_id: id} )
+    .exec() 
+=======
 router.delete('/:id', checkAuth, function(req, res) {
     let id = req.params.id;
     Product.deleteOne( {_id: id} )
     .exec()
+>>>>>>> 7dae87653edff582c521b84ff04d91623e2f4e8d
     .then(
         result => res.status(200).json({
             response: {

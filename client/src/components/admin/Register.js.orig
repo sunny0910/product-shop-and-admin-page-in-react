@@ -1,5 +1,8 @@
 import React, {Component} from 'react';
+<<<<<<< HEAD
+=======
 import { Paper, InputLabel, Button, Input, FormControl, Typography } from '@material-ui/core';
+>>>>>>> 7dae87653edff582c521b84ff04d91623e2f4e8d
 
 export default class Register extends Component {
     constructor(props) {
@@ -36,6 +39,28 @@ export default class Register extends Component {
         console.log(this.state);
     }
     render() {
+<<<<<<< HEAD
+        let ret= (
+            <div>
+                <form onSubmit = {this.registerSubmit}>
+                    <label>
+                        Name:
+                    </label>
+                    <input type='text' value = {this.state.name} onChange = {this.handleNameChange}/>
+                    <label>
+                        Email:
+                        <input type= 'email' value= {this.state.email} onChange = {this.handleEmailChange} />
+                    </label>
+                    <label>
+                        Password:
+                        <input type= 'password' value= {this.state.password} onChange = {this.handlePasswordChange} />
+                    </label>
+                    <input type='submit'/>
+                </form>
+            </div>
+        );
+        return ret;
+=======
         return (
             <div>
                 <form onSubmit = {this.registerSubmit}>
@@ -73,5 +98,6 @@ export default class Register extends Component {
                 </form>
             </div>
         );
+>>>>>>> 7dae87653edff582c521b84ff04d91623e2f4e8d
     }
 };

@@ -1,6 +1,9 @@
 import React, {Component} from 'react';
+<<<<<<< HEAD
+=======
 import { Paper, Avatar, FormControl, InputLabel, Input, Button, Typography } from '@material-ui/core';
 import Person from '@material-ui/icons/Person';
+>>>>>>> 7dae87653edff582c521b84ff04d91623e2f4e8d
 
 class Login extends Component
 {
@@ -31,6 +34,24 @@ class Login extends Component
     }
 
     render() {
+<<<<<<< HEAD
+        let ret = (
+            <div className = 'login'>
+                <form onSubmit= {this.loginSubmit}>
+                    <label>
+                        UserName:
+                    </label>
+                        <input type='text' name='username' value={this.state.username} onChange={this.handleUsernameChange}/>
+                    <label>
+                        Password:
+                    </label>
+                        <input type='password' name='password' value={this.state.password} onChange={this.handlePasswordChange}/>
+                    <input type='submit'/>
+                </form>
+            </div>
+        );
+        return ret;
+=======
         return (
             <div className = 'login'>
                 <form onSubmit= {this.loginSubmit}>
@@ -64,6 +85,7 @@ class Login extends Component
                 </form>
             </div>
         );
+>>>>>>> 7dae87653edff582c521b84ff04d91623e2f4e8d
     }
 }
 export default Login;

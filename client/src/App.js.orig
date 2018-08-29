@@ -1,4 +1,9 @@
 import React, { Component } from 'react';
+<<<<<<< HEAD
+// import logo from './logo.svg';
+import './App.css';
+// import Login from './components/admin/Login';
+=======
 import {
   BrowserRouter as Router,
   Route,
@@ -6,12 +11,17 @@ import {
 } from 'react-router-dom';
 import './App.css';
 import Login from './components/admin/Login';
+>>>>>>> 7dae87653edff582c521b84ff04d91623e2f4e8d
 import Register from './components/admin/Register';
 
 class App extends Component {
   render() {
     return (
       <div className="App">
+<<<<<<< HEAD
+        {/* <Login/> */}
+        <Register/>
+=======
         <Router>
             <div>
               <Switch>
@@ -21,6 +31,7 @@ class App extends Component {
               </Switch>
             </div>
         </Router>
+>>>>>>> 7dae87653edff582c521b84ff04d91623e2f4e8d
       </div>
     );
   }

@@ -26,6 +26,8 @@
   from { transform: rotate(0deg); }
   to { transform: rotate(360deg); }
 }
+<<<<<<< HEAD
+=======
 
 body {
   background-color: #fafafa;
@@ -36,3 +38,4 @@ body {
   margin: auto;
   margin-top: 10%;
 }
+>>>>>>> 7dae87653edff582c521b84ff04d91623e2f4e8d

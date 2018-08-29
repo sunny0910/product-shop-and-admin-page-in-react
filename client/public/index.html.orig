@@ -19,8 +19,12 @@
       work correctly both with client-side routing and a non-root public URL.
       Learn how to configure a non-root public URL by running `npm run build`.
     -->
+<<<<<<< HEAD
+    <title>React App</title>
+=======
     <title>MERN Project</title>
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+>>>>>>> 7dae87653edff582c521b84ff04d91623e2f4e8d
   </head>
   <body>
     <noscript>
