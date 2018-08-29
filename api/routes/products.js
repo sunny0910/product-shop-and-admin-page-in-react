@@ -1,6 +1,7 @@
 var express = require('express');
 var router = express.Router();
 var Product = require('../models/productsModel');
+const checkAuth = require('../middleware/check-auth');
 
 router.get('/', function(req, res) {
     Product.find().select('name price _id').exec()
@@ -29,7 +30,7 @@ router.get('/', function(req, res) {
     });
 });
 
-router.post('/', function(req, res) {
+router.post('/', checkAuth, function(req, res) {
     const product = new Product(req.body);
     product
     .save()
@@ -42,8 +43,8 @@ router.post('/', function(req, res) {
                     price : result.price,
                     request : {
                         type: 'GET',
-                        url: 'http://localhost:3000/api/v1/products/'+result._id
-                    }       
+                        url: 'http://localhost:3001/api/v1/products/'+result._id
+                    }
                 }
             });
         }
@@ -55,7 +56,7 @@ router.post('/', function(req, res) {
             });
         }
     );
-    
+
 });
 
 router.get('/:id', function(req, res) {
@@ -77,7 +78,7 @@ router.get('/:id', function(req, res) {
         }
     );
 });
-router.post('/:id', function(req, res) {
+router.post('/:id', checkAuth, function(req, res) {
     let body = req.body;
     let id = req.params.id;
     Product.update({_id: id}, {$set: body })
@@ -88,7 +89,7 @@ router.post('/:id', function(req, res) {
                 message: "Product updated",
                 request: {
                     type: 'GET',
-                    url : "http://localhost:3000/api/v1/products/"+id
+                    url : "http://localhost:3001/api/v1/products/"+id
                 }
             }
         )
@@ -100,10 +101,10 @@ router.post('/:id', function(req, res) {
     )
 });
 
-router.delete('/:id', function(req, res) {
+router.delete('/:id', checkAuth, function(req, res) {
     let id = req.params.id;
     Product.deleteOne( {_id: id} )
-    .exec() 
+    .exec()
     .then(
         result => res.status(200).json({
             response: {

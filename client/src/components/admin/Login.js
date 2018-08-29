@@ -1,4 +1,6 @@
 import React, {Component} from 'react';
+import { Paper, Avatar, FormControl, InputLabel, Input, Button, Typography } from '@material-ui/core';
+import Person from '@material-ui/icons/Person';
 
 class Login extends Component
 {
@@ -29,22 +31,39 @@ class Login extends Component
     }
 
     render() {
-        let ret = (
+        return (
             <div className = 'login'>
                 <form onSubmit= {this.loginSubmit}>
-                    <label>
-                        UserName:
-                    </label>
-                        <input type='text' name='username' value={this.state.username} onChange={this.handleUsernameChange}/>
-                    <label>
-                        Password:
-                    </label>
-                        <input type='password' name='password' value={this.state.password} onChange={this.handlePasswordChange}/>
-                    <input type='submit'/>
+                <Paper className = "entrypaper">
+                    <Avatar>
+                        <Person/>
+                    </Avatar>
+                    <Typography variant='headline'>Sign In</Typography>
+                    <FormControl margin = 'normal' required fullWidth>
+                        <InputLabel htmlFor = 'username'>UserName: </InputLabel>
+                        <Input 
+                            type='text'
+                            name='username'
+                            value={this.state.username}
+                            onChange = {this.handleUsernameChange}
+                            autoComplete = 'email'
+                        />
+                    </FormControl>
+                    <FormControl margin = 'normal' required fullWidth>
+                        <InputLabel htmlFor = 'password'>Password: </InputLabel>
+                        <Input
+                            type = 'password'
+                            name = 'password'
+                            value = {this.state.password}
+                            onChange = {this.handleUsernameChange}
+                            autoComplete = 'password'
+                        />
+                    </FormControl>
+                    <Button type='submit' fullWidth variant='raised' color='primary'>Sign In</Button>
+                </Paper>
                 </form>
             </div>
         );
-        return ret;
     }
 }
 export default Login;
