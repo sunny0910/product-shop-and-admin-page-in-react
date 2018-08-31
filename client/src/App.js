@@ -9,15 +9,23 @@ import Login from './components/admin/Login';
 import Register from './components/admin/Register';
 
 class App extends Component {
+
+  constructor(props) {
+    super(props);
+    this.state = {
+      loggedIn: false
+    }
+  }
+
   render() {
     return (
       <div className="App">
         <Router>
             <div>
               <Switch>
-                <Route exact path='/' component = {Login} />
-                <Route path = '/login' component = {Login} />
-                <Route path = '/register' component = {Register} />
+                <Route exact path='/' component = {Login} loggedIn = {this.state.loggedIn} />
+                <Route exact path = '/login' component = {Login} loggedIn = {this.state.loggedIn} />
+                <Route exact path = '/register' component = {Register} loggedIn = {this.state.loggedIn} />
               </Switch>
             </div>
         </Router>

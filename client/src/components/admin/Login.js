@@ -1,66 +1,126 @@
 import React, {Component} from 'react';
-import { Paper, Avatar, FormControl, InputLabel, Input, Button, Typography } from '@material-ui/core';
+import { Paper, Avatar, FormControl, InputLabel, Input, Button, Typography, LinearProgress } from '@material-ui/core';
 import Person from '@material-ui/icons/Person';
 
 class Login extends Component
 {
     constructor(props) {
         super(props);
-        this.state = {username: '', password: ''};
+        this.state = {
+            email: '',
+            password: '',
+            hideProgress: true,
+            emailError: false,
+            passwordError: false
+        };
 
         this.loginSubmit = this.loginSubmit.bind(this);
-        this.handleUsernameChange = this.handleUsernameChange.bind(this);
+        this.handleEmailChange = this.handleEmailChange.bind(this);
         this.handlePasswordChange = this.handlePasswordChange.bind(this);
     }
 
-    handleUsernameChange(e) {
-        this.setState(
-            {username : e.target.value}
-        );
+    handleEmailChange(e) {
+        const emailRegex = /^[a-zA-Z0-9]+@[a-zA-Z0-9]+\.[A-Za-z]+$/;
+        if ((!emailRegex.test(e.target.value)) && e.target.value !== '') {
+            this.setState({
+                emailError: true
+            });
+        } else {
+            this.setState({
+                emailError: false
+            });
+        }
+        this.setState({
+            email : e.target.value
+        });
     }
 
     handlePasswordChange(e) {
-        this.setState(
-            {password: e.target.value}
-        );
+        if (this.state.password !== '') {
+            this.setState({
+                passwordError: false
+            });
+        }
+        this.setState({
+            password: e.target.value
+        });
     }
 
     loginSubmit(event) {
         event.preventDefault();
+        if (this.state.email === '') {
+            this.setState({
+                emailError: true
+            });
+        }
+        if (this.state.password === '') {
+            this.setState({
+                passwordError: true
+            });
+        }
+        if (this.state.email === '' || this.state.password === '') {
+            return;
+        }
+        const data = {
+            "email": this.state.email,
+            "password": this.state.password
+        }
+        const headers = {
+            "Content-Type": "application/json; charset=utf-8",
+
+        }
+        fetch('http://localhost:3001/api/v1/login', {data: data})
+        .then((result) => {
+            console.log(result);
+        })
         console.log(this.state);
     }
 
     render() {
+        const progressStyle = this.state.hideProgress ? {display: 'none'} : {};
+        const emailErrorStyle = this.state.emailError ? {display : 'block',  color : 'red'} :{display: 'none'};
         return (
             <div className = 'login'>
                 <form onSubmit= {this.loginSubmit}>
-                <Paper className = "entrypaper">
-                    <Avatar>
-                        <Person/>
-                    </Avatar>
-                    <Typography variant='headline'>Sign In</Typography>
-                    <FormControl margin = 'normal' required fullWidth>
-                        <InputLabel htmlFor = 'username'>UserName: </InputLabel>
-                        <Input 
-                            type='text'
-                            name='username'
-                            value={this.state.username}
-                            onChange = {this.handleUsernameChange}
-                            autoComplete = 'email'
-                        />
-                    </FormControl>
-                    <FormControl margin = 'normal' required fullWidth>
-                        <InputLabel htmlFor = 'password'>Password: </InputLabel>
-                        <Input
-                            type = 'password'
-                            name = 'password'
-                            value = {this.state.password}
-                            onChange = {this.handleUsernameChange}
-                            autoComplete = 'password'
-                        />
-                    </FormControl>
-                    <Button type='submit' fullWidth variant='raised' color='primary'>Sign In</Button>
-                </Paper>
+                    <div className = 'formpaper'>
+                        <div className = 'progress' style = {progressStyle}>
+                            <LinearProgress/>
+                        </div>
+                        <Paper className = "innerpaper" >
+                            <div className = "formcontent">
+                                <Avatar className='avatarIcon'>
+                                    <Person/>
+                                </Avatar>
+                                <div className = 'formHeading'>
+                                    <Typography variant='headline' >Sign In</Typography>
+                                </div>
+                                <FormControl className="fields" margin = 'normal' required fullWidth>
+                                    <InputLabel htmlFor = 'email'>Email: </InputLabel>
+                                    <Input
+                                        type='text'
+                                        name='email'
+                                        value={this.state.email}
+                                        onChange = {this.handleEmailChange}
+                                        autoComplete = 'email'
+                                        required
+                                    />
+                                    <span style={emailErrorStyle}>Invalid Value</span>
+                                </FormControl>
+                                <FormControl className="fields" margin = 'normal' required fullWidth>
+                                    <InputLabel htmlFor = 'password'>Password: </InputLabel>
+                                    <Input
+                                        type = 'password'
+                                        name = 'password'
+                                        value = {this.state.password}
+                                        onChange = {this.handlePasswordChange}
+                                        autoComplete = 'password'
+                                        required
+                                    />
+                                </FormControl>
+                                <Button className='formSubmit' type='submit' fullWidth variant='raised' color='primary'>Sign In</Button>
+                            </div>
+                        </Paper>
+                    </div>
                 </form>
             </div>
         );

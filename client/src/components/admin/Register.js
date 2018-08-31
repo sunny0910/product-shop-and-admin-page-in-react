@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import { Paper, InputLabel, Button, Input, FormControl, Typography } from '@material-ui/core';
+import { Paper, InputLabel, Button, Input, FormControl, Typography, LinearProgress } from '@material-ui/core';
 
 export default class Register extends Component {
     constructor(props) {
@@ -7,7 +7,11 @@ export default class Register extends Component {
         this.state = {
             name: '',
             email: '',
-            password: ''
+            password: '',
+            nameError: false,
+            emailError: false,
+            passwordError: false,
+            hideProgress : true,
         };
 
         this.handleEmailChange = this.handleEmailChange.bind(this);
@@ -16,60 +20,117 @@ export default class Register extends Component {
         this.registerSubmit = this.registerSubmit.bind(this);
     }
 
-    handleEmailChange(e) {
-        this.setState(
-            {email : e.target.value}
-        );
-    }
     handleNameChange(e) {
-        this.setState(
-            {name : e.target.value}
-        );
+        this.setState({
+            name : e.target.value,
+            nameError: false
+        });
+    }
+    handleEmailChange(e) {
+        const emailRegex = /^[a-zA-Z0-9]+@[a-zA-Z0-9]+\.[A-Za-z]+$/;
+        if ((!emailRegex.test(e.target.value)) && e.target.value !== '') {
+            this.setState({
+                emailError: true
+            });
+        } else {
+            this.setState({
+                emailError: false
+            });
+        }
+        this.setState({
+            email : e.target.value,
+        });
     }
     handlePasswordChange(e) {
+        const passwordRegex = /^.*(?=.{8,})((?=.*[!@#$%^&*()\-_=+{};:,<.>]){1})(?=.*\d)((?=.*[a-z]){1})((?=.*[A-Z]){1}).*$/;
+        if ((!passwordRegex.test(e.target.value)) && e.target.value !== '') {
+            this.setState({
+                passwordError: true
+            });
+        } else {
+            this.setState({
+                passwordError: false
+            });
+        }
         this.setState(
             {password: e.target.value}
         );
     }
     registerSubmit(e) {
         e.preventDefault();
+        if (this.state.name === '') {
+            this.setState({
+                nameError: true
+            });
+        }
+        if (this.state.email === '') {
+            this.setState({
+                emailError: true
+            });
+        }
+        if (this.state.password === '') {
+            this.setState({
+                passwordError: true
+            });
+        }
+        if (this.state.name === '' || this.state.email === '' || this.state.password === '') {
+            return;
+        }
         console.log(this.state);
     }
     render() {
+        const progressStyle = this.state.hideProgress ? {display: 'none'} : {};
+        const nameErrorStyle = this.state.nameError ? {display : 'block',  color : 'red'} :{display: 'none'};
+        const emailErrorStyle = this.state.emailError ? {display : 'block',  color : 'red'} :{display: 'none'};
+        const passwordErrorStyle = this.state.passwordError ? {display : 'block',  color : 'red'} :{display: 'none'};
         return (
             <div>
                 <form onSubmit = {this.registerSubmit}>
-                    <Paper className = "entrypaper">
-                    <Typography variant='headline'>Register</Typography>
-                        <FormControl margin = 'normal' required fullWidth>
-                            <InputLabel htmlFor = 'name'>Name</InputLabel>
-                            <Input
-                                type='text'
-                                name='name'
-                                value = {this.state.name}
-                                onChange = {this.handleNameChange} />
-                        </FormControl>
-                            
-                        <FormControl margin = 'normal' required fullWidth>
-                            <InputLabel htmlFor = 'email'>Email</InputLabel>
-                            <Input
-                                type='email'
-                                name='email'
-                                value = {this.state.email}
-                                onChange = {this.handleEmailChange} />
-                        </FormControl>
-                        
-                        <FormControl margin = 'normal' required fullWidth>
-                            <InputLabel htmlFor = 'password'>Password</InputLabel>
-                            <Input
-                                type='password'
-                                name='password'
-                                value = {this.state.password}
-                                onChange = {this.handlePasswordChange} />
-                        </FormControl>
-                        
-                        <Button type = 'submit' color='primary' variant='raised' fullWidth>Register</Button>
-                    </Paper>
+                    <div className = 'formpaper'>
+                        <div className = 'progress' style = {progressStyle}>
+                            <LinearProgress/>
+                        </div>
+                        <Paper className = "innerpaper">
+                            <div className = "formcontent">
+                                <div className = 'formHeading'>
+                                    <Typography variant='headline' >Register</Typography>
+                                </div>
+                                    <FormControl margin = 'normal' required fullWidth>
+                                        <InputLabel htmlFor = 'name'>Name</InputLabel>
+                                        <Input
+                                            type='text'
+                                            name='name'
+                                            value = {this.state.name}
+                                            onChange = {this.handleNameChange}
+                                            required/>
+                                        <span style={nameErrorStyle}>Invalid Value</span>
+                                    </FormControl>
+
+                                    <FormControl margin = 'normal' required fullWidth>
+                                        <InputLabel htmlFor = 'email'>Email</InputLabel>
+                                        <Input
+                                            type='email'
+                                            name='email'
+                                            value = {this.state.email}
+                                            onChange = {this.handleEmailChange}
+                                            required/>
+                                        <span style={emailErrorStyle}>Invalid Value</span>
+                                    </FormControl>
+
+                                    <FormControl margin = 'normal' required fullWidth>
+                                        <InputLabel htmlFor = 'password'>Password</InputLabel>
+                                        <Input
+                                            type='password'
+                                            name='password'
+                                            value = {this.state.password}
+                                            onChange = {this.handlePasswordChange}
+                                            required/>
+                                        <span style={passwordErrorStyle}>Invalid Value! Strong Password with Uppercase and Lowercase letters, digits and special characters</span>
+                                    </FormControl>
+                                    <Button className='formSubmit ' type = 'submit' color='primary' variant='raised' fullWidth>Register</Button>
+                                </div>
+                        </Paper>
+                    </div>
                 </form>
             </div>
         );
