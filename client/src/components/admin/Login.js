@@ -1,6 +1,8 @@
 import React, {Component} from 'react';
 import { Paper, Avatar, FormControl, InputLabel, Input, Button, Typography, LinearProgress } from '@material-ui/core';
 import Person from '@material-ui/icons/Person';
+import apiUrl from '../../apiUrl';
+import apiRequest from '../../ApiRequest';
 
 class Login extends Component
 {
@@ -13,7 +15,6 @@ class Login extends Component
             emailError: false,
             passwordError: false
         };
-
         this.loginSubmit = this.loginSubmit.bind(this);
         this.handleEmailChange = this.handleEmailChange.bind(this);
         this.handlePasswordChange = this.handlePasswordChange.bind(this);
@@ -58,22 +59,28 @@ class Login extends Component
                 passwordError: true
             });
         }
-        if (this.state.email === '' || this.state.password === '') {
+        if (this.state.emailError || this.state.passwordError) {
             return;
         }
-        const data = {
+        this.setState({
+            hideProgress: false
+        });
+        const data = JSON.stringify({
             "email": this.state.email,
             "password": this.state.password
-        }
-        const headers = {
-            "Content-Type": "application/json; charset=utf-8",
-
-        }
-        fetch('http://localhost:3001/api/v1/login', {data: data})
-        .then((result) => {
-            console.log(result);
+        });
+        apiRequest(apiUrl+'/users/login', 'POST', data)
+        .then(result => {
+            result.json()
+            .then( (json) => {
+                console.log(json);
+                this.setState({
+                    hideProgress: true
+                });
+                // this.props.logge
+            }
+            );
         })
-        console.log(this.state);
     }
 
     render() {

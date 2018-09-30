@@ -1,5 +1,7 @@
 import React, {Component} from 'react';
 import { Paper, InputLabel, Button, Input, FormControl, Typography, LinearProgress } from '@material-ui/core';
+import apiRequest from '../../ApiRequest';
+import apiUrl from '../../apiUrl';
 
 export default class Register extends Component {
     constructor(props) {
@@ -73,10 +75,28 @@ export default class Register extends Component {
                 passwordError: true
             });
         }
-        if (this.state.name === '' || this.state.email === '' || this.state.password === '') {
+        if (this.state.nameError || this.state.emailError || this.state.passwordError) {
             return;
         }
-        console.log(this.state);
+        this.setState({
+            hideProgress: false
+        });
+        const data = JSON.stringify({
+            name: this.state.name,
+            email: this.state.email,
+            password: this.state.password
+        });
+        apiRequest(apiUrl+'/users/signup', 'POST', data)
+        .then(result => {
+            result.json()
+            .then( (json) => {
+                console.log(json);
+                this.setState({
+                    hideProgress: true
+                });
+            }
+            );
+        })
     }
     render() {
         const progressStyle = this.state.hideProgress ? {display: 'none'} : {};

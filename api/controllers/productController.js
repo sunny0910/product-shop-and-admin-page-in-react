@@ -1,4 +1,5 @@
 const Product = require('../models/productsModel');
+const baseUrl = require('../baseUrl');
 
 const getAllProducts = (req, res) => {
     Product.find().select('name price _id').exec()
@@ -12,7 +13,7 @@ const getAllProducts = (req, res) => {
                     price : doc.price,
                     request : {
                         type: 'GET',
-                        url: "http://localhost:3000/api/v1/products/"+doc._id
+                        url: baseUrl+"/api/v1/products/"+doc._id
                     }
                 }
             })
@@ -40,7 +41,7 @@ const createProduct = (req, res) => {
                     price : result.price,
                     request : {
                         type: 'GET',
-                        url: 'http://localhost:3001/api/v1/products/'+result._id
+                        url: baseUrl+'/api/v1/products/'+result._id
                     }
                 }
             });
@@ -84,7 +85,7 @@ const updateProduct = (req, res) => {
                 message: "Product updated",
                 request: {
                     type: 'GET',
-                    url : "http://localhost:3001/api/v1/products/"+id
+                    url : baseUrl+"/api/v1/products/"+id
                 }
             }
         )

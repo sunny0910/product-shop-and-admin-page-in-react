@@ -5,6 +5,7 @@ var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 var mongoose = require('mongoose');
 const uri = 'mongodb://localhost:27017/products';
+const cors = require('cors');
 require('dotenv').config();
 
 var productRouter = require('./api/routes/products');
@@ -13,13 +14,21 @@ mongoose.Promise = global.Promise;
 mongoose.connect(uri);
 var app = express();
 
+app.use(cors());
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use('/api/v1/user', userRouter)
+app.use((req, res, next) => {
+  // res.append('Access-Control-Allow-Origin', ['*']);
+  res.append('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
+  res.append('Access-Control-Allow-Headers', ['Content-Type', 'Access-Control-Allow-Origin', 'Access-Control-Allow-Headers']);
+  next();
+});
+
+app.use('/api/v1/users', userRouter)
 app.use('/api/v1/products', productRouter);
 
 // catch 404 and forward to error handler
