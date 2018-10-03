@@ -9,6 +9,7 @@ const userSignUp = (req, res) => {
     .then(user => {
         if (user.length >= 1) {
             return res.status(409).json({
+                status: 409,
                 message: 'Email exists'
             });
         } else {

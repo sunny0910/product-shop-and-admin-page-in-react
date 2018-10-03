@@ -11,7 +11,17 @@ require('dotenv').config();
 var productRouter = require('./api/routes/products');
 var userRouter = require('./api/routes/user');
 mongoose.Promise = global.Promise;
-mongoose.connect(uri);
+var dbConnected = true;
+mongoose.connect(uri)
+.then(
+  () => console.log('Connected to the DB')
+)
+.catch(
+  () => {
+    console.log('DB Connection failed');
+    dbConnected = false;
+  }
+)
 var app = express();
 
 app.use(cors());
@@ -25,6 +35,13 @@ app.use((req, res, next) => {
   // res.append('Access-Control-Allow-Origin', ['*']);
   res.append('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
   res.append('Access-Control-Allow-Headers', ['Content-Type', 'Access-Control-Allow-Origin', 'Access-Control-Allow-Headers']);
+  next();
+});
+
+app.use((req, res, next) => {
+  if (!dbConnected) {
+    return res.status(500).json({"message": "DB Connection Failed"});
+  }
   next();
 });
 

@@ -14,6 +14,7 @@ export default class Register extends Component {
             emailError: false,
             passwordError: false,
             hideProgress : true,
+            emailExists : false,
         };
 
         this.handleEmailChange = this.handleEmailChange.bind(this);
@@ -36,7 +37,8 @@ export default class Register extends Component {
             });
         } else {
             this.setState({
-                emailError: false
+                emailError: false,
+                emailExists: false
             });
         }
         this.setState({
@@ -75,7 +77,7 @@ export default class Register extends Component {
                 passwordError: true
             });
         }
-        if (this.state.nameError || this.state.emailError || this.state.passwordError) {
+        if (this.state.nameError || this.state.emailError || this.state.passwordError || this.state.emailExists) {
             return;
         }
         this.setState({
@@ -88,14 +90,31 @@ export default class Register extends Component {
         });
         apiRequest(apiUrl+'/users/signup', 'POST', data)
         .then(result => {
-            result.json()
-            .then( (json) => {
-                console.log(json);
+            if (result.status === 409) {
+                this.setState({
+                    emailExists: true,
+                    hideProgress: true
+                });
+                return;
+            }
+            if (result.status === 500) {
                 this.setState({
                     hideProgress: true
                 });
+                this.props.serverError(true);
+                return;
+            }
+            result.json()
+            .then( (json) => {
+                this.setState({
+                    hideProgress: true
+                });
+                this.props.loggedIn(true);
             }
             );
+        })
+        .catch(result => {
+            console.log(result);
         })
     }
     render() {
@@ -103,6 +122,7 @@ export default class Register extends Component {
         const nameErrorStyle = this.state.nameError ? {display : 'block',  color : 'red'} :{display: 'none'};
         const emailErrorStyle = this.state.emailError ? {display : 'block',  color : 'red'} :{display: 'none'};
         const passwordErrorStyle = this.state.passwordError ? {display : 'block',  color : 'red'} :{display: 'none'};
+        const emailExistsStyle = this.state.emailExists ? {display: 'block', color: 'red'} : {display: 'none'};
         return (
             <div>
                 <form onSubmit = {this.registerSubmit}>
@@ -135,6 +155,7 @@ export default class Register extends Component {
                                             onChange = {this.handleEmailChange}
                                             required/>
                                         <span style={emailErrorStyle}>Invalid Value</span>
+                                        <span style={emailExistsStyle}>Email Already Exists!</span>
                                     </FormControl>
 
                                     <FormControl margin = 'normal' required fullWidth>

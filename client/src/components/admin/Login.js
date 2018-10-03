@@ -71,13 +71,16 @@ class Login extends Component
         });
         apiRequest(apiUrl+'/users/login', 'POST', data)
         .then(result => {
+            if (result.status === 500) {
+                this.props.serverError(true);
+                return;
+            }
             result.json()
             .then( (json) => {
-                console.log(json);
                 this.setState({
                     hideProgress: true
                 });
-                // this.props.logge
+                this.props.loggedIn(true);
             }
             );
         })
