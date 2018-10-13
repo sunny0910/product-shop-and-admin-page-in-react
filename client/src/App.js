@@ -7,6 +7,8 @@ import {
 import './App.css';
 import Login from './components/admin/Login';
 import Register from './components/admin/Register';
+import Products from './components/products/products';
+import Users from './components/users/users';
 
 class App extends Component {
 
@@ -43,15 +45,23 @@ class App extends Component {
             <div>
               <Switch>
                 <Route 
-                  exact path='/'
-                  render = {() => <Login loggedIn = {this.loggedIn} serverError = {this.serverError} />}
+                  exact path="/"
+                  render = {() => <Products loggedIn = {this.loggedIn} serverError = {this.serverError} />}
                 />
                 <Route 
-                  exact path = '/login'
+                  exact path="/products"
+                  render = {() => <Products loggedIn = {this.loggedIn} serverError = {this.serverError} />}
+                />
+                <Route 
+                  exact path="/users"
+                  render = {() => <Users loggedIn = {this.loggedIn} serverError = {this.serverError} />}
+                />
+                <Route 
+                  exact path = "/login"
                   render = {() => <Login loggedIn = {this.loggedIn} serverError = {this.serverError} />}
                 />
                 <Route
-                  exact path = '/register'
+                  exact path = "/register"
                   render = {() => <Register loggedIn = {this.loggedIn} serverError = {this.serverError} />}
                 />
               </Switch>
