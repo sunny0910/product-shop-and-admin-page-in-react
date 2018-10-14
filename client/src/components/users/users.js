@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import ApiUrl from '../../apiUrl';
 import ApiRequest from '../../ApiRequest';
+import DataTable from '../data-tables/table';
 
 class Users extends Component
 {
@@ -15,6 +16,10 @@ class Users extends Component
     componentDidMount() {
         ApiRequest(ApiUrl+'/users','GET')
         .then((result) => {
+            if (result.status === 500) {
+                this.props.serverError(true);
+                return;
+            }
             result.json()
             .then((json) => {
                 this.setState({
@@ -22,25 +27,20 @@ class Users extends Component
                     count: json.count
                 });
             })
+            .catch((err) => {
+                console.log(err);
+                this.props.serverError(true);
+            })
         })
     }
 
     render() {
         const users = this.state.users;
-        const allUsers = users.map((user) => 
-            <div className = 'users-listing-single-user' key={user._id}>
-                <div className='user-email'>
-                    <p>{user.email}</p>
-                </div>
-                <div className='link' >
-                    <a href = {user.request.url} >Link</a>
-                </div>
-            </div>
-        );
+        const columns = ["FirstName", "SecondName", "Email", "", "", ""];
 
         return (
-            <div className='users'>
-            {allUsers}
+            <div id='users-table'>
+                <DataTable data={users} columns={columns} />
             </div>
         );
     }

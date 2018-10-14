@@ -17,8 +17,8 @@ mongoose.connect(uri)
   () => console.log('Connected to the DB')
 )
 .catch(
-  () => {
-    console.log('DB Connection failed');
+  (err) => {
+    console.log('DB Connection failed '+ err);
     dbConnected = false;
   }
 )

@@ -10,27 +10,34 @@ class Products extends Component
             products: [],
             count: 0
         }
+        console.log(this.state);
     }
 
     componentDidMount() {
         apiRequest(apiUrl+'/products', 'GET')
         .then((result) => {
+            if (result.status === 500) {
+                this.props.serverError(true);
+                return
+            }
             result.json()
             .then((json) => {
                 this.setState({
                     products: json.products,
                     count: json.count
                 });
-                //console.log(this.state);
-            }
-            )
+            })
+            .catch((err) => {
+                console.log(err);
+                this.props.serverError(true);
+            })
         })
     }
 
     render() {
         const products=this.state.products;
         const allProducts = products.map((product) => 
-            <div className = 'product-listing-single-product' id = {product.id}>
+            <div className = 'product-listing-single-product' key = {product._id}>
                 <div className='product-name'>
                     <p>{product.name}</p>
                 </div>
@@ -39,7 +46,6 @@ class Products extends Component
                 </div>
             </div>
         );
-        console.log(products);
         return (
             <div className = 'products'>
                 {allProducts}

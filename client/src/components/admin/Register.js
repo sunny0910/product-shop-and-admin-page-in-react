@@ -7,10 +7,12 @@ export default class Register extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            name: '',
+            firstName: '',
+            secondName: '',
             email: '',
             password: '',
-            nameError: false,
+            firstNameError: false,
+            secondNameError: false,
             emailError: false,
             passwordError: false,
             hideProgress : true,
@@ -18,15 +20,22 @@ export default class Register extends Component {
         };
 
         this.handleEmailChange = this.handleEmailChange.bind(this);
-        this.handleNameChange = this.handleNameChange.bind(this);
+        this.handleFirstNameChange = this.handleFirstNameChange.bind(this);
+        this.handleSecondNameChange = this.handleSecondNameChange.bind(this);
         this.handlePasswordChange = this.handlePasswordChange.bind(this);
         this.registerSubmit = this.registerSubmit.bind(this);
     }
 
-    handleNameChange(e) {
+    handleFirstNameChange(e) {
         this.setState({
-            name : e.target.value,
-            nameError: false
+            firstName : e.target.value,
+            firstNameError: false
+        });
+    }
+    handleSecondNameChange(e) {
+        this.setState({
+            secondName : e.target.value,
+            secondNameError: false
         });
     }
     handleEmailChange(e) {
@@ -46,25 +55,30 @@ export default class Register extends Component {
         });
     }
     handlePasswordChange(e) {
-        const passwordRegex = /^.*(?=.{8,})((?=.*[!@#$%^&*()\-_=+{};:,<.>]){1})(?=.*\d)((?=.*[a-z]){1})((?=.*[A-Z]){1}).*$/;
-        if ((!passwordRegex.test(e.target.value)) && e.target.value !== '') {
-            this.setState({
-                passwordError: true
-            });
-        } else {
-            this.setState({
-                passwordError: false
-            });
-        }
+        // const passwordRegex = /^.*(?=.{8,})((?=.*[!@#$%^&*()\-_=+{};:,<.>]){1})(?=.*\d)((?=.*[a-z]){1})((?=.*[A-Z]){1}).*$/;
+        // if ((!passwordRegex.test(e.target.value)) && e.target.value !== '') {
+        //     this.setState({
+        //         passwordError: true
+        //     });
+        // } else {
+        //     this.setState({
+        //         passwordError: false
+        //     });
+        // }
         this.setState(
             {password: e.target.value}
         );
     }
     registerSubmit(e) {
         e.preventDefault();
-        if (this.state.name === '') {
+        if (this.state.firstName === '') {
             this.setState({
-                nameError: true
+                firstNameError: true
+            });
+        }
+        if (this.state.secondName === '') {
+            this.setState({
+                secondNameError: true
             });
         }
         if (this.state.email === '') {
@@ -77,14 +91,15 @@ export default class Register extends Component {
                 passwordError: true
             });
         }
-        if (this.state.nameError || this.state.emailError || this.state.passwordError || this.state.emailExists) {
+        if (this.state.firstNameError || this.state.secondNameError || this.state.emailError || this.state.passwordError || this.state.emailExists) {
             return;
         }
         this.setState({
             hideProgress: false
         });
         const data = JSON.stringify({
-            name: this.state.name,
+            firstName: this.state.firstName,
+            secondName: this.state.secondName,
             email: this.state.email,
             password: this.state.password
         });
@@ -109,12 +124,12 @@ export default class Register extends Component {
                 this.setState({
                     hideProgress: true
                 });
-                this.props.loggedIn(true);
-            }
-            );
-        })
-        .catch(result => {
-            console.log(result);
+                this.props.userLogIn(true);
+            })
+            .catch((err) => {
+                console.log(err);
+                this.props.serverError(true);
+            })
         })
     }
     render() {
@@ -135,18 +150,29 @@ export default class Register extends Component {
                                 <div className = 'formHeading'>
                                     <Typography variant='headline' >Register</Typography>
                                 </div>
-                                    <FormControl margin = 'normal' required fullWidth>
-                                        <InputLabel htmlFor = 'name'>Name</InputLabel>
+                                    <FormControl margin = 'normal' required className="firstNameField" error = {this.state.secondNameError}>
+                                        <InputLabel htmlFor = 'firstName'>First Name</InputLabel>
                                         <Input
                                             type='text'
-                                            name='name'
-                                            value = {this.state.name}
-                                            onChange = {this.handleNameChange}
+                                            name='firstName'
+                                            value = {this.state.firstName}
+                                            onChange = {this.handleFirstNameChange}
                                             required/>
                                         <span style={nameErrorStyle}>Invalid Value</span>
                                     </FormControl>
 
-                                    <FormControl margin = 'normal' required fullWidth>
+                                    <FormControl margin = 'normal' required className="secondNameField" error = {this.state.secondNameError}>
+                                        <InputLabel htmlFor = 'secondName'>Second Name</InputLabel>
+                                        <Input
+                                            type='text'
+                                            name='secondName'
+                                            value = {this.state.secondName}
+                                            onChange = {this.handleSecondNameChange}
+                                            required/>
+                                        <span style={nameErrorStyle}>Invalid Value</span>
+                                    </FormControl>
+
+                                    <FormControl margin = 'normal' required fullWidth error = {this.state.emailError}>
                                         <InputLabel htmlFor = 'email'>Email</InputLabel>
                                         <Input
                                             type='email'
@@ -158,7 +184,7 @@ export default class Register extends Component {
                                         <span style={emailExistsStyle}>Email Already Exists!</span>
                                     </FormControl>
 
-                                    <FormControl margin = 'normal' required fullWidth>
+                                    <FormControl margin = 'normal' required fullWidth error = {this.state.passwordError}>
                                         <InputLabel htmlFor = 'password'>Password</InputLabel>
                                         <Input
                                             type='password'

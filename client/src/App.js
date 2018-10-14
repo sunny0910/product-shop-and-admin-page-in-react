@@ -3,29 +3,32 @@ import {
   BrowserRouter as Router,
   Route,
   Switch,
+  Redirect
 } from 'react-router-dom';
 import './App.css';
 import Login from './components/admin/Login';
 import Register from './components/admin/Register';
 import Products from './components/products/products';
 import Users from './components/users/users';
+import EditUser from './components/users/editUser';
 
-class App extends Component {
-
+class App extends Component
+{
   constructor(props) {
     super(props);
     this.state = {
       loggedIn: false,
       serverError: false
     }
-    this.loggedIn = this.loggedIn.bind(this);
+    this.userLogIn = this.userLogIn.bind(this);
     this.serverError = this.serverError.bind(this);
   }
 
-  loggedIn(value) {
+  userLogIn(value) {
     this.setState({
       loggedIn: value
     });
+    return true;
   }
 
   serverError(value) {
@@ -34,35 +37,53 @@ class App extends Component {
     });
   }
 
+  logOut() {
+    this.setState({
+      loggedIn: false
+    });
+  }
+
   render() {
+    // console.log(this.state);
+    const loggedIn = this.state.loggedIn;
     const serverErrorStyle = this.state.serverError ? {display: 'block'} : {display: 'none'};
     return (
       <div className="App">
-      <div className ="serverError" style = {serverErrorStyle}>
-        <p> Unable to connect, Please try again later! </p>
-      </div>
+        <div className ="serverError" style = {serverErrorStyle}>
+          <p> Unable to connect, Please try again later! </p>
+        </div>
         <Router>
-            <div>
+            <div className='content'>
               <Switch>
                 <Route 
                   exact path="/"
-                  render = {() => <Products loggedIn = {this.loggedIn} serverError = {this.serverError} />}
+                  render = {() => (<Products serverError={this.serverError} />) }
                 />
                 <Route 
                   exact path="/products"
-                  render = {() => <Products loggedIn = {this.loggedIn} serverError = {this.serverError} />}
+                  render = {() => (<Products serverError={this.serverError} />) }
+                />
+                <Route
+                  exact path="/users"
+                  //render = {() => (loggedIn) ? (<Users/>) : (<Redirect to="/login" />) }
+                  render = {() => (<Users serverError={this.serverError}/>)}
                 />
                 <Route 
-                  exact path="/users"
-                  render = {() => <Users loggedIn = {this.loggedIn} serverError = {this.serverError} />}
+                  exact path="/users/:id/edit"
+                  // render = {() => (loggedIn) ? (<EditUser/>) : (<Redirect to="/login" />) }
+                  render = {(props) => (<EditUser serverError={this.serverError} {...props} />) }
                 />
                 <Route 
                   exact path = "/login"
-                  render = {() => <Login loggedIn = {this.loggedIn} serverError = {this.serverError} />}
+                  render = {() => (loggedIn) ? (<Redirect to='/products'/>) : (<Login userLogIn = {this.userLogIn} serverError = {this.serverError} />) }
                 />
                 <Route
                   exact path = "/register"
-                  render = {() => <Register loggedIn = {this.loggedIn} serverError = {this.serverError} />}
+                  render = {() => (loggedIn) ? (<Redirect to='/products'/>) : (<Register userLogIn = {this.userLogIn} serverError = {this.serverError} />) }
+                />
+                <Route
+                  exact path = "/logout"
+                  render = {() => (loggedIn) ? (this.logOut()) : (<Redirect to='/products'/>) }
                 />
               </Switch>
             </div>

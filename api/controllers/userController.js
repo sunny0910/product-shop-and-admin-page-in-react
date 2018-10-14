@@ -27,12 +27,16 @@ const userSignUp = (req, res) => {
                     } else {
                         const user = new User(
                             {
+                                firstName: req.body.firstName,
+                                secondName: req.body.secondName,
                                 email : req.body.email,
                                 password : hash
                             });
                         user.save()
                         .then(result => {
                             const token = jwt.sign({
+                                firstName: user.firstName,
+                                secondName: user.secondName,
                                 email: user.email,
                                 userId: user._id,
                             }, process.env.JWT_KEY,
@@ -71,6 +75,8 @@ const userLogIn = (req, res) => {
         bcrypt.compare(req.body.password, user.password)
         .then((resp)=> {
             const token = jwt.sign({
+                firstName: user.firstName,
+                secondName: user.secondName,
                 email: user.email,
                 userId: user._id,
             }, process.env.JWT_KEY,
@@ -130,11 +136,13 @@ const users = (req, res) => {
             allUsers: docs.map(doc => {
                 return {
                     _id : doc._id,
+                    firstName: doc.firstName,
+                    secondName: doc.secondName,
                     email: doc.email,
                     password : doc.password,
                     request : {
-                        type: 'GET',
-                        url: baseUrl+"/api/v1/users/"+doc._id
+                        edit: baseUrl+"/api/v1/users/"+doc._id+"/edit",
+                        view: baseUrl+"/api/v1/users/"+doc._id
                     }
                 }
             })
@@ -150,9 +158,50 @@ const users = (req, res) => {
     });
 }
 
+const getUser = (req, res) => {
+    User.find({"_id": req.params.userId}).exec()
+    .then(doc => {
+        doc=doc[0];
+        const response = {
+            id: doc._id,
+            firstName: doc.firstName,
+            secondName: doc.secondName,
+            email: doc.email,
+        }
+        res.status(200).json(response);
+        }
+    )
+    .catch(err => {
+        res.status(500).json({
+            status: 500,
+            error: err
+        });
+    });
+}
+
+const userUpdate = (req,res) => {
+    console.log(req.params.userId);
+    User.update({"_id": req.params.userId}, {$set: req.body}).exec()
+    .then(user => {
+        return res.status(200).json({
+            status: 200,
+            messsage: 'User Updated',
+            user: user
+        });
+    })
+    .catch(err => {
+        res.status(500).json({
+            status: 500,
+            error: err
+        });
+    });
+}
+
 module.exports = {
     userSignUp: userSignUp,
     userLogIn: userLogIn,
     userDelete: userDelete,
-    users: users
+    users: users,
+    getUser: getUser,
+    userUpdate: userUpdate
 }

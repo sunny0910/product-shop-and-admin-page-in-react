@@ -80,9 +80,12 @@ class Login extends Component
                 this.setState({
                     hideProgress: true
                 });
-                this.props.loggedIn(true);
-            }
-            );
+                this.props.userLogIn(true);
+            })
+            .catch((err) => {
+                console.log(err);
+                this.props.serverError(true);
+            })
         })
     }
 
@@ -96,7 +99,7 @@ class Login extends Component
                         <div className = 'progress' style = {progressStyle}>
                             <LinearProgress/>
                         </div>
-                        <Paper className = "innerpaper" >
+                        <Paper>
                             <div className = "formcontent">
                                 <Avatar className='avatarIcon'>
                                     <Person/>
@@ -104,7 +107,7 @@ class Login extends Component
                                 <div className = 'formHeading'>
                                     <Typography variant='headline' >Sign In</Typography>
                                 </div>
-                                <FormControl className="fields" margin = 'normal' required fullWidth>
+                                <FormControl margin = 'normal' required fullWidth error = {this.state.emailError} >
                                     <InputLabel htmlFor = 'email'>Email: </InputLabel>
                                     <Input
                                         type='text'
@@ -116,7 +119,7 @@ class Login extends Component
                                     />
                                     <span style={emailErrorStyle}>Invalid Value</span>
                                 </FormControl>
-                                <FormControl className="fields" margin = 'normal' required fullWidth>
+                                <FormControl margin = 'normal' required fullWidth>
                                     <InputLabel htmlFor = 'password'>Password: </InputLabel>
                                     <Input
                                         type = 'password'

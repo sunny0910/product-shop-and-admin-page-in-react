@@ -2,7 +2,9 @@
   animation: App-logo-spin infinite 20s linear;
   height: 80px;
 }
-
+.success {
+  background-color: green;
+}
 .App-header {
   background-color: #222;
   height: 150px;
@@ -34,10 +36,7 @@ body {
   padding: 2%;
 }
 
-.innerpaper {
-  /* width: 40%; */
-  /* margin: auto; */
-  /* margin-top: 10%; */
+.formcontent {
   padding: 5%;
   padding-bottom: 5%;
 }
@@ -52,4 +51,24 @@ body {
 }
 .formSubmit {
   margin-top: 3% !important;
+}
+
+.data-table {
+  margin: auto;
+  margin-top: 5%;
+  width: 80%;
+}
+
+.editpaper {
+  margin: auto;
+  margin-top: 10%;
+  width: 70%
+}
+.firstNameField {
+  float: left;
+  width: 49%
+}
+.secondNameField {
+  float: right;
+  width: 49%
 }
