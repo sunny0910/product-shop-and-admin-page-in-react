@@ -139,11 +139,7 @@ const users = (req, res) => {
                     firstName: doc.firstName,
                     secondName: doc.secondName,
                     email: doc.email,
-                    password : doc.password,
-                    request : {
-                        edit: baseUrl+"/api/v1/users/"+doc._id+"/edit",
-                        view: baseUrl+"/api/v1/users/"+doc._id
-                    }
+                    url : baseUrl+"/api/v1/users/"+doc._id
                 }
             })
         }

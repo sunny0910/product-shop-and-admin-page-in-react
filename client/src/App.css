@@ -5,6 +5,31 @@
 .success {
   background-color: green;
 }
+#header header {
+  background-color: #2196f3;
+}
+.menu {
+  float: right;
+  width: 50%
+}
+#nav-logo {
+  margin-right: 30%;
+  width: 20%
+}
+.menu-items {
+  display: inline;
+  padding: 0 5%;
+  float: left;
+}
+.menu-items-wrapper {
+  float: right;
+  width: 100%;
+}
+.cart-icon {
+  float: right;
+  margin-left: 5%;
+  width: 5%;
+}
 .App-header {
   background-color: #222;
   height: 150px;

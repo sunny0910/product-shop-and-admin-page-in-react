@@ -11,6 +11,7 @@ import Register from './components/admin/Register';
 import Products from './components/products/products';
 import Users from './components/users/users';
 import EditUser from './components/users/editUser';
+import Header from './../src/components/header/header';
 
 class App extends Component
 {
@@ -52,6 +53,7 @@ class App extends Component
         <div className ="serverError" style = {serverErrorStyle}>
           <p> Unable to connect, Please try again later! </p>
         </div>
+        <Header loggedIn = {loggedIn}/>
         <Router>
             <div className='content'>
               <Switch>
