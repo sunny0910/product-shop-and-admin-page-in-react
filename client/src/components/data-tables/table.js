@@ -1,11 +1,12 @@
 import React, {Component} from 'react';
 import Table from '@material-ui/core/Table';
-import { TableHead, TableBody, TableCell, TableRow, Paper } from '@material-ui/core';
+import { TableHead, TableBody, TableCell, TableRow, Paper, IconButton, Tooltip } from '@material-ui/core';
 import Delete from '@material-ui/icons/Delete';
 import Edit from '@material-ui/icons/Edit';
 import Eye from '@material-ui/icons/RemoveRedEye';
 import CheckBox from '@material-ui/icons/CheckBox';
 import {Link} from 'react-router-dom';
+import TableToolBar from './tableToolBar';
 
 class DataTable extends Component
 {
@@ -21,32 +22,37 @@ class DataTable extends Component
         this.mainCheckboxOnChange = this.mainCheckboxOnChange.bind(this);
     }
 
-    checkboxOnChange(e) {
-        console.log(e.target.key);
-    }
-
     mainCheckboxOnChange(e) {
-        this.setState((state) => ({
+        
+        this.setState((state, props) => ({
+            selected: (state.mainCheckBoxSelected)? [] : props.data.map(row => row._id),
+            selectedCount: (state.mainCheckBoxSelected)? 0: props.data.length,
             mainCheckBoxSelected: !state.mainCheckBoxSelected,
             mainCheckBoxColor: (state.mainCheckBoxSelected) ? "inherit": "secondary"
         }));
     }
 
-    handleClick(e, id) {
-        let checked = false;
-        let newSelected = this.state.selected.slice(0);
-        if (this.state.selected.indexOf(id) === -1) {
-            newSelected.push(id);
-            checked = true
+    checkboxOnChange(e, id) {
+        let mainCheckBoxColor, mainCheckBoxSelected;
+        
+        let newSelectedArray = this.state.selected.slice(0);
+        let checkboxAlreadySelected = this.state.selected.includes(id);
+
+        (checkboxAlreadySelected)?newSelectedArray.pop(id):newSelectedArray.push(id)
+
+        if (newSelectedArray.length === this.props.data.length) {
+            mainCheckBoxSelected = true;
+            mainCheckBoxColor = "secondary";
         } else {
-            newSelected.pop(id);
+            mainCheckBoxSelected = false;
+            mainCheckBoxColor = "inherit";
         }
-        console.log(this.state);
         this.setState(prevState => ({
-            selected: newSelected,
-            selectedCount: ((checked)?prevState.selectedCount+1:prevState.selectedCount-1)
+            selected: newSelectedArray,
+            selectedCount: ((checkboxAlreadySelected)?prevState.selectedCount-1:prevState.selectedCount+1),
+            mainCheckBoxColor: mainCheckBoxColor,
+            mainCheckBoxSelected: mainCheckBoxSelected
         }));
-        console.log(this.state);
     }
 
     isSelected(id) {
@@ -57,13 +63,15 @@ class DataTable extends Component
     }
 
     render() {
+        
         return (
             <Paper className="data-table">
+            <TableToolBar selectedCount={this.state.selectedCount}/>
                 <Table padding='checkbox'>
                     <TableHead>
                         <TableRow>
                             <TableCell>
-                                <CheckBox checked = {this.state.mainCheckBoxSelected} color={this.state.mainCheckBoxColor} value="main" onClick={this.mainCheckboxOnChange}/>
+                                <CheckBox checked = {true} color={this.state.mainCheckBoxColor} value="main" onClick={this.mainCheckboxOnChange}/>
                             </TableCell>
                             {this.props.columns.map((column, index) => {
                                 return (
@@ -78,19 +86,37 @@ class DataTable extends Component
                             return (
                                 <TableRow key={index} hover selected={isSelected} >
                                     <TableCell>
-                                        <CheckBox selected={isSelected} onClick={event => this.handleClick(event,row._id) } color={(isSelected) ? "secondary": "inherit"} />
+                                        <CheckBox selected={isSelected} onClick={event => this.checkboxOnChange(event,row._id) } color={(isSelected) ? "secondary": "inherit"} />
                                     </TableCell>
                                     <TableCell>{row.firstName}</TableCell>
                                     <TableCell>{row.secondName}</TableCell>
                                     <TableCell>{row.email}</TableCell>
                                     <TableCell>
-                                        <Link to={row.url.edit} className="actions"><Edit/></Link>
+                                        <Link to={row.url.edit} className="actions">
+                                            <Tooltip title="Edit" >
+                                                <IconButton aria-label="Edit">
+                                                    <Edit/>
+                                                </IconButton>
+                                            </Tooltip>
+                                        </Link>
                                     </TableCell>
                                     <TableCell>
-                                        <Link to={row.url.view} className="actions"><Eye/></Link>
+                                        <Link to={row.url.view} className="actions">
+                                            <Tooltip title="View" >
+                                                <IconButton aria-label="View">
+                                                    <Eye/>
+                                                </IconButton>
+                                            </Tooltip>
+                                        </Link>
                                     </TableCell>
                                     <TableCell>
-                                        <Link to={row.url.edit} className="actions"><Delete/></Link>
+                                        <Link to={row.url.delete} className="actions">
+                                            <Tooltip title="Delete" >
+                                                <IconButton aria-label="Delete">
+                                                    <Delete/>
+                                                </IconButton>
+                                            </Tooltip>
+                                        </Link>
                                     </TableCell>
                                 </TableRow>
                             );

@@ -6,10 +6,6 @@ import { Link } from 'react-router-dom'
 
 class Header extends Component
 {
-    constructor(props) {
-        super(props)
-        
-    }
 
     render() {
         let buttons = (!this.props.loggedIn)?
@@ -20,7 +16,7 @@ class Header extends Component
             <Link to='/register'><Typography color='inherit' variant="subheading" >Register</Typography></Link>
         </div></div>):
         (<div className="menu-items">
-            <Typography color='inherit' variant="subheading" >Logout</Typography>
+            <Link to='/logout' onClick={this.props.logOut}><Typography color='inherit' variant="subheading" >Logout</Typography></Link>
         </div>);
         return (
             <div id = "header">

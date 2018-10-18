@@ -10,7 +10,6 @@ class Products extends Component
             products: [],
             count: 0
         }
-        console.log(this.state);
     }
 
     componentDidMount() {

@@ -24,6 +24,7 @@ class App extends Component
     }
     this.userLogIn = this.userLogIn.bind(this);
     this.serverError = this.serverError.bind(this);
+    this.logOut = this.logOut.bind(this);
   }
 
   userLogIn(value) {
@@ -56,7 +57,7 @@ class App extends Component
         </div>
         <Router>
             <div className='content'>
-              <Header loggedIn = {this.state.loggedIn} productsInCart={this.state.productsInCart}/>
+              <Header loggedIn = {this.state.loggedIn} logOut={this.logOut} productsInCart={this.state.productsInCart}/>
               <Switch>
                 <Route 
                   exact path="/"
@@ -87,6 +88,7 @@ class App extends Component
                 <Route
                   exact path = "/logout"
                   render = {() => (loggedIn) ? (this.logOut()) : (<Redirect to='/products'/>) }
+                  // Component = {Products}
                 />
               </Switch>
             </div>

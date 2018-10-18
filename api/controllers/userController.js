@@ -140,7 +140,8 @@ const users = (req, res) => {
                     email: doc.email,
                     url: {
                         edit : "/users/"+doc._id+"/edit",
-                        view: "/users/"+doc._id
+                        view: "/users/"+doc._id,
+                        delete: "/users"+doc._id+"/delete"
                     }
                 }
             })

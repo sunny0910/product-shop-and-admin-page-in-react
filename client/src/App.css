@@ -18,6 +18,15 @@
 .actions {
   color: #0000008f;
 }
+.table-title-left {
+  width: 90%
+}
+.table-title-right {
+  width: 10%
+}
+.table-title-right button {
+  float: right;
+}
 .logo {
   margin-right: 30%;
   width: 30%
