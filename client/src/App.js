@@ -19,7 +19,8 @@ class App extends Component
     super(props);
     this.state = {
       loggedIn: false,
-      serverError: false
+      serverError: false,
+      productsInCart: 0
     }
     this.userLogIn = this.userLogIn.bind(this);
     this.serverError = this.serverError.bind(this);
@@ -53,9 +54,9 @@ class App extends Component
         <div className ="serverError" style = {serverErrorStyle}>
           <p> Unable to connect, Please try again later! </p>
         </div>
-        <Header loggedIn = {loggedIn}/>
         <Router>
             <div className='content'>
+              <Header loggedIn = {this.state.loggedIn} productsInCart={this.state.productsInCart}/>
               <Switch>
                 <Route 
                   exact path="/"
@@ -65,15 +66,15 @@ class App extends Component
                   exact path="/products"
                   render = {() => (<Products serverError={this.serverError} />) }
                 />
-                <Route
-                  exact path="/users"
-                  //render = {() => (loggedIn) ? (<Users/>) : (<Redirect to="/login" />) }
-                  render = {() => (<Users serverError={this.serverError}/>)}
-                />
                 <Route 
                   exact path="/users/:id/edit"
                   // render = {() => (loggedIn) ? (<EditUser/>) : (<Redirect to="/login" />) }
                   render = {(props) => (<EditUser serverError={this.serverError} {...props} />) }
+                />
+                <Route
+                  exact path="/users"
+                  //render = {() => (loggedIn) ? (<Users/>) : (<Redirect to="/login" />) }
+                  render = {() => (<Users serverError={this.serverError}/>)}
                 />
                 <Route 
                   exact path = "/login"

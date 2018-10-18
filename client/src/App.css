@@ -12,13 +12,19 @@
   float: right;
   width: 50%
 }
-#nav-logo {
+#header a {
+  color: white;
+}
+.actions {
+  color: #0000008f;
+}
+.logo {
   margin-right: 30%;
-  width: 20%
+  width: 30%
 }
 .menu-items {
   display: inline;
-  padding: 0 5%;
+  padding: 0 7%;
   float: left;
 }
 .menu-items-wrapper {
@@ -27,7 +33,7 @@
 }
 .cart-icon {
   float: right;
-  margin-left: 5%;
+  margin-left: 3%;
   width: 5%;
 }
 .App-header {

@@ -6,6 +6,8 @@ import apiRequest from '../../ApiRequest';
 class EditUser extends Component
 {
     constructor(props) {
+        console.log('kk');
+        
         super(props)
         this.state = {
             id: props.match.params.id,

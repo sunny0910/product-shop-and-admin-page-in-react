@@ -12,7 +12,7 @@ var productRouter = require('./api/routes/products');
 var userRouter = require('./api/routes/user');
 mongoose.Promise = global.Promise;
 var dbConnected = true;
-mongoose.connect(uri)
+mongoose.connect(uri, {useNewUrlParser: true})
 .then(
   () => console.log('Connected to the DB')
 )

@@ -84,13 +84,13 @@ class DataTable extends Component
                                     <TableCell>{row.secondName}</TableCell>
                                     <TableCell>{row.email}</TableCell>
                                     <TableCell>
-                                        <Link to={row.request.edit}><Edit/></Link>
+                                        <Link to={row.url.edit} className="actions"><Edit/></Link>
                                     </TableCell>
                                     <TableCell>
-                                        <Link to={row.request.view}><Eye/></Link>
+                                        <Link to={row.url.view} className="actions"><Eye/></Link>
                                     </TableCell>
                                     <TableCell>
-                                        <Link to={row.request.view}><Delete/></Link>
+                                        <Link to={row.url.edit} className="actions"><Delete/></Link>
                                     </TableCell>
                                 </TableRow>
                             );

@@ -1,7 +1,6 @@
 var User = require('../models/userModel');
 var bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
-const baseUrl = require('../baseUrl');
 
 const userSignUp = (req, res) => {
     User.find({email: req.body.email})
@@ -139,7 +138,10 @@ const users = (req, res) => {
                     firstName: doc.firstName,
                     secondName: doc.secondName,
                     email: doc.email,
-                    url : baseUrl+"/api/v1/users/"+doc._id
+                    url: {
+                        edit : "/users/"+doc._id+"/edit",
+                        view: "/users/"+doc._id
+                    }
                 }
             })
         }
