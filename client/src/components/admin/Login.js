@@ -92,6 +92,7 @@ class Login extends Component
     render() {
         const progressStyle = this.state.hideProgress ? {display: 'none'} : {};
         const emailErrorStyle = this.state.emailError ? {display : 'block',  color : 'red'} :{display: 'none'};
+        document.title = "Login";
         return (
             <div className = 'login'>
                 <form onSubmit= {this.loginSubmit}>

@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import Table from '@material-ui/core/Table';
-import { TableHead, TableBody, TableCell, TableRow, Paper, IconButton, Tooltip } from '@material-ui/core';
+import { TableHead, TableBody, TableCell, TableRow, Paper, IconButton, Tooltip, CircularProgress } from '@material-ui/core';
 import Delete from '@material-ui/icons/Delete';
 import Edit from '@material-ui/icons/Edit';
 import Eye from '@material-ui/icons/RemoveRedEye';
@@ -13,6 +13,7 @@ class DataTable extends Component
     constructor(props) {
         super(props);
         this.state = {
+            loading: true,
             selected: [],
             selectedCount: 0,
             mainCheckBoxSelected: false,
@@ -63,67 +64,74 @@ class DataTable extends Component
     }
 
     render() {
-        
+        setTimeout(() => {
+            this.setState({loading: false});
+        }, 700);
         return (
-            <Paper className="data-table">
-            <TableToolBar selectedCount={this.state.selectedCount}/>
-                <Table padding='checkbox'>
-                    <TableHead>
-                        <TableRow>
-                            <TableCell>
-                                <CheckBox checked = {true} color={this.state.mainCheckBoxColor} value="main" onClick={this.mainCheckboxOnChange}/>
-                            </TableCell>
-                            {this.props.columns.map((column, index) => {
-                                return (
-                                    <TableCell key= {index} >{column}</TableCell>
-                                );
-                            })}
-                        </TableRow>
-                    </TableHead>
-                    <TableBody>
-                        {this.props.data.map((row, index) => {
-                            const isSelected = this.isSelected(row._id);
-                            return (
-                                <TableRow key={index} hover selected={isSelected} >
+            <React.Fragment>
+                <Paper className="data-table">
+                <TableToolBar selectedCount={this.state.selectedCount}/>
+                {this.state.loading ?
+                    <CircularProgress color="primary" variant="indeterminate" className="loader"/> :
+                        (<Table padding='checkbox'>
+                            <TableHead>
+                                <TableRow>
                                     <TableCell>
-                                        <CheckBox selected={isSelected} onClick={event => this.checkboxOnChange(event,row._id) } color={(isSelected) ? "secondary": "inherit"} />
+                                        <CheckBox checked = {true} color={this.state.mainCheckBoxColor} value="main" onClick={this.mainCheckboxOnChange}/>
                                     </TableCell>
-                                    <TableCell>{row.firstName}</TableCell>
-                                    <TableCell>{row.secondName}</TableCell>
-                                    <TableCell>{row.email}</TableCell>
-                                    <TableCell>
-                                        <Link to={row.url.edit} className="actions">
-                                            <Tooltip title="Edit" >
-                                                <IconButton aria-label="Edit">
-                                                    <Edit/>
-                                                </IconButton>
-                                            </Tooltip>
-                                        </Link>
-                                    </TableCell>
-                                    <TableCell>
-                                        <Link to={row.url.view} className="actions">
-                                            <Tooltip title="View" >
-                                                <IconButton aria-label="View">
-                                                    <Eye/>
-                                                </IconButton>
-                                            </Tooltip>
-                                        </Link>
-                                    </TableCell>
-                                    <TableCell>
-                                        <Link to={row.url.delete} className="actions">
-                                            <Tooltip title="Delete" >
-                                                <IconButton aria-label="Delete">
-                                                    <Delete/>
-                                                </IconButton>
-                                            </Tooltip>
-                                        </Link>
-                                    </TableCell>
+                                    {this.props.columns.map((column, index) => {
+                                        return (
+                                            <TableCell key= {index} >{column}</TableCell>
+                                        );
+                                    })}
                                 </TableRow>
-                            );
-                        })}
-                    </TableBody>
-                </Table>
+                            </TableHead>
+                            <TableBody>
+                                {this.props.data.map((row, index) => {
+                                    const isSelected = this.isSelected(row._id);
+                                    return (
+                                        <TableRow key={index} hover selected={isSelected} >
+                                            <TableCell>
+                                                <CheckBox selected={isSelected} onClick={event => this.checkboxOnChange(event,row._id) } color={(isSelected) ? "secondary": "inherit"} />
+                                            </TableCell>
+                                            <TableCell>{row.firstName}</TableCell>
+                                            <TableCell>{row.secondName}</TableCell>
+                                            <TableCell>{row.email}</TableCell>
+                                            <TableCell>
+                                                <Link to={row.url.edit} className="actions">
+                                                    <Tooltip title="Edit" >
+                                                        <IconButton aria-label="Edit">
+                                                            <Edit/>
+                                                        </IconButton>
+                                                    </Tooltip>
+                                                </Link>
+                                            </TableCell>
+                                            <TableCell>
+                                                <Link to={row.url.view} className="actions">
+                                                    <Tooltip title="View" >
+                                                        <IconButton aria-label="View">
+                                                            <Eye/>
+                                                        </IconButton>
+                                                    </Tooltip>
+                                                </Link>
+                                            </TableCell>
+                                            <TableCell>
+                                                <Link to={row.url.delete} className="actions">
+                                                    <Tooltip title="Delete" >
+                                                        <IconButton aria-label="Delete">
+                                                            <Delete/>
+                                                        </IconButton>
+                                                    </Tooltip>
+                                                </Link>
+                                            </TableCell>
+                                        </TableRow>
+                                    );
+                                })}
+                            </TableBody>
+                    </Table>)
+                }
             </Paper>
+            </React.Fragment>
         );
     }
 }

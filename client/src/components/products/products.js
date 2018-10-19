@@ -34,6 +34,7 @@ class Products extends Component
     }
 
     render() {
+        document.title = "Products";
         const products=this.state.products;
         const allProducts = products.map((product) => 
             <div className = 'product-listing-single-product' key = {product._id}>

@@ -55,16 +55,16 @@ export default class Register extends Component {
         });
     }
     handlePasswordChange(e) {
-        // const passwordRegex = /^.*(?=.{8,})((?=.*[!@#$%^&*()\-_=+{};:,<.>]){1})(?=.*\d)((?=.*[a-z]){1})((?=.*[A-Z]){1}).*$/;
-        // if ((!passwordRegex.test(e.target.value)) && e.target.value !== '') {
-        //     this.setState({
-        //         passwordError: true
-        //     });
-        // } else {
-        //     this.setState({
-        //         passwordError: false
-        //     });
-        // }
+        const passwordRegex = /^.*(?=.{8,})((?=.*[!@#$%^&*()\-_=+{};:,<.>]){1})(?=.*\d)((?=.*[a-z]){1})((?=.*[A-Z]){1}).*$/;
+        if ((!passwordRegex.test(e.target.value)) && e.target.value !== '') {
+            this.setState({
+                passwordError: true
+            });
+        } else {
+            this.setState({
+                passwordError: false
+            });
+        }
         this.setState(
             {password: e.target.value}
         );
@@ -138,6 +138,7 @@ export default class Register extends Component {
         const emailErrorStyle = this.state.emailError ? {display : 'block',  color : 'red'} :{display: 'none'};
         const passwordErrorStyle = this.state.passwordError ? {display : 'block',  color : 'red'} :{display: 'none'};
         const emailExistsStyle = this.state.emailExists ? {display: 'block', color: 'red'} : {display: 'none'};
+        document.title = "Register";
         return (
             <div>
                 <form onSubmit = {this.registerSubmit}>

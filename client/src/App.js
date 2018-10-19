@@ -11,6 +11,7 @@ import Register from './components/admin/Register';
 import Products from './components/products/products';
 import Users from './components/users/users';
 import EditUser from './components/users/editUser';
+import CreateUser from './components/users/createUser';
 import Header from './../src/components/header/header';
 
 class App extends Component
@@ -47,7 +48,6 @@ class App extends Component
   }
 
   render() {
-    // console.log(this.state);
     const loggedIn = this.state.loggedIn;
     const serverErrorStyle = this.state.serverError ? {display: 'block'} : {display: 'none'};
     return (
@@ -74,8 +74,13 @@ class App extends Component
                 />
                 <Route
                   exact path="/users"
-                  //render = {() => (loggedIn) ? (<Users/>) : (<Redirect to="/login" />) }
+                  // render = {() => (loggedIn) ? (<Users/>) : (<Redirect to="/login" />) }
                   render = {() => (<Users serverError={this.serverError}/>)}
+                />
+                <Route
+                  exact path="/users/add"
+                  //render = {() => (loggedIn) ? (<CreateUser/>) : (<Redirect to="/login" />) }
+                  render = {() => (<CreateUser serverError={this.serverError}/>)}
                 />
                 <Route 
                   exact path = "/login"

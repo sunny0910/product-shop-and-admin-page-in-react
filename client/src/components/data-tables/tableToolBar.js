@@ -6,7 +6,7 @@ import {Link} from 'react-router-dom';
 class TableToolBar extends Component
 {
     render() {
-        let style = (this.props.selectedCount == 0)?{}:{ backgroundColor: "#f50057", color: "white"};
+        let style = (this.props.selectedCount === 0) ? {} : { backgroundColor: "#f50057", color: "white"};
         return (
             <Toolbar style={style}>
                 <div className='table-title-left'>

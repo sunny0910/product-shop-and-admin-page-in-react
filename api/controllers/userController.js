@@ -67,7 +67,7 @@ const userSignUp = (req, res) => {
 };
 
 const userLogIn = (req, res) => {
-    console.log(req);
+    // console.log(req);
     User.findOne({email: req.body.email})
     .exec()
     .then(user => {
@@ -166,6 +166,7 @@ const getUser = (req, res) => {
             firstName: doc.firstName,
             secondName: doc.secondName,
             email: doc.email,
+            password: doc.password
         }
         res.status(200).json(response);
         }
@@ -179,7 +180,38 @@ const getUser = (req, res) => {
 }
 
 const userUpdate = (req,res) => {
-    console.log(req.params.userId);
+    if (typeof(req.body.password) !== "undefined") {
+        bcrypt.genSalt(parseInt(process.env.JWT_KEY), (err, salt) => {
+            if (err) {
+                return res.status(500).json({
+                    error: err
+                });
+            }
+            bcrypt.hash(req.body.password, salt, (err, hash) => {
+                if (err) {
+                    return res.status(500).json({
+                        error: err
+                    });
+                } else {
+                    req.body.password = hash;
+                    User.update({"_id": req.params.userId}, {$set: req.body}).exec()
+                    .then(user => {
+                        return res.status(200).json({
+                            status: 200,
+                            messsage: 'User Updated',
+                            user: user
+                        });
+                    })
+                    .catch(err => {
+                        res.status(500).json({
+                            status: 500,
+                            error: err
+                        });
+                    });
+                }
+            });
+        });
+    }
     User.update({"_id": req.params.userId}, {$set: req.body}).exec()
     .then(user => {
         return res.status(200).json({

@@ -37,7 +37,7 @@ class Users extends Component
     render() {
         const users = this.state.users;
         const columns = ["FirstName", "SecondName", "Email", "", "", ""];
-
+        document.title = "Users";
         return (
             <div id='users-table'>
                 <DataTable data={users} columns={columns} />

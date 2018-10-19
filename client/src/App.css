@@ -98,10 +98,17 @@ body {
   margin-top: 5%;
   width: 80%;
 }
-
+.loader {
+  margin-top: 10%;
+  margin-left: 45%;
+}
+.userForm {
+  margin-top: 10%;
+}
 .editpaper {
   margin: auto;
   margin-top: 10%;
+  text-align: center;
   width: 70%
 }
 .firstNameField {
