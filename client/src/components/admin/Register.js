@@ -125,7 +125,7 @@ export default class Register extends Component {
                     hideProgress: true,
                     jwtToken: json.token
                 });
-                this.props.userLogIn(true);
+                this.props.userLogIn(true, json.token);
             })
             .catch((err) => {
                 console.log(err);

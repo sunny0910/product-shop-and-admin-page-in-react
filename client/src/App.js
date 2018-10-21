@@ -14,6 +14,7 @@ import EditUser from './components/users/editUser';
 import AddUser from './components/users/addUser';
 import ViewUser from "./components/users/viewUser";
 import Header from './../src/components/header/header';
+import Snackbar from '@material-ui/core/Snackbar';
 
 class App extends Component
 {
@@ -23,16 +24,19 @@ class App extends Component
       loggedIn: false,
       jwtToken: "",
       serverError: false,
+      unAuthorised: false,
       productsInCart: 0
     }
     this.userLogIn = this.userLogIn.bind(this);
     this.serverError = this.serverError.bind(this);
+    this.unAuthorised = this.unAuthorised.bind(this);
     this.logOut = this.logOut.bind(this);
   }
 
-  userLogIn(value) {
+  userLogIn(value, token) {
     this.setState({
-      loggedIn: value
+      loggedIn: value,
+      jwtToken: token
     });
     return true;
   }
@@ -40,6 +44,12 @@ class App extends Component
   serverError(value) {
     this.setState({
       serverError: value
+    });
+  }
+
+  unAuthorised() {
+    this.setState({
+      unAuthorised: true
     });
   }
 
@@ -51,12 +61,12 @@ class App extends Component
 
   render() {
     const loggedIn = this.state.loggedIn;
-    const serverErrorStyle = this.state.serverError ? {display: 'block'} : {display: 'none'};
+    const serverErrorMessage = "Unable to connect, Please try again later!";
+    const unAuthorisedErrorMessage = "You Don't have access to the page!";
+    const anchorOrigin = {horizontal: "center", vertical: "top"};
     return (
       <div className="App">
-        <div className ="serverError" style = {serverErrorStyle}>
-          <p> Unable to connect, Please try again later! </p>
-        </div>
+      {(this.state.serverError || this.state.unAuthorised)?<Snackbar anchorOrigin={anchorOrigin} open message={this.props.serverError ? serverErrorMessage:unAuthorisedErrorMessage}/>:''}
         <Router>
             <div className='content'>
               <Header loggedIn = {this.state.loggedIn} logOut={this.logOut} productsInCart={this.state.productsInCart}/>
@@ -71,25 +81,25 @@ class App extends Component
                 />
                 <Route 
                   exact path="/users/:id/edit"
-                  // render = {() => (loggedIn) ? (<EditUser/>) : (<Redirect to="/login" />) }
-                  render = {(props) => (<EditUser serverError={this.serverError} {...props} />) }
+                  render = {(props) => (loggedIn) ? (<EditUser serverError={this.serverError} {...props} token = {this.state.jwtToken} unAuthorised = {this.unAuthorised} />) : (<Redirect to="/login" />) }
+                  // render = {(props) => (<EditUser serverError={this.serverError} {...props} />) }
                 />
                 <Route
                   exact path="/users"
-                  // render = {() => (loggedIn) ? (<Users/>) : (<Redirect to="/login" />) }
-                  render = {() => (<Users serverError={this.serverError}/>)}
+                  render = {() => (loggedIn) ? (<Users serverError={this.serverError} token = {this.state.jwtToken} unAuthorised = {this.unAuthorised} />) : (<Redirect to="/login" />) }
+                  // render = {() => (<Users serverError={this.serverError}/>)}
                 />
                 <Route
                   exact path="/users/add"
-                  //render = {() => (loggedIn) ? (<AddUser/>) : (<Redirect to="/login" />) }
-                  render = {() => (<AddUser serverError={this.serverError}/>)}
+                  render = {() => (loggedIn) ? (<AddUser serverError={this.serverError} token = {this.state.jwtToken} unAuthorised = {this.unAuthorised} />) : (<Redirect to="/login" />) }
+                  // render = {() => (<AddUser serverError={this.serverError}/>)}
                 />
                 <Route
                   exact path="/users/:id"
-                  //render = {() => (loggedIn) ? (<ViewUser/>) : (<Redirect to="/login" />) }
-                  render = {(props) => (<ViewUser serverError={this.serverError} {...props}/>)}
+                  render = {(props) => (loggedIn) ? (<ViewUser serverError={this.serverError} {...props} token = {this.state.jwtToken} unAuthorised = {this.unAuthorised} />) : (<Redirect to="/login" />) }
+                  // render = {(props) => (<ViewUser serverError={this.serverError} {...props}/>)}
                 />
-                <Route 
+                <Route
                   exact path = "/login"
                   render = {() => (loggedIn) ? (<Redirect to='/products'/>) : (<Login userLogIn = {this.userLogIn} serverError = {this.serverError} />) }
                 />
@@ -100,7 +110,6 @@ class App extends Component
                 <Route
                   exact path = "/logout"
                   render = {() => (loggedIn) ? (this.logOut()) : (<Redirect to='/products'/>) }
-                  // Component = {Products}
                 />
               </Switch>
             </div>

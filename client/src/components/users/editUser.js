@@ -9,6 +9,7 @@ class EditUser extends Component
                     id= {this.props.match.params.id}
                     serverError = {this.props.serverError}
                     editPage = {true}
+                    token = {this.props.token}
                 />
     }
 }

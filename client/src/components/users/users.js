@@ -15,9 +15,13 @@ class Users extends Component
     }
 
     componentDidMount() {
-        ApiRequest(ApiUrl+'/users','GET')
+        ApiRequest(ApiUrl+'/users','GET', '', this.props.token)
         .then((result) => {
             if (result.status === 500) {
+                this.props.serverError(true);
+                return;
+            }
+            if (result.status === 401) {
                 this.props.serverError(true);
                 return;
             }
@@ -47,7 +51,7 @@ class Users extends Component
         document.title = "Users";
         return (
             <div id='users-table'>
-                <DataTable data={users} columns={columns} updateUserList={this.updateUserList} />
+                <DataTable token={this.props.token} data={users} columns={columns} updateUserList={this.updateUserList} />
             </div>
         );
     }

@@ -70,8 +70,9 @@ class DataTable extends Component
 
     deleteUser(id) {
         this.setState({linearLoading: true});
-        apiRequest(apiUrl+'/users/'+id, 'GET')
+        apiRequest(apiUrl+'/users/'+id, 'DELETE', '', this.props.token)
             .then((result) => {
+                console.log(result);
                 if (result.status === 500) {
                     this.props.serverError(true);
                     return
@@ -153,13 +154,11 @@ class DataTable extends Component
                                                 </Link>
                                             </TableCell>
                                             <TableCell>
-                                                {/* <Link to={row.url.delete} className="actions"> */}
-                                                    <Tooltip title="Delete" >
-                                                        <IconButton aria-label="Delete" onClick= {() => this.deleteUser(row._id)}>
-                                                            <Delete/>
-                                                        </IconButton>
-                                                    </Tooltip>
-                                                {/* </Link> */}
+                                                <Tooltip title="Delete" >
+                                                    <IconButton aria-label="Delete" onClick= {() => this.deleteUser(row._id)}>
+                                                        <Delete/>
+                                                    </IconButton>
+                                                </Tooltip>
                                             </TableCell>
                                         </TableRow>
                                     );

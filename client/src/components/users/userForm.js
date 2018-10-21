@@ -130,7 +130,7 @@ class UserForm extends Component
             return;
         }
         setTimeout(() => {
-            apiRequest(apiUrl+'/users/'+this.props.id, 'GET')
+            apiRequest(apiUrl+'/users/'+this.props.id, 'GET', '', this.props.token)
             .then((result) => {
                 if (result.status === 500) {
                     this.props.serverError(true);
@@ -188,7 +188,7 @@ class UserForm extends Component
             data.password = this.state.password;
         }
         data = JSON.stringify(data);
-        apiRequest(apiUrl+'/users/'+urlPath, method, data)
+        apiRequest(apiUrl+'/users/'+urlPath, method, data, this.props.token)
         .then(result => {
             if (result.status === 500) {
                 this.props.serverError(true);
@@ -218,13 +218,12 @@ class UserForm extends Component
 
     render() {
         const anchorOrigin = {horizontal: "center", vertical: "bottom"};
-        const message = (this.state.sucessNotification)?<Snackbar anchorOrigin={anchorOrigin} open onClose={this.hideUpdatedMessage} message={this.props.editPage ? 'User Updated!':"User Added!"}/>:'';
         const buttonText = this.props.editPage ? "Update User":"Add User";
         return (
             <div className = 'editpaper'>
                 <Paper>
                     <form onSubmit={this.handleSubmit}>
-                        {message}
+                        {(this.state.sucessNotification)?<Snackbar anchorOrigin={anchorOrigin} open onClose={this.hideUpdatedMessage} message={this.props.editPage ? 'User Updated!':"User Added!"}/>:''}
                         {(this.state.linearLoading? <LinearProgress color="primary" />: '')}
                         <div className='formcontent'>
                             <div className = 'formHeading'>

@@ -34,11 +34,13 @@ class Header extends Component
                                         <Typography color='inherit' variant="subheading"  >Products</Typography>
                                     </Link>
                                 </div>
+                                { this.props.loggedIn ?
                                 <div className="menu-items">
                                     <Link to='/users'>
                                         <Typography color='inherit' variant="subheading"  >Users</Typography>
                                     </Link>
                                 </div>
+                                :''}
                                 {buttons}
                             </div>
                         </div>
