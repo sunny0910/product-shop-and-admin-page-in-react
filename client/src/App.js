@@ -11,7 +11,8 @@ import Register from './components/admin/Register';
 import Products from './components/products/products';
 import Users from './components/users/users';
 import EditUser from './components/users/editUser';
-import CreateUser from './components/users/createUser';
+import AddUser from './components/users/addUser';
+import ViewUser from "./components/users/viewUser";
 import Header from './../src/components/header/header';
 
 class App extends Component
@@ -20,6 +21,7 @@ class App extends Component
     super(props);
     this.state = {
       loggedIn: false,
+      jwtToken: "",
       serverError: false,
       productsInCart: 0
     }
@@ -79,8 +81,13 @@ class App extends Component
                 />
                 <Route
                   exact path="/users/add"
-                  //render = {() => (loggedIn) ? (<CreateUser/>) : (<Redirect to="/login" />) }
-                  render = {() => (<CreateUser serverError={this.serverError}/>)}
+                  //render = {() => (loggedIn) ? (<AddUser/>) : (<Redirect to="/login" />) }
+                  render = {() => (<AddUser serverError={this.serverError}/>)}
+                />
+                <Route
+                  exact path="/users/:id"
+                  //render = {() => (loggedIn) ? (<ViewUser/>) : (<Redirect to="/login" />) }
+                  render = {(props) => (<ViewUser serverError={this.serverError} {...props}/>)}
                 />
                 <Route 
                   exact path = "/login"

@@ -1,10 +1,10 @@
 import React, { Component } from "react";
 import UserForm from "./userForm";
 
-class CreateUser extends Component
+class AddUser extends Component
 {
     render() {
-        document.title = "Create User";
+        document.title = "Add User";
         return (
             <UserForm 
                 serverError = {this.props.serverError}
@@ -13,4 +13,4 @@ class CreateUser extends Component
     }
 }
 
-export default CreateUser;
+export default AddUser;

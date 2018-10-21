@@ -122,7 +122,8 @@ export default class Register extends Component {
             result.json()
             .then( (json) => {
                 this.setState({
-                    hideProgress: true
+                    hideProgress: true,
+                    jwtToken: json.token
                 });
                 this.props.userLogIn(true);
             })

@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Paper, Typography, FormControl, InputLabel, Input, Button, Snackbar, CircularProgress} from '@material-ui/core'
+import {Paper, Typography, FormControl, InputLabel, Input, Button, Snackbar, CircularProgress, LinearProgress} from '@material-ui/core'
 import apiUrl from '../../apiUrl';
 import apiRequest from '../../ApiRequest';
 
@@ -20,7 +20,8 @@ class UserForm extends Component
             paswordError: false,
             confirmPasswordError: false,
             sucessNotification: false,
-            loading: true
+            spinnerLoading: true,
+            linearLoading: false
         }
         this.handleFirstNameChange = this.handleFirstNameChange.bind(this);
         this.handleSecondNameChange = this.handleSecondNameChange.bind(this);
@@ -125,7 +126,7 @@ class UserForm extends Component
 
     componentDidMount() {
         if (!this.props.editPage) {
-            this.setState({loading: false});
+            this.setState({spinnerLoading: false});
             return;
         }
         setTimeout(() => {
@@ -141,7 +142,7 @@ class UserForm extends Component
                         firstName: json.firstName,
                         secondName: json.secondName,
                         email: json.email,
-                        loading: false
+                        spinnerLoading: false
                     });
                 })
                 .catch((err) => {
@@ -171,7 +172,7 @@ class UserForm extends Component
         if (this.state.firstNameError || this.state.secondNameError || this.state.passwordError || this.state.confirmPasswordError) {
             return;
         }
-        this.setState({loading: true});
+        this.setState({linearLoading: true});
         let data = {
             firstName: this.state.firstName,
             secondName: this.state.secondName,
@@ -204,9 +205,9 @@ class UserForm extends Component
                 setTimeout(() => {
                     this.setState({
                         sucessNotification: true,
-                        loading: false
+                        linearLoading: false
                     })
-                }, 700);
+                }, 500);
             })
             .catch((err) => {
                 console.log(err);
@@ -217,21 +218,22 @@ class UserForm extends Component
 
     render() {
         const anchorOrigin = {horizontal: "center", vertical: "bottom"};
-        const message = (this.state.sucessNotification)?<Snackbar anchorOrigin={anchorOrigin} open onClose={this.hideUpdatedMessage} message={this.props.editPage ? 'User Updated!':"User Created!"}/>:'';
-        const buttonText = this.props.editPage ? "Update":"Create";
+        const message = (this.state.sucessNotification)?<Snackbar anchorOrigin={anchorOrigin} open onClose={this.hideUpdatedMessage} message={this.props.editPage ? 'User Updated!':"User Added!"}/>:'';
+        const buttonText = this.props.editPage ? "Update User":"Add User";
         return (
             <div className = 'editpaper'>
                 <Paper>
                     <form onSubmit={this.handleSubmit}>
                         {message}
+                        {(this.state.linearLoading? <LinearProgress color="primary" />: '')}
                         <div className='formcontent'>
                             <div className = 'formHeading'>
                                 {
                                     this.props.editPage ? <Typography variant='headline' >Edit User</Typography>:
-                                    <Typography variant="headline" > Create User</Typography>
+                                    <Typography variant="headline" > Add User</Typography>
                                 }
                             </div>
-                            {this.state.loading ?
+                            {this.state.spinnerLoading ?
                                 <CircularProgress color="primary" variant="indeterminate" className="userForm"/> :
                                 <React.Fragment>
                                     <FormControl className="firstNameField" margin = 'normal' error={this.state.firstNameError} required >

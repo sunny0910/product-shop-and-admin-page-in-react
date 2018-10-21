@@ -1,26 +1,31 @@
 import React, {Component} from 'react';
 import Table from '@material-ui/core/Table';
-import { TableHead, TableBody, TableCell, TableRow, Paper, IconButton, Tooltip, CircularProgress } from '@material-ui/core';
+import { TableHead, TableBody, TableCell, TableRow, Paper, IconButton, Tooltip, CircularProgress, LinearProgress, Snackbar } from '@material-ui/core';
 import Delete from '@material-ui/icons/Delete';
 import Edit from '@material-ui/icons/Edit';
 import Eye from '@material-ui/icons/RemoveRedEye';
 import CheckBox from '@material-ui/icons/CheckBox';
 import {Link} from 'react-router-dom';
 import TableToolBar from './tableToolBar';
+import apiRequest from '../../ApiRequest';
+import apiUrl from '../../apiUrl';
 
 class DataTable extends Component
 {
     constructor(props) {
         super(props);
         this.state = {
-            loading: true,
+            spinnerLoading: true,
+            linearLoading: false,
             selected: [],
             selectedCount: 0,
             mainCheckBoxSelected: false,
-            mainCheckBoxColor: 'inherit'
+            mainCheckBoxColor: 'inherit',
+            deleteNotification: false
         }
         this.checkboxOnChange = this.checkboxOnChange.bind(this);
         this.mainCheckboxOnChange = this.mainCheckboxOnChange.bind(this);
+        this.hideDeleteNotification = this.hideDeleteNotification.bind(this);
     }
 
     mainCheckboxOnChange(e) {
@@ -63,15 +68,47 @@ class DataTable extends Component
         return true;
     }
 
+    deleteUser(id) {
+        this.setState({linearLoading: true});
+        apiRequest(apiUrl+'/users/'+id, 'GET')
+            .then((result) => {
+                if (result.status === 500) {
+                    this.props.serverError(true);
+                    return
+                }
+                result.json()
+                .then((id) => {
+                    setTimeout((id) => this.setState({linearLoading: false, deleteNotification: true}, () => this.props.updateUserList(id) ), 500, id.id);
+                })
+                .catch((err) => {
+                    console.log(err);
+                    this.props.serverError(true);
+                })
+            })
+            .catch((err) => {
+                this.props.serverError(true);
+            })
+    }
+
+    hideDeleteNotification() {
+        this.setState({
+            deleteNotification: false
+        });
+    }
+
     render() {
         setTimeout(() => {
-            this.setState({loading: false});
-        }, 700);
+            this.setState({spinnerLoading: false});
+        }, 500);
+        const anchorOrigin = {horizontal: "center", vertical: "bottom"};
+        const message = (this.state.deleteNotification)?<Snackbar anchorOrigin={anchorOrigin} open onClose={this.hideDeleteNotification} message="User Deleted!"/>:'';
         return (
             <React.Fragment>
                 <Paper className="data-table">
+                {message}
+                {(this.state.linearLoading) ? <LinearProgress color="secondary"/>:''}
                 <TableToolBar selectedCount={this.state.selectedCount}/>
-                {this.state.loading ?
+                {this.state.spinnerLoading ?
                     <CircularProgress color="primary" variant="indeterminate" className="loader"/> :
                         (<Table padding='checkbox'>
                             <TableHead>
@@ -98,15 +135,6 @@ class DataTable extends Component
                                             <TableCell>{row.secondName}</TableCell>
                                             <TableCell>{row.email}</TableCell>
                                             <TableCell>
-                                                <Link to={row.url.edit} className="actions">
-                                                    <Tooltip title="Edit" >
-                                                        <IconButton aria-label="Edit">
-                                                            <Edit/>
-                                                        </IconButton>
-                                                    </Tooltip>
-                                                </Link>
-                                            </TableCell>
-                                            <TableCell>
                                                 <Link to={row.url.view} className="actions">
                                                     <Tooltip title="View" >
                                                         <IconButton aria-label="View">
@@ -116,13 +144,22 @@ class DataTable extends Component
                                                 </Link>
                                             </TableCell>
                                             <TableCell>
-                                                <Link to={row.url.delete} className="actions">
-                                                    <Tooltip title="Delete" >
-                                                        <IconButton aria-label="Delete">
-                                                            <Delete/>
+                                                <Link to={row.url.edit} className="actions">
+                                                    <Tooltip title="Edit" >
+                                                        <IconButton aria-label="Edit">
+                                                            <Edit/>
                                                         </IconButton>
                                                     </Tooltip>
                                                 </Link>
+                                            </TableCell>
+                                            <TableCell>
+                                                {/* <Link to={row.url.delete} className="actions"> */}
+                                                    <Tooltip title="Delete" >
+                                                        <IconButton aria-label="Delete" onClick= {() => this.deleteUser(row._id)}>
+                                                            <Delete/>
+                                                        </IconButton>
+                                                    </Tooltip>
+                                                {/* </Link> */}
                                             </TableCell>
                                         </TableRow>
                                     );

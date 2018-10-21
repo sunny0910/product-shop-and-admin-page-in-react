@@ -11,6 +11,7 @@ class Users extends Component
             users : [],
             count: 0
         };
+        this.updateUserList = this.updateUserList.bind(this);
     }
 
     componentDidMount() {
@@ -34,13 +35,19 @@ class Users extends Component
         })
     }
 
+    updateUserList(id) {
+        let users = this.state.users.splice(0);
+        users = users.filter((user) => { return user._id !== id});
+        this.setState({users: users});
+    }
+
     render() {
         const users = this.state.users;
         const columns = ["FirstName", "SecondName", "Email", "", "", ""];
         document.title = "Users";
         return (
             <div id='users-table'>
-                <DataTable data={users} columns={columns} />
+                <DataTable data={users} columns={columns} updateUserList={this.updateUserList} />
             </div>
         );
     }

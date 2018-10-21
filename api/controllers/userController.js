@@ -67,7 +67,6 @@ const userSignUp = (req, res) => {
 };
 
 const userLogIn = (req, res) => {
-    // console.log(req);
     User.findOne({email: req.body.email})
     .exec()
     .then(user => {
@@ -115,9 +114,9 @@ const userLogIn = (req, res) => {
 };
 
 const userDelete = (req, res) => {
-    User.remove({_id : req.params.userId}).exec()
+    User.deleteOne({_id : req.params.userId}).exec()
     .then(result => {
-            return res.status(200).json({res : result});
+            return res.status(200).json({res : result, id: req.params.userId});
         }
     )
     .catch(err => {
@@ -138,10 +137,11 @@ const users = (req, res) => {
                     firstName: doc.firstName,
                     secondName: doc.secondName,
                     email: doc.email,
+                    password: doc.password,
                     url: {
                         edit : "/users/"+doc._id+"/edit",
                         view: "/users/"+doc._id,
-                        delete: "/users"+doc._id+"/delete"
+                        delete: "/users/"+doc._id+"/delete"
                     }
                 }
             })
@@ -166,7 +166,6 @@ const getUser = (req, res) => {
             firstName: doc.firstName,
             secondName: doc.secondName,
             email: doc.email,
-            password: doc.password
         }
         res.status(200).json(response);
         }

@@ -78,7 +78,8 @@ class Login extends Component
             result.json()
             .then( (json) => {
                 this.setState({
-                    hideProgress: true
+                    hideProgress: true,
+                    jwtToken: json.token
                 });
                 this.props.userLogIn(true);
             })
