@@ -5,13 +5,15 @@ const userController = require('../controllers/userController');
 
 router.post('/signup', userController.userSignUp);
 
-router.delete('/:userId', userController.userDelete);
+router.post('/login', userController.userLogIn);
+
+router.delete('/:userId', checkAuth, userController.userDelete);
+
+router.delete("/", checkAuth, userController.deleteMultipleUsers);
 
 router.get('/:userId', checkAuth, userController.getUser);
 
 router.patch('/:userId', checkAuth, userController.userUpdate);
-
-router.post('/login', userController.userLogIn);
 
 router.get('/', checkAuth, userController.users);
 

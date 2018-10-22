@@ -26,12 +26,12 @@ class DataTable extends Component
         this.checkboxOnChange = this.checkboxOnChange.bind(this);
         this.mainCheckboxOnChange = this.mainCheckboxOnChange.bind(this);
         this.hideDeleteNotification = this.hideDeleteNotification.bind(this);
+        this.deleteMultipleRows = this.deleteMultipleRows.bind(this);
     }
 
     mainCheckboxOnChange(e) {
-        
         this.setState((state, props) => ({
-            selected: (state.mainCheckBoxSelected)? [] : props.data.map(row => row._id),
+            selected: (state.mainCheckBoxSelected)? [] : props.data.map(row => row.id),
             selectedCount: (state.mainCheckBoxSelected)? 0: props.data.length,
             mainCheckBoxSelected: !state.mainCheckBoxSelected,
             mainCheckBoxColor: (state.mainCheckBoxSelected) ? "inherit": "secondary"
@@ -68,18 +68,40 @@ class DataTable extends Component
         return true;
     }
 
-    deleteUser(id) {
+    deleteRow(id) {
         this.setState({linearLoading: true});
         apiRequest(apiUrl+'/users/'+id, 'DELETE', '', this.props.token)
             .then((result) => {
-                console.log(result);
                 if (result.status === 500) {
                     this.props.serverError(true);
                     return
                 }
                 result.json()
-                .then((id) => {
-                    setTimeout((id) => this.setState({linearLoading: false, deleteNotification: true}, () => this.props.updateUserList(id) ), 500, id.id);
+                .then((res) => {
+                    setTimeout((id) => this.setState({linearLoading: false, deleteNotification: true}, () => this.props.updateUserList(id) ), 500, res.id);
+                })
+                .catch((err) => {
+                    console.log(err);
+                    this.props.serverError(true);
+                })
+            })
+            .catch((err) => {
+                this.props.serverError(true);
+            })
+    }
+
+    deleteMultipleRows() {
+        this.setState({linearLoading: true});
+        let data = JSON.stringify(this.state.selected);
+        apiRequest(apiUrl+'/users', 'DELETE', data, this.props.token)
+            .then((result) => {
+                if (result.status === 500) {
+                    this.props.serverError(true);
+                    return
+                }
+                result.json()
+                .then((res) => {
+                    setTimeout((ids) => this.setState({linearLoading: false, deleteNotification: true}, () => this.props.updateUserList(ids) ), 500, res.ids);
                 })
                 .catch((err) => {
                     console.log(err);
@@ -102,13 +124,13 @@ class DataTable extends Component
             this.setState({spinnerLoading: false});
         }, 500);
         const anchorOrigin = {horizontal: "center", vertical: "bottom"};
-        const message = (this.state.deleteNotification)?<Snackbar anchorOrigin={anchorOrigin} open onClose={this.hideDeleteNotification} message="User Deleted!"/>:'';
+        const message = (this.state.deleteNotification)?<Snackbar autoHideDuration={1500} anchorOrigin={anchorOrigin} open onClose={this.hideDeleteNotification} message="User Deleted!"/>:'';
         return (
             <React.Fragment>
                 <Paper className="data-table">
                 {message}
                 {(this.state.linearLoading) ? <LinearProgress color="secondary"/>:''}
-                <TableToolBar selectedCount={this.state.selectedCount}/>
+                <TableToolBar selectedCount={this.state.selectedCount} deleteMultipleRows = {this.deleteMultipleRows} hideDeleteNotification = {this.hideDeleteNotification}/>
                 {this.state.spinnerLoading ?
                     <CircularProgress color="primary" variant="indeterminate" className="loader"/> :
                         (<Table padding='checkbox'>
@@ -126,11 +148,11 @@ class DataTable extends Component
                             </TableHead>
                             <TableBody>
                                 {this.props.data.map((row, index) => {
-                                    const isSelected = this.isSelected(row._id);
+                                    const isSelected = this.isSelected(row.id);
                                     return (
                                         <TableRow key={index} hover selected={isSelected} >
                                             <TableCell>
-                                                <CheckBox selected={isSelected} onClick={event => this.checkboxOnChange(event,row._id) } color={(isSelected) ? "secondary": "inherit"} />
+                                                <CheckBox selected={isSelected} onClick={event => this.checkboxOnChange(event,row.id) } color={(isSelected) ? "secondary": "inherit"} />
                                             </TableCell>
                                             <TableCell>{row.firstName}</TableCell>
                                             <TableCell>{row.secondName}</TableCell>
@@ -155,7 +177,7 @@ class DataTable extends Component
                                             </TableCell>
                                             <TableCell>
                                                 <Tooltip title="Delete" >
-                                                    <IconButton aria-label="Delete" onClick= {() => this.deleteUser(row._id)}>
+                                                    <IconButton aria-label="Delete" onClick= {() => this.deleteRow(row.id)}>
                                                         <Delete/>
                                                     </IconButton>
                                                 </Tooltip>

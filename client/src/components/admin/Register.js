@@ -126,6 +126,7 @@ export default class Register extends Component {
                     jwtToken: json.token
                 });
                 this.props.userLogIn(true, json.token);
+                document.cookie = "token="+json.token+"; path=/";
             })
             .catch((err) => {
                 console.log(err);
@@ -141,7 +142,7 @@ export default class Register extends Component {
         const emailExistsStyle = this.state.emailExists ? {display: 'block', color: 'red'} : {display: 'none'};
         document.title = "Register";
         return (
-            <div>
+            <React.Fragment>
                 <form onSubmit = {this.registerSubmit}>
                     <div className = 'formpaper'>
                         <div className = 'progress' style = {progressStyle}>
@@ -159,6 +160,7 @@ export default class Register extends Component {
                                             name='firstName'
                                             value = {this.state.firstName}
                                             onChange = {this.handleFirstNameChange}
+                                            autoComplete = "name"
                                             required/>
                                         <span style={nameErrorStyle}>Invalid Value</span>
                                     </FormControl>
@@ -170,6 +172,7 @@ export default class Register extends Component {
                                             name='secondName'
                                             value = {this.state.secondName}
                                             onChange = {this.handleSecondNameChange}
+                                            autoComplete = "name"
                                             required/>
                                         <span style={nameErrorStyle}>Invalid Value</span>
                                     </FormControl>
@@ -181,6 +184,7 @@ export default class Register extends Component {
                                             name='email'
                                             value = {this.state.email}
                                             onChange = {this.handleEmailChange}
+                                            autoComplete = "email"
                                             required/>
                                         <span style={emailErrorStyle}>Invalid Value</span>
                                         <span style={emailExistsStyle}>Email Already Exists!</span>
@@ -201,7 +205,7 @@ export default class Register extends Component {
                         </Paper>
                     </div>
                 </form>
-            </div>
+            </React.Fragment>
         );
     }
 };

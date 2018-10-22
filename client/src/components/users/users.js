@@ -22,7 +22,7 @@ class Users extends Component
                 return;
             }
             if (result.status === 401) {
-                this.props.serverError(true);
+                this.props.unAuthorised(result);
                 return;
             }
             result.json()
@@ -39,9 +39,13 @@ class Users extends Component
         })
     }
 
-    updateUserList(id) {
-        let users = this.state.users.splice(0);
-        users = users.filter((user) => { return user._id !== id});
+    updateUserList(userId) {
+        let users = this.state.users.slice(0);
+        if (typeof(userId) === "object") {
+            users = users.filter((user) => { return !userId.includes(user.id)});
+        } else {
+            users = users.filter((user) => { return user.id !== userId});
+        }
         this.setState({users: users});
     }
 

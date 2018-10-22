@@ -136,6 +136,10 @@ class UserForm extends Component
                     this.props.serverError(true);
                     return
                 }
+                if (result.status === 401) {
+                    this.props.unAuthorised(result);
+                    return;
+                }
                 result.json()
                 .then(json => {
                     this.setState({
@@ -223,7 +227,7 @@ class UserForm extends Component
             <div className = 'editpaper'>
                 <Paper>
                     <form onSubmit={this.handleSubmit}>
-                        {(this.state.sucessNotification)?<Snackbar anchorOrigin={anchorOrigin} open onClose={this.hideUpdatedMessage} message={this.props.editPage ? 'User Updated!':"User Added!"}/>:''}
+                        {(this.state.sucessNotification)?<Snackbar autoHideDuration={1500} anchorOrigin={anchorOrigin} open onClose={this.hideUpdatedMessage} message={this.props.editPage ? 'User Updated!':"User Added!"}/>:''}
                         {(this.state.linearLoading? <LinearProgress color="primary" />: '')}
                         <div className='formcontent'>
                             <div className = 'formHeading'>

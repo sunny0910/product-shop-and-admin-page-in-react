@@ -45,6 +45,7 @@ const userSignUp = (req, res) => {
                             );
                             res.status(201).json({
                                 message: 'User created',
+                                id: user._id,
                                 token: token,
                                 status: 200
                             });
@@ -87,6 +88,7 @@ const userLogIn = (req, res) => {
                 return res.status(200).json({
                     status: 200,
                     messsage: 'Auth succ',
+                    id: user._id,
                     token: token
                 });
             } else {
@@ -126,6 +128,21 @@ const userDelete = (req, res) => {
     });
 };
 
+const deleteMultipleUsers = (req, res) => {
+    User.deleteMany({_id : {$in: req.body}}).exec()
+    .then(result => {
+        console.log(result);
+            return res.status(200).json({res : result, ids: req.body});
+        }
+    )
+    .catch(err => {
+        console.log(err);
+        return res.status(500).json({
+            error: err
+        });
+    });
+};
+
 const users = (req, res) => {
     User.find().exec()
     .then(docs => {
@@ -133,7 +150,7 @@ const users = (req, res) => {
             count: docs.length,
             allUsers: docs.map(doc => {
                 return {
-                    _id : doc._id,
+                    id : doc._id,
                     firstName: doc.firstName,
                     secondName: doc.secondName,
                     email: doc.email,
@@ -233,5 +250,6 @@ module.exports = {
     userDelete: userDelete,
     users: users,
     getUser: getUser,
-    userUpdate: userUpdate
+    userUpdate: userUpdate,
+    deleteMultipleUsers: deleteMultipleUsers
 }

@@ -6,11 +6,11 @@ import {Link} from 'react-router-dom';
 class TableToolBar extends Component
 {
     render() {
-        let style = (this.props.selectedCount === 0) ? {} : { backgroundColor: "#f50057", color: "white"};
+        let style = (this.props.selectedCount === 0) ? {} : { backgroundColor: "rgb(251, 224, 234)", color: "rgb(225, 0, 80)"};
         return (
             <Toolbar style={style}>
                 <div className='table-title-left'>
-                    {   this.props.selectedCount>0?
+                    {   this.props.selectedCount > 0 ?
                         (<Typography color='inherit' variant='subheading'>
                             {this.props.selectedCount} Selected    
                         </Typography>):
@@ -20,21 +20,20 @@ class TableToolBar extends Component
                     }
                 </div>
                 <div className='table-title-right'>
-                    {this.props.selectedCount>0?(
-                    <Tooltip title="Delete">
-                    <Link to='/users/delte'>
-                        <IconButton aria-label="Delete">
-                            <Delete style={style}/>
-                        </IconButton>
-                    </Link>
-                    </Tooltip>
-                    ):<Tooltip title="Add">
-                        <Link to='/users/add'>
-                            <IconButton aria-label="Add">
-                                <Add />
+                    {this.props.selectedCount > 0 ? 
+                        (<Tooltip title="Delete">
+                            <IconButton aria-label="Delete">
+                                <Delete style={style} onClick={this.props.deleteMultipleRows} onClose={this.hideDeleteNotification}/>
                             </IconButton>
-                        </Link>
-                    </Tooltip>}
+                        </Tooltip>):
+                        <Tooltip title="Add">
+                            <Link to='/users/add'>
+                                <IconButton aria-label="Add">
+                                    <Add />
+                                </IconButton>
+                            </Link>
+                        </Tooltip>
+                    }
                 </div>
             </Toolbar>
         );

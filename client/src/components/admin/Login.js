@@ -81,6 +81,12 @@ class Login extends Component
                     hideProgress: true,
                 });
                 this.props.userLogIn(true, json.token);
+                document.cookie = "token="+json.token+"; path=/";
+                let a = document.cookie.split("; ");
+                a = a.map((row) => row.split("="));
+                let x = a.filter((row) => row[0] === "token");
+                console.log(x);
+                // return (x.length === 0) ? false: x[1];
             })
             .catch((err) => {
                 console.log(err);
