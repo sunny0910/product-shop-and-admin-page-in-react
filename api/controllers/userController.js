@@ -29,6 +29,7 @@ const userSignUp = (req, res) => {
                                 firstName: req.body.firstName,
                                 secondName: req.body.secondName,
                                 email : req.body.email,
+                                role: req.body.role,
                                 password : hash
                             });
                         user.save()
@@ -154,7 +155,7 @@ const users = (req, res) => {
                     firstName: doc.firstName,
                     secondName: doc.secondName,
                     email: doc.email,
-                    password: doc.password,
+                    role: doc.role,
                     url: {
                         edit : "/users/"+doc._id+"/edit",
                         view: "/users/"+doc._id,
@@ -183,6 +184,7 @@ const getUser = (req, res) => {
             firstName: doc.firstName,
             secondName: doc.secondName,
             email: doc.email,
+            role: doc.role
         }
         res.status(200).json(response);
         }

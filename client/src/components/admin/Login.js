@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import { Paper, Avatar, FormControl, InputLabel, Input, Button, Typography, LinearProgress } from '@material-ui/core';
 import Person from '@material-ui/icons/Person';
 import apiUrl from '../../apiUrl';
-import apiRequest from '../../ApiRequest';
+import apiRequest from '../../apiRequest';
 
 class Login extends Component
 {

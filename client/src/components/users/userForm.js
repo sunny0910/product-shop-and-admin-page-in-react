@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import {Paper, Typography, FormControl, InputLabel, Input, Button, Snackbar, CircularProgress, LinearProgress} from '@material-ui/core'
 import apiUrl from '../../apiUrl';
-import apiRequest from '../../ApiRequest';
+import apiRequest from '../../apiRequest';
 
 class UserForm extends Component
 {

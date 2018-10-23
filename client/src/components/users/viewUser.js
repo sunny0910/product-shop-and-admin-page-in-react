@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import {Paper, Typography, CircularProgress, Grid} from '@material-ui/core';
 import apiUrl from '../../apiUrl';
-import apiRequest from '../../ApiRequest';
+import apiRequest from '../../apiRequest';
 
 class ViewUser extends Component
 {

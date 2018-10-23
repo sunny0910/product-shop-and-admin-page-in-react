@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import apiUrl from '../../apiUrl';
-import apiRequest from '../../ApiRequest';
+import apiRequest from '../../apiRequest';
 
 class Products extends Component
 {

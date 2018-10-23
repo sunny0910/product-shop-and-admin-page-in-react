@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import { Paper, InputLabel, Button, Input, FormControl, Typography, LinearProgress } from '@material-ui/core';
-import apiRequest from '../../ApiRequest';
+import apiRequest from '../../apiRequest';
 import apiUrl from '../../apiUrl';
 
 export default class Register extends Component {

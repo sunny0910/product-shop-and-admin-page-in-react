@@ -7,8 +7,9 @@ import Eye from '@material-ui/icons/RemoveRedEye';
 import CheckBox from '@material-ui/icons/CheckBox';
 import {Link} from 'react-router-dom';
 import TableToolBar from './tableToolBar';
-import apiRequest from '../../ApiRequest';
+import apiRequest from '../../apiRequest';
 import apiUrl from '../../apiUrl';
+import getUserRole from '../users/getUserRole';
 
 class DataTable extends Component
 {
@@ -46,7 +47,7 @@ class DataTable extends Component
 
         (checkboxAlreadySelected)?newSelectedArray.pop(id):newSelectedArray.push(id)
 
-        if (newSelectedArray.length === this.props.data.length) {
+        if (newSelectedArray.length === this.props.users.length) {
             mainCheckBoxSelected = true;
             mainCheckBoxColor = "secondary";
         } else {
@@ -119,6 +120,10 @@ class DataTable extends Component
         });
     }
 
+    getRole() {
+
+    }
+    
     render() {
         setTimeout(() => {
             this.setState({spinnerLoading: false});
@@ -147,7 +152,7 @@ class DataTable extends Component
                                 </TableRow>
                             </TableHead>
                             <TableBody>
-                                {this.props.data.map((row, index) => {
+                                {this.props.users.map((row, index) => {
                                     const isSelected = this.isSelected(row.id);
                                     return (
                                         <TableRow key={index} hover selected={isSelected} >
@@ -157,6 +162,7 @@ class DataTable extends Component
                                             <TableCell>{row.firstName}</TableCell>
                                             <TableCell>{row.secondName}</TableCell>
                                             <TableCell>{row.email}</TableCell>
+                                            <TableCell>{getUserRole(row.role)}</TableCell>
                                             <TableCell>
                                                 <Link to={row.url.view} className="actions">
                                                     <Tooltip title="View" >

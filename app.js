@@ -10,6 +10,7 @@ require('dotenv').config();
 
 var productRouter = require('./api/routes/products');
 var userRouter = require('./api/routes/user');
+var rolesRouter = require('./api/routes/roles');
 mongoose.Promise = global.Promise;
 var dbConnected = true;
 mongoose.connect(uri, {useNewUrlParser: true})
@@ -47,6 +48,7 @@ app.use((req, res, next) => {
 
 app.use('/api/v1/users', userRouter)
 app.use('/api/v1/products', productRouter);
+app.use('/api/v1/roles', rolesRouter)
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
