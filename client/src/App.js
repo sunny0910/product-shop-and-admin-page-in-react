@@ -31,7 +31,8 @@ class App extends Component
       jwtToken: getDataFromCookie("token"),
       serverError: false,
       unAuthorised: false,
-      productsInCart: 0,
+      productsInCartCount: 0,
+      productsInCart: [],
       roles: []
     }
     this.userLogIn = this.userLogIn.bind(this);
@@ -41,6 +42,30 @@ class App extends Component
     this.hideUnathorizedMessage = this.hideUnathorizedMessage.bind(this);
     this.logOut = this.logOut.bind(this);
     this.getUserRole = this.getUserRole.bind(this);
+    this.handleCartCounter = this.handleCartCounter.bind(this);
+    this.addToCart = this.addToCart.bind(this);
+    this.removeFromCart = this.removeFromCart.bind(this);
+  }
+
+  handleCartCounter(e) {
+    this.setState(PrevState => (
+      {productsInCartCount: PrevState.productsInCartCount+1}
+    ), () => console.log(this.state.productsInCartCount)
+    );
+  }
+
+  addToCart(productId) {
+    this.setState((prevState) => (
+      { poductsInCart: prevState.productsInCart.push(productId)}
+    ))
+    this.handleCartCounter()
+  }
+
+  removeFromCart(productId) {
+    let index = this.state.productsInCart.indexOf(productId);
+    this.setState((prevState) => (
+      {productsInCart: prevState.productsInCart.splice(index, 1)}
+    ))
   }
 
   componentDidMount() {
@@ -145,45 +170,93 @@ class App extends Component
     return (
       <div className="App">
         {(this.state.serverError || this.state.unAuthorised) ?
-          <Snackbar anchorOrigin={anchorOrigin} open autoHideDuration={2000} onClose={this.hideErrorMessage} message={this.props.serverError ? serverErrorMessage : unAuthorisedErrorMessage}/>:''
+          <Snackbar 
+            anchorOrigin={anchorOrigin}
+            open autoHideDuration={2000}
+            onClose={this.hideErrorMessage}
+            message={this.props.serverError ? serverErrorMessage : unAuthorisedErrorMessage}
+          />:''
         }
         <Router>
             <div className='content'>
-              <Header loggedIn = {this.state.loggedIn} admin={checkIsAdmin(this.state.userRoleId)} logOut={this.logOut} productsInCart={this.state.productsInCart}/>
+              <Header
+                loggedIn = {this.state.loggedIn}
+                admin={checkIsAdmin(this.state.userRoleId)}
+                logOut={this.logOut}
+                productsInCartCount={this.state.productsInCartCount}
+              />
               <Switch>
                 <Route 
                   exact path="/"
-                  render = {() => (<Products serverError={this.serverError} hideUnathorizedMessage = {this.hideUnathorizedMessage} />) }
+                  render = {() => (
+                    <Products addToCart = {this.addToCart}
+                      removeFromCart = {this.removeFromCart}
+                      handleCartCounter={this.handleCartCounter}
+                      productsInCart = {this.state.productsInCart}
+                      serverError={this.serverError}
+                      hideUnathorizedMessage = {this.hideUnathorizedMessage}
+                    />)
+                  }
                 />
                 <Route 
                   exact path="/products"
-                  render = {(props) => (<Products serverError={this.serverError} {...props} hideUnathorizedMessage = {this.hideUnathorizedMessage} />) }
+                  render = {(props) => (
+                    <Products addToCart = {this.addToCart}
+                      removeFromCart={this.removeFromCart}
+                      handleCartCounter={this.handleCartCounter}
+                      productsInCart = {this.state.productsInCart}
+                      serverError={this.serverError}
+                      {...props}
+                      hideUnathorizedMessage = {this.hideUnathorizedMessage} 
+                    />)
+                  }
                 />
                 <Route 
                   exact path="/users/:id/edit"
                   render = {(props) => ( checkIsAdmin(this.state.userRoleId) ?
-                    (<EditUser getUserRole={this.getUserRole} roles={this.state.roles} serverError={this.serverError} {...props} token = {this.state.jwtToken} unAuthorised = {this.unAuthorised} hideUnathorizedMessage = {this.hideUnathorizedMessage} />) :
+                    (<EditUser getUserRole={this.getUserRole}
+                        roles={this.state.roles}
+                        serverError={this.serverError}
+                        {...props}
+                        token = {this.state.jwtToken}
+                        unAuthorised = {this.unAuthorised}
+                        hideUnathorizedMessage = {this.hideUnathorizedMessage} />) :
                     ( (this.state.loggedIn) ? <Redirect to="/products&unathorize='true'" />: <Redirect to="/login" />)
                   )}
                 />
                 <Route
                   exact path="/users"
                   render = {() => ( checkIsAdmin(this.state.userRoleId) ?
-                    (<Users userId = {this.state.userId} getUserRole={this.getUserRole} serverError={this.serverError} token = {this.state.jwtToken} unAuthorised = {this.unAuthorised} hideUnathorizedMessage = {this.hideUnathorizedMessage} />) :
+                    (<Users userId = {this.state.userId}
+                        getUserRole={this.getUserRole}
+                        serverError={this.serverError}
+                        token = {this.state.jwtToken}
+                        unAuthorised = {this.unAuthorised}
+                        hideUnathorizedMessage = {this.hideUnathorizedMessage} />) :
                     ((this.state.loggedIn) ? <Redirect to="/products&unathorize='true'" />: <Redirect to="/login" />)
                   )}
                 />
                 <Route
                   exact path="/users/add"
                   render = {() => ( checkIsAdmin(this.state.userRoleId) ?
-                    (<AddUser getUserRole={this.getUserRole} roles={this.state.roles} serverError={this.serverError} token = {this.state.jwtToken} unAuthorised = {this.unAuthorised} hideUnathorizedMessage = {this.hideUnathorizedMessage} />) :
+                    (<AddUser getUserRole={this.getUserRole}
+                        roles={this.state.roles}
+                        serverError={this.serverError}
+                        token = {this.state.jwtToken}
+                        unAuthorised = {this.unAuthorised}
+                        hideUnathorizedMessage = {this.hideUnathorizedMessage} />) :
                     ((this.state.loggedIn) ? <Redirect to="/products&unathorize='true'" />: <Redirect to="/login" />)
                   )}
                 />
                 <Route
                   exact path="/users/:id"
                   render = {(props) => ( checkIsAdmin(this.state.userRoleId) ?
-                    (<ViewUser getUserRole={this.getUserRole} serverError={this.serverError} {...props} token = {this.state.jwtToken} unAuthorised = {this.unAuthorised} hideUnathorizedMessage = {this.hideUnathorizedMessage} />) :
+                    (<ViewUser getUserRole={this.getUserRole}
+                        serverError={this.serverError}
+                        {...props}
+                        token = {this.state.jwtToken}
+                        unAuthorised = {this.unAuthorised}
+                        hideUnathorizedMessage = {this.hideUnathorizedMessage} />) :
                     ((this.state.loggedIn) ? <Redirect to="/products&unathorize='true'" />: <Redirect to="/login" />)
                   )}
                 />

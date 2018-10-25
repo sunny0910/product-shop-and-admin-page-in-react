@@ -153,10 +153,7 @@ class DataTable extends Component
     }
 
     stableSort(allUsers) {
-        let start = this.state.page*this.state.rowsPerPage;
-        let end = start+this.state.rowsPerPage;
-        const users = allUsers.slice(start, end);
-        users.sort((a, b) => {
+        allUsers.sort((a, b) => {
             if (this.state.orderBy === "Role") {
                 if (this.state.order === "asc") {
                     return a.role-b.role;
@@ -193,6 +190,9 @@ class DataTable extends Component
             }
             return a-b;
         })
+        let start = this.state.page*this.state.rowsPerPage;
+        let end = start+this.state.rowsPerPage;
+        const users = allUsers.slice(start, end);
         return users;
     }
 

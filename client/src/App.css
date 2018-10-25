@@ -118,3 +118,8 @@ body {
   float: right;
   width: 49%
 }
+
+.products-grid {
+  margin: 10% auto;
+  width: 80%;
+}

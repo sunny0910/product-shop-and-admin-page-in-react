@@ -46,8 +46,8 @@ class Header extends Component
                             </div>
                         </div>
                         <div className="cart-icon">
-                            {this.props.productsInCart !==0 ?
-                            <Badge badgeContent={this.props.productsInCart} color= "primary">
+                            {this.props.productsInCartCount !==0 ?
+                            <Badge badgeContent={this.props.productsInCartCount} color= "primary">
                                 <ShoppingCart/>
                             </Badge>:
                             <ShoppingCart/>
