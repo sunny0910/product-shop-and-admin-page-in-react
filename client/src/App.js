@@ -67,11 +67,11 @@ class App extends Component
     })
   }
 
-  userLogIn(value, token, id, userRoleId) {
+  userLogIn(loggedIn, token, id, userRoleId) {
     this.setState({
       userId: id,
       userRoleId: userRoleId,
-      loggedIn: value,
+      loggedIn: loggedIn,
       jwtToken: token
     });
     return true;
@@ -91,7 +91,7 @@ class App extends Component
   }
   
   hideUnathorizedMessage() {
-    this.setState({unAuthorised: false})      
+    this.setState({unAuthorised: false})
   }
 
   unAuthorised(response) {
@@ -103,15 +103,24 @@ class App extends Component
       }
       this.setState({
         unAuthorised: true,
-        loggedIn: loggedIn
+        loggedIn: loggedIn,
+        userId: 0,
+        userRoleId: 0,
+        jwtToken: ""
       });
+      document.cookie = "token =; expires = 01-10-1995; path=/;"
+      document.cookie = "userId =; expires = 01-10-1995; path=/;"
+      document.cookie = "userRoleId =; expires = 01-10-1995; path=/;"
     })
     .catch((err) => console.log(err) )
   }
 
   logOut() {
     this.setState({
-      loggedIn: false
+      loggedIn: false,
+      userId: 0,
+      userRoleId: 0,
+      jwtToken: ""
     });
     document.cookie = "token =; expires = 01-10-1995; path=/;"
     document.cookie = "userId =; expires = 01-10-1995; path=/;"

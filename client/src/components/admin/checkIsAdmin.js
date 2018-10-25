@@ -1,5 +1,5 @@
 const checkIsAdmin =  (userRoleId) => {
-  if (userRoleId === "1") {
+  if (userRoleId === 1) {
       return true;
     }
     return false;

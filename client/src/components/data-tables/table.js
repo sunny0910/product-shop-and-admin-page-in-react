@@ -24,15 +24,19 @@ class DataTable extends Component
             deleteNotification: false,
             rowsPerPage: 5,
             page: 0,
-            orderBy: 'Email',
+            orderBy: "Email",
             order: 'asc'
         }
-        this.checkboxOnChange = this.checkboxOnChange.bind(this);
         this.mainCheckboxOnChange = this.mainCheckboxOnChange.bind(this);
-        this.hideDeleteNotification = this.hideDeleteNotification.bind(this);
+        this.checkboxOnChange = this.checkboxOnChange.bind(this);
+        this.isSelected = this.isSelected.bind(this);
+        this.deleteRow = this.deleteRow.bind(this);
         this.deleteMultipleRows = this.deleteMultipleRows.bind(this);
+        this.hideDeleteNotification = this.hideDeleteNotification.bind(this);
         this.handlePageChange = this.handlePageChange.bind(this);
         this.handleChangeRowsPerPage = this.handleChangeRowsPerPage.bind(this);
+        this.changeOrderOrOrderBy = this.changeOrderOrOrderBy.bind(this);
+        this.stableSort = this.stableSort.bind(this);
     }
 
     mainCheckboxOnChange(e) {
@@ -125,12 +129,71 @@ class DataTable extends Component
         });
     }
 
-    handlePageChange() {
-
+    handlePageChange(event, page) {
+        this.setState({
+            page: page
+        })
     }
 
-    handleChangeRowsPerPage() {
+    handleChangeRowsPerPage(event) {
+        this.setState({
+            rowsPerPage: event.target.value
+        })
+    }
 
+    changeOrderOrOrderBy(event, column) {
+        let order = "asc";
+        if (column === this.state.orderBy && this.state.order === "asc") {
+            order = "desc";
+        }
+        this.setState({
+            orderBy: column,
+            order: order
+        })
+    }
+
+    stableSort(allUsers) {
+        let start = this.state.page*this.state.rowsPerPage;
+        let end = start+this.state.rowsPerPage;
+        const users = allUsers.slice(start, end);
+        users.sort((a, b) => {
+            if (this.state.orderBy === "Role") {
+                if (this.state.order === "asc") {
+                    return a.role-b.role;
+                } else {
+                    return b.role-a.role;
+                }
+            }
+            if (this.state.orderBy === "FirstName") {
+                let afirstName = a.firstName.toUpperCase()
+                let bfirstName = b.firstName.toUpperCase()
+                if (this.state.order === "asc") {
+                    return afirstName > bfirstName;
+                } else {
+                    return bfirstName > afirstName;
+                }
+            }
+            if (this.state.orderBy === "SecondName") {
+                let asecondName = a.secondName.toUpperCase()
+                let bsecondName = b.secondName.toUpperCase()
+                if (this.state.order === "asc") {
+                    return asecondName > bsecondName;
+                } else {
+                    return bsecondName > asecondName;
+                }
+            }
+            if (this.state.orderBy === "Email") {
+                let aemail = a.email.toUpperCase()
+                let bemail = b.email.toUpperCase()
+                if (this.state.order === "asc") {
+                    return aemail > bemail;
+                } else {
+                    return bemail > aemail;
+                }
+            }
+            return a-b;
+        })
+        return users;
     }
 
     render() {
@@ -155,8 +218,8 @@ class DataTable extends Component
                                             {this.props.columns.map((column, index) => {
                                                 return (
                                                     <TableCell key= {index} >
-                                                        <Tooltip title="Sort" enterDelay={300} placement={"left"}>
-                                                            <TableSortLabel direction = {this.state.order} active = {this.state.orderBy === column ? true : false} >{column}</TableSortLabel> 
+                                                        <Tooltip title="Sort" placement={"left"}>
+                                                            <TableSortLabel direction = {this.state.order} active = {this.state.orderBy === column} onClick = {event => this.changeOrderOrOrderBy(event, column)} >{column}</TableSortLabel> 
                                                         </Tooltip>
                                                     </TableCell>
                                                 );
@@ -164,7 +227,7 @@ class DataTable extends Component
                                         </TableRow>
                                     </TableHead>
                                     <TableBody>
-                                        {this.props.users.map((user, index) => {
+                                        {this.stableSort(this.props.users).map((user, index) => {
                                             const isSelected = this.isSelected(user.id);
                                             return (
                                                 <TableRow key={index} hover selected={isSelected} >
