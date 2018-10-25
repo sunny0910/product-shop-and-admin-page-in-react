@@ -11,6 +11,7 @@ class ViewUser extends Component
             firstName: '',
             secondName: '',
             email: '',
+            roles: '',
             spinnerLoading: true
         }
     }
@@ -25,10 +26,19 @@ class ViewUser extends Component
                 }
                 result.json()
                 .then(json => {
+                    if (result.status === 500) {
+                        this.props.serverError(true);
+                        return;
+                    }
+                    if (result.status === 401) {
+                        this.props.unAuthorised(result);
+                        return;
+                    }
                     this.setState({
                         firstName: json.firstName,
                         secondName: json.secondName,
                         email: json.email,
+                        role: json.role,
                         spinnerLoading: false
                     });
                 })
@@ -68,6 +78,12 @@ class ViewUser extends Component
                                 </Grid>
                                 <Grid item xs={9}>
                                 <Typography>{this.state.email}</Typography>
+                                </Grid>
+                                <Grid item xs={3}>
+                                <Typography align="left" variant="body2" ><b>Role: </b></Typography>
+                                </Grid>
+                                <Grid item xs={9}>
+                                <Typography>{this.props.getUserRole(this.state.role)}</Typography>
                                 </Grid>
                             </React.Fragment>
                         }

@@ -4,7 +4,6 @@ const getAllRoles = (req, res) => {
     Roles.find().select('name _id').exec()
     .then(docs => {
         const response = {
-            count: docs.length,
             roles: docs.map(doc => {
                 return {
                     id : doc._id,

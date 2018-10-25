@@ -80,13 +80,10 @@ class Login extends Component
                 this.setState({
                     hideProgress: true,
                 });
-                this.props.userLogIn(true, json.token);
+                this.props.userLogIn(true, json.token, json.id, json.role);
                 document.cookie = "token="+json.token+"; path=/";
-                let a = document.cookie.split("; ");
-                a = a.map((row) => row.split("="));
-                let x = a.filter((row) => row[0] === "token");
-                console.log(x);
-                // return (x.length === 0) ? false: x[1];
+                document.cookie = "userId="+json.id+"; path=/";
+                document.cookie = "userRoleId="+json.role+"; path=/";
             })
             .catch((err) => {
                 console.log(err);

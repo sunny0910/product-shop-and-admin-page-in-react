@@ -8,16 +8,6 @@ class Header extends Component
 {
 
     render() {
-        let buttons = (!this.props.loggedIn)?
-        (<div><div className="menu-items">
-            <Link to='/login'><Typography color='inherit' variant="subheading"  >Log-In</Typography></Link>
-        </div>
-        <div className="menu-items">
-            <Link to='/register'><Typography color='inherit' variant="subheading" >Register</Typography></Link>
-        </div></div>):
-        (<div className="menu-items">
-            <Link to='/logout' onClick={this.props.logOut}><Typography color='inherit' variant="subheading" >Logout</Typography></Link>
-        </div>);
         return (
             <div id = "header">
                 <AppBar color="primary" position="sticky">
@@ -34,14 +24,26 @@ class Header extends Component
                                         <Typography color='inherit' variant="subheading"  >Products</Typography>
                                     </Link>
                                 </div>
-                                { this.props.loggedIn ?
+                                { this.props.admin ?
                                 <div className="menu-items">
                                     <Link to='/users'>
                                         <Typography color='inherit' variant="subheading"  >Users</Typography>
                                     </Link>
                                 </div>
                                 :''}
-                                {buttons}
+                                {(!this.props.loggedIn)?
+                                    (<React.Fragment>
+                                        <div className="menu-items">
+                                            <Link to='/login'><Typography color='inherit' variant="subheading"  >Log-In</Typography></Link>
+                                        </div>
+                                        <div className="menu-items">
+                                            <Link to='/register'><Typography color='inherit' variant="subheading" >Register</Typography></Link>
+                                        </div>
+                                    </React.Fragment>):
+                                    (<div className="menu-items">
+                                        <Link to='/logout' onClick={this.props.logOut}><Typography color='inherit' variant="subheading" >Logout</Typography></Link>
+                                    </div>)
+                                }
                             </div>
                         </div>
                         <div className="cart-icon">

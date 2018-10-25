@@ -125,8 +125,10 @@ export default class Register extends Component {
                     hideProgress: true,
                     jwtToken: json.token
                 });
-                this.props.userLogIn(true, json.token);
+            this.props.userLogIn(true, json.token, json.id, json.role);
                 document.cookie = "token="+json.token+"; path=/";
+                document.cookie = "userId="+json.id+"; path=/";
+                document.cookie = "userRoleId="+json.role+"; path=/";
             })
             .catch((err) => {
                 console.log(err);

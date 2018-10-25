@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import apiUrl from '../../apiUrl';
 import apiRequest from '../../apiRequest';
+import { Snackbar } from '@material-ui/core';
 
 class Products extends Component
 {
@@ -10,6 +11,8 @@ class Products extends Component
             products: [],
             count: 0
         }
+        // console.log(this.props.match.params.unathorized);
+        
     }
 
     componentDidMount() {
@@ -34,6 +37,7 @@ class Products extends Component
     }
 
     render() {
+        const anchorOrigin = {horizontal: "center", vertical: "bottom"};
         document.title = "Products";
         const products=this.state.products;
         const allProducts = products.map((product) => 
@@ -48,6 +52,7 @@ class Products extends Component
         );
         return (
             <div className = 'products'>
+            {(this.props.match.params.unathorized) ? <Snackbar autoHideDuration={1500} anchorOrigin={anchorOrigin} open onClose={this.props.hideUnathorizedMessage} message="You are Not Authorized to view this page!" />:''}
                 {allProducts}
             </div>
         );

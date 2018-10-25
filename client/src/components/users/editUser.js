@@ -10,6 +10,7 @@ class EditUser extends Component
                     serverError = {this.props.serverError}
                     editPage = {true}
                     token = {this.props.token}
+                    roles = {this.props.roles}
                 />
     }
 }

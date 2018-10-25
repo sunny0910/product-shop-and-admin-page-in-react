@@ -9,6 +9,7 @@ class AddUser extends Component
             <UserForm 
                 serverError = {this.props.serverError}
                 token = {this.props.token}
+                roles = {this.props.roles}
             />
         );
     }

@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Paper, Typography, FormControl, InputLabel, Input, Button, Snackbar, CircularProgress, LinearProgress} from '@material-ui/core'
+import {Paper, Typography, FormControl, InputLabel, Input, Button, Snackbar, CircularProgress, LinearProgress, Select, MenuItem} from '@material-ui/core'
 import apiUrl from '../../apiUrl';
 import apiRequest from '../../apiRequest';
 
@@ -11,12 +11,14 @@ class UserForm extends Component
             firstName: '',
             secondName: '',
             email: '',
+            role: '',
             password: '',
             confirmPassword: '',
             firstNameError: false,
             secondNameError: false,
             emailError: false,
             emailExists: false,
+            roleError: false,
             paswordError: false,
             confirmPasswordError: false,
             sucessNotification: false,
@@ -32,6 +34,7 @@ class UserForm extends Component
         this.errorMessageStyle = this.errorMessageStyle.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
         this.checkBothPasswords = this.checkBothPasswords.bind(this);
+        this.handleRoleChange = this.handleRoleChange.bind(this);
     }
 
     handleFirstNameChange(e) {
@@ -146,6 +149,7 @@ class UserForm extends Component
                         firstName: json.firstName,
                         secondName: json.secondName,
                         email: json.email,
+                        role: json.role,
                         spinnerLoading: false
                     });
                 })
@@ -166,11 +170,19 @@ class UserForm extends Component
             this.setState({
                 firstNameError: true
             });
+            return;
         }
         if (this.state.secondName === '') {
             this.setState({
                 secondNameError: true
             });
+            return;
+        }
+        if (this.state.role === '') {
+            this.setState({
+                roleError: true
+            });
+            return;
         }
         this.checkBothPasswords();
         if (this.state.firstNameError || this.state.secondNameError || this.state.passwordError || this.state.confirmPasswordError) {
@@ -180,6 +192,7 @@ class UserForm extends Component
         let data = {
             firstName: this.state.firstName,
             secondName: this.state.secondName,
+            role: this.state.role
         };
         let method = "PATCH"
         let urlPath = this.props.id;
@@ -217,6 +230,17 @@ class UserForm extends Component
                 console.log(err);
                 this.props.serverError(true);
             })
+        })
+    }
+
+    handleRoleChange(e) {
+        let roleError= false;
+        if (e.target.value === '') {
+            roleError = true;
+        }
+        this.setState({
+            role: e.target.value,
+            roleError: roleError
         })
     }
 
@@ -263,7 +287,7 @@ class UserForm extends Component
                                     />
                                     <span style={this.errorMessageStyle(this.state.secondNameError)}>Invalid Value</span>
                                 </FormControl>
-                                <FormControl margin = 'normal' required fullWidth disabled = {this.props.editPage?true:false} error = {this.state.emailError || this.state.emailExists}>
+                                <FormControl margin = 'normal' className="firstNameField" required disabled = {this.props.editPage?true:false} error = {this.state.emailError || this.state.emailExists}>
                                     <InputLabel htmlFor = 'email'>Email: </InputLabel>
                                     <Input
                                         type='text'
@@ -275,6 +299,18 @@ class UserForm extends Component
                                     />
                                     <span style={this.errorMessageStyle(this.state.emailError)}>Invalid Value</span>
                                     <span style={this.errorMessageStyle(this.state.emailExists)}>Email Exists</span>
+                                </FormControl>
+                                <FormControl margin = 'normal' className="secondNameField" required error = {this.state.roleError}>
+                                    <InputLabel htmlFor = 'role'>Role: </InputLabel>
+                                    <Select
+                                        type='text'
+                                        name='role'
+                                        value={this.state.role}
+                                        onChange = {this.handleRoleChange}
+                                        required >
+                                        <MenuItem value="">Select</MenuItem>
+                                        {this.props.roles.map((role) => <MenuItem key ={role.id} value={role.id} >{role.name}</MenuItem> )}
+                                    </Select>
                                 </FormControl>
                                 <FormControl margin = 'normal' fullWidth error={this.state.passwordError}>
                                     <InputLabel htmlFor = 'password'>Password: </InputLabel>

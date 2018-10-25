@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import ApiUrl from '../../apiUrl';
+import apiUrl from '../../apiUrl';
 import apiRequest from '../../apiRequest';
 import DataTable from '../data-tables/table';
 
@@ -9,14 +9,13 @@ class Users extends Component
         super(props);
         this.state = {
             users : [],
-            roles: [],
             count: 0
         };
         this.updateUserList = this.updateUserList.bind(this);
     }
 
     componentDidMount() {
-        apiRequest(ApiUrl+'/users','GET', '', this.props.token)
+        apiRequest(apiUrl+'/users','GET', '', this.props.token)
         .then((result) => {
             if (result.status === 500) {
                 this.props.serverError(true);
@@ -38,18 +37,6 @@ class Users extends Component
                 this.props.serverError(true);
             })
         })
-    apiRequest(apiUrl+'/roles','GET', '')
-        .then((result) => {
-            result.json()
-            .then((json) => {
-                this.setState = ({
-                    roles : json.roles
-                })
-            })
-            .catch((err) => {
-                console.log(err);
-            })
-        })
     }
 
     updateUserList(userId) {
@@ -68,7 +55,7 @@ class Users extends Component
         document.title = "Users";
         return (
             <div id='users-table'>
-                <DataTable token={this.props.token} users={users} roles={this.state.roles} columns={columns} updateUserList={this.updateUserList} />
+                <DataTable token={this.props.token} userId={this.props.userId} users={users} getUserRole = {this.props.getUserRole} columns={columns} updateUserList={this.updateUserList} />
             </div>
         );
     }

@@ -47,6 +47,7 @@ const userSignUp = (req, res) => {
                             res.status(201).json({
                                 message: 'User created',
                                 id: user._id,
+                                role: user.role,
                                 token: token,
                                 status: 200
                             });
@@ -90,6 +91,7 @@ const userLogIn = (req, res) => {
                     status: 200,
                     messsage: 'Auth succ',
                     id: user._id,
+                    role: user.role,
                     token: token
                 });
             } else {

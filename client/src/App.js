@@ -15,28 +15,62 @@ import AddUser from './components/users/addUser';
 import ViewUser from "./components/users/viewUser";
 import Header from './../src/components/header/header';
 import Snackbar from '@material-ui/core/Snackbar';
-import getToken from './components/getTokenFromCookie';
+import getDataFromCookie from './components/getDataFromCookie';
+import apiUrl from './apiUrl';
+import apiRequest from './apiRequest';
+import checkIsAdmin from './components/admin/checkIsAdmin';
 
 class App extends Component
 {
   constructor(props) {
     super(props);
     this.state = {
-      loggedIn: (getToken() === '')?false:true,
-      jwtToken: getToken(),
+      loggedIn: (getDataFromCookie("userId") === '')?false:true,
+      userId: getDataFromCookie("userId"),
+      userRoleId: getDataFromCookie("userRoleId"),
+      jwtToken: getDataFromCookie("token"),
       serverError: false,
       unAuthorised: false,
-      productsInCart: 0
+      productsInCart: 0,
+      roles: []
     }
     this.userLogIn = this.userLogIn.bind(this);
     this.serverError = this.serverError.bind(this);
     this.hideErrorMessage = this.hideErrorMessage.bind(this);
     this.unAuthorised = this.unAuthorised.bind(this);
+    this.hideUnathorizedMessage = this.hideUnathorizedMessage.bind(this);
     this.logOut = this.logOut.bind(this);
+    this.getUserRole = this.getUserRole.bind(this);
   }
 
-  userLogIn(value, token) {
+  componentDidMount() {
+    apiRequest(apiUrl+'/roles','GET', '')
+    .then((result) => {
+        if (result.status === 500) {
+            this.props.serverError(true);
+            return;
+        }
+        if (result.status === 401) {
+            this.props.unAuthorised(result);
+            return;
+        }
+        result.json()
+        .then((json) => {
+            this.setState({
+                roles: json.roles
+            })
+        })
+        .catch((err) => {
+            console.log(err);
+            this.props.serverError(true);
+        })
+    })
+  }
+
+  userLogIn(value, token, id, userRoleId) {
     this.setState({
+      userId: id,
+      userRoleId: userRoleId,
       loggedIn: value,
       jwtToken: token
     });
@@ -56,6 +90,10 @@ class App extends Component
     })
   }
   
+  hideUnathorizedMessage() {
+    this.setState({unAuthorised: false})      
+  }
+
   unAuthorised(response) {
     let loggedIn = this.state.loggedIn;
     response.json()
@@ -76,6 +114,18 @@ class App extends Component
       loggedIn: false
     });
     document.cookie = "token =; expires = 01-10-1995; path=/;"
+    document.cookie = "userId =; expires = 01-10-1995; path=/;"
+    document.cookie = "userRoleId =; expires = 01-10-1995; path=/;"
+  }
+
+  getUserRole(id) {
+    if (this.state.roles.length === 0 ) {
+        return;
+    }
+    let role = this.state.roles.find((role) => {
+        return role.id === id
+    });
+    return role.name;
   }
 
   render() {
@@ -85,50 +135,69 @@ class App extends Component
     const anchorOrigin = {horizontal: "center", vertical: "top"};
     return (
       <div className="App">
-      {(this.state.serverError || this.state.unAuthorised)?<Snackbar anchorOrigin={anchorOrigin} open autoHideDuration={2000} onClose={this.hideErrorMessage} message={this.props.serverError ? serverErrorMessage : unAuthorisedErrorMessage}/>:''}
+        {(this.state.serverError || this.state.unAuthorised) ?
+          <Snackbar anchorOrigin={anchorOrigin} open autoHideDuration={2000} onClose={this.hideErrorMessage} message={this.props.serverError ? serverErrorMessage : unAuthorisedErrorMessage}/>:''
+        }
         <Router>
             <div className='content'>
-              <Header loggedIn = {this.state.loggedIn} logOut={this.logOut} productsInCart={this.state.productsInCart}/>
+              <Header loggedIn = {this.state.loggedIn} admin={checkIsAdmin(this.state.userRoleId)} logOut={this.logOut} productsInCart={this.state.productsInCart}/>
               <Switch>
                 <Route 
                   exact path="/"
-                  render = {() => (<Products serverError={this.serverError} />) }
+                  render = {() => (<Products serverError={this.serverError} hideUnathorizedMessage = {this.hideUnathorizedMessage} />) }
                 />
                 <Route 
                   exact path="/products"
-                  render = {() => (<Products serverError={this.serverError} />) }
+                  render = {(props) => (<Products serverError={this.serverError} {...props} hideUnathorizedMessage = {this.hideUnathorizedMessage} />) }
                 />
                 <Route 
                   exact path="/users/:id/edit"
-                  render = {(props) => (loggedIn) ? (<EditUser serverError={this.serverError} {...props} token = {this.state.jwtToken} unAuthorised = {this.unAuthorised} />) : (<Redirect to="/login" />) }
-                  // render = {(props) => (<EditUser serverError={this.serverError} {...props} />) }
+                  render = {(props) => ( checkIsAdmin(this.state.userRoleId) ?
+                    (<EditUser getUserRole={this.getUserRole} roles={this.state.roles} serverError={this.serverError} {...props} token = {this.state.jwtToken} unAuthorised = {this.unAuthorised} hideUnathorizedMessage = {this.hideUnathorizedMessage} />) :
+                    ( (this.state.loggedIn) ? <Redirect to="/products&unathorize='true'" />: <Redirect to="/login" />)
+                  )}
                 />
                 <Route
                   exact path="/users"
-                  render = {() => (loggedIn) ? (<Users serverError={this.serverError} token = {this.state.jwtToken} unAuthorised = {this.unAuthorised} />) : (<Redirect to="/login" />) }
-                  // render = {() => (<Users serverError={this.serverError}/>)}
+                  render = {() => ( checkIsAdmin(this.state.userRoleId) ?
+                    (<Users userId = {this.state.userId} getUserRole={this.getUserRole} serverError={this.serverError} token = {this.state.jwtToken} unAuthorised = {this.unAuthorised} hideUnathorizedMessage = {this.hideUnathorizedMessage} />) :
+                    ((this.state.loggedIn) ? <Redirect to="/products&unathorize='true'" />: <Redirect to="/login" />)
+                  )}
                 />
                 <Route
                   exact path="/users/add"
-                  render = {() => (loggedIn) ? (<AddUser serverError={this.serverError} token = {this.state.jwtToken} unAuthorised = {this.unAuthorised} />) : (<Redirect to="/login" />) }
-                  // render = {() => (<AddUser serverError={this.serverError}/>)}
+                  render = {() => ( checkIsAdmin(this.state.userRoleId) ?
+                    (<AddUser getUserRole={this.getUserRole} roles={this.state.roles} serverError={this.serverError} token = {this.state.jwtToken} unAuthorised = {this.unAuthorised} hideUnathorizedMessage = {this.hideUnathorizedMessage} />) :
+                    ((this.state.loggedIn) ? <Redirect to="/products&unathorize='true'" />: <Redirect to="/login" />)
+                  )}
                 />
                 <Route
                   exact path="/users/:id"
-                  render = {(props) => (loggedIn) ? (<ViewUser serverError={this.serverError} {...props} token = {this.state.jwtToken} unAuthorised = {this.unAuthorised} />) : (<Redirect to="/login" />) }
-                  // render = {(props) => (<ViewUser serverError={this.serverError} {...props}/>)}
+                  render = {(props) => ( checkIsAdmin(this.state.userRoleId) ?
+                    (<ViewUser getUserRole={this.getUserRole} serverError={this.serverError} {...props} token = {this.state.jwtToken} unAuthorised = {this.unAuthorised} hideUnathorizedMessage = {this.hideUnathorizedMessage} />) :
+                    ((this.state.loggedIn) ? <Redirect to="/products&unathorize='true'" />: <Redirect to="/login" />)
+                  )}
                 />
                 <Route
                   exact path = "/login"
-                  render = {() => (loggedIn) ? (<Redirect to='/products'/>) : (<Login userLogIn = {this.userLogIn} serverError = {this.serverError} />) }
+                  render = {() => (loggedIn) ?
+                    (<Redirect to='/products'/>) :
+                    (<Login userLogIn = {this.userLogIn} serverError = {this.serverError} />)
+                  }
                 />
                 <Route
                   exact path = "/register"
-                  render = {() => (loggedIn) ? (<Redirect to='/products'/>) : (<Register userLogIn = {this.userLogIn} serverError = {this.serverError} />) }
+                  render = {() => (loggedIn) ?
+                    (<Redirect to='/products'/>) :
+                    (<Register userLogIn = {this.userLogIn} serverError = {this.serverError} />)
+                  }
                 />
                 <Route
                   exact path = "/logout"
-                  render = {() => (loggedIn) ? (this.logOut()) : (<Redirect to='/products'/>) }
+                  render = {() => (loggedIn) ?
+                    (this.logOut()) :
+                    (<Redirect to='/products'/>)
+                  }
                 />
               </Switch>
             </div>
