@@ -1,10 +1,14 @@
 var mongoose = require('mongoose');
 var productSchema = mongoose.Schema({
-    name : {
+    name: {
         type: String,
         required: true
     },
-    price : {
+    description: {
+        type: String,
+        required: true
+    },
+    price: {
         type: Number,
         required: true
     }

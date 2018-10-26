@@ -8,12 +8,14 @@ const getAllProducts = (req, res) => {
             count: docs.length,
             products: docs.map(doc => {
                 return {
-                    _id : doc._id,
+                    id : doc._id,
                     name: doc.name,
+                    description: doc.description,
                     price : doc.price,
-                    request : {
-                        type: 'GET',
-                        url: baseUrl+"/api/v1/products/"+doc._id
+                    url : {
+                        view: "/products/"+doc._id,
+                        edit: "/products/"+doc._id+"/edit",
+                        delete: "/products"+doc._id+"/delete"
                     }
                 }
             })
@@ -36,13 +38,10 @@ const createProduct = (req, res) => {
             res.json({
                 message:'Product created successfuly',
                 product: {
-                    _id : result._id,
+                    id : result._id,
                     name : result.name,
+                    description: result.description,
                     price : result.price,
-                    request : {
-                        type: 'GET',
-                        url: baseUrl+'/api/v1/products/'+result._id
-                    }
                 }
             });
         }
@@ -58,7 +57,7 @@ const createProduct = (req, res) => {
 const getOneProduct = (req, res) => {
     const id = req.params.id;
     Product.findById(id)
-    .select('name price _id')
+    .select('price description name _id')
     .exec()
     .then(doc => {
         if (doc) {
@@ -83,10 +82,6 @@ const updateProduct = (req, res) => {
         result => res.status(200).json(
             {
                 message: "Product updated",
-                request: {
-                    type: 'GET',
-                    url : baseUrl+"/api/v1/products/"+id
-                }
             }
         )
     )

@@ -123,3 +123,10 @@ body {
   margin: 10% auto;
   width: 80%;
 }
+
+.admin-product-actions {
+  float: right;
+}
+.admin-product-actions a {
+  margin: auto
+}

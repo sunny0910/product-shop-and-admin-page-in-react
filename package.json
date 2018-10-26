@@ -9,7 +9,7 @@
     "start": "concurrently \"npm run server\" \"npm run client\" "
   },
   "dependencies": {
-    "aws-sdk": "^2.338.0",
+    "aws-sdk": "^2.343.0",
     "bcrypt": "^3.0.2",
     "concurrently": "^4.0.1",
     "cookie-parser": "~1.4.3",

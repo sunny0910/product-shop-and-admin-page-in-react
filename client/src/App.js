@@ -9,6 +9,8 @@ import './App.css';
 import Login from './components/admin/Login';
 import Register from './components/admin/Register';
 import Products from './components/products/products';
+import AddProduct from './components/products/addProduct';
+import EditProduct from './components/products/editProduct';
 import Users from './components/users/users';
 import EditUser from './components/users/editUser';
 import AddUser from './components/users/addUser';
@@ -190,6 +192,7 @@ class App extends Component
                   exact path="/"
                   render = {() => (
                     <Products addToCart = {this.addToCart}
+                      admin={checkIsAdmin(this.state.userRoleId)}
                       removeFromCart = {this.removeFromCart}
                       handleCartCounter={this.handleCartCounter}
                       productsInCart = {this.state.productsInCart}
@@ -202,10 +205,35 @@ class App extends Component
                   exact path="/products"
                   render = {(props) => (
                     <Products addToCart = {this.addToCart}
+                      admin={checkIsAdmin(this.state.userRoleId)}
                       removeFromCart={this.removeFromCart}
                       handleCartCounter={this.handleCartCounter}
                       productsInCart = {this.state.productsInCart}
                       serverError={this.serverError}
+                      unAuthorised = {this.unAuthorised}
+                      {...props}
+                      hideUnathorizedMessage = {this.hideUnathorizedMessage} 
+                    />)
+                  }
+                />
+                <Route 
+                  exact path="/products/add"
+                  render = {() => (
+                    <AddProduct admin={checkIsAdmin(this.state.userRoleId)}
+                      serverError={this.serverError}
+                      unAuthorised = {this.unAuthorised}
+                      token = {this.state.jwtToken}
+                      hideUnathorizedMessage = {this.hideUnathorizedMessage} 
+                    />)
+                  }
+                />
+                <Route 
+                  exact path="/products/:id/edit"
+                  render = {(props) => (
+                    <EditProduct admin={checkIsAdmin(this.state.userRoleId)}
+                      serverError={this.serverError}
+                      unAuthorised = {this.unAuthorised}
+                      token = {this.state.jwtToken}
                       {...props}
                       hideUnathorizedMessage = {this.hideUnathorizedMessage} 
                     />)

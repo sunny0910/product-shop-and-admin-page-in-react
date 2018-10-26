@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import apiUrl from '../../apiUrl';
 import apiRequest from '../../apiRequest';
 import { Grid, Card, CardActions, CardContent, CardMedia, Button, Typography } from '@material-ui/core';
+import {Link} from 'react-router-dom';
 // import CardActionArea from '@material-ui/core/CardActionArea';
 
 class Products extends Component
@@ -42,7 +43,7 @@ class Products extends Component
         document.title = "Products";
         // const products=this.state.products;
         // const allProducts = products.map((product) => 
-        //     <div className = 'product-listing-single-product' key = {product._id}>
+        //     <div className = 'product-listing-single-product' key = {product.id}>
         //         <div className='product-name'>
         //             <p>{product.name}</p>
         //         </div>
@@ -56,9 +57,13 @@ class Products extends Component
             {/* {(this.props.match.params.unathorized) ? <Snackbar autoHideDuration={1500} anchorOrigin={anchorOrigin} open onClose={this.props.hideUnathorizedMessage} message="You are Not Authorized to view this page!" />:''} */}
                 
                 {/* {allProducts} */}
-            <Grid container spacing={40} direction="row" justify = "space-evenly" alignItems="center">
+            {this.props.admin ?
+                <Link to="/products/add" style={{float: "right"}}> <Button variant="extendedFab" type="button" color="primary" size="medium" onClick={this.state.props}>Add</Button> </Link>:
+                ''
+            }
+            <Grid container spacing={40} direction="row" justify = "flex-start" alignItems="center">
                 {this.state.products.map((product) => (
-                    <Grid item xs={3} key={product._id}>
+                    <Grid item xs={4} key={product.id}>
                         <Card className="product-card">
                             {/* <CardActionArea> */}
                                 <CardMedia
@@ -77,14 +82,37 @@ class Products extends Component
                                 </CardContent>
                             {/* </CardActionArea> */}
                             <CardActions>
-                                {this.props.productsInCart.includes(product._id) ?
-                                    <Button color="primary" size="large" onClick={() => this.props.removeFromCart(product._id)}>
-                                        Remove
-                                    </Button> :
-                                    <Button color="primary" size="large" onClick={() => this.props.addToCart(product._id)}>
-                                        Add To Cart
-                                    </Button>
-                                }
+                                <Grid container spacing={8} direction="row" justify="space-evenly" alignItems="center">
+                                    <Grid item >
+                                        {this.props.productsInCart.includes(product.id) ?
+                                            <Button color="primary" size="small" variant="extendedFab" onClick={() => this.props.removeFromCart(product.id)}>
+                                                Remove
+                                            </Button> :
+                                            <Button color="primary" size="small" variant="extendedFab" onClick={() => this.props.addToCart(product.id)}>
+                                                Add To Cart
+                                            </Button>
+                                        }
+                                    </Grid>
+                                        {this.props.admin ?
+                                            <React.Fragment> 
+                                                <Grid item>
+                                                    <Link to={product.url.edit} >
+                                                        <Button color="primary" size="small" variant="extendedFab">
+                                                            Edit
+                                                        </Button>
+                                                    </Link>
+                                                </Grid>
+                                                <Grid item>
+                                                    <Link to={product.url.delete} >
+                                                        <Button color="primary" size="small" variant="extendedFab">
+                                                            Delete
+                                                        </Button>
+                                                    </Link>
+                                                </Grid>
+                                            </React.Fragment>
+                                            :''
+                                        }
+                                </Grid>
                             </CardActions>
                         </Card>
                     </Grid>
