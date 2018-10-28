@@ -10,7 +10,7 @@
 }
 .menu {
   float: right;
-  width: 50%
+  width: 50%;
 }
 #header a {
   color: white;
@@ -19,17 +19,17 @@
   color: #0000008f;
 }
 .table-title-left {
-  width: 90%
+  width: 90%;
 }
 .table-title-right {
-  width: 10%
+  width: 10%;
 }
 .table-title-right button {
   float: right;
 }
 .logo {
-  margin-right: 30%;
-  width: 30%
+  margin-right: 50%;
+  width: 30%;
 }
 .menu-items {
   display: inline;
@@ -61,8 +61,12 @@
 }
 
 @keyframes App-logo-spin {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 body {
@@ -85,7 +89,7 @@ body {
   margin: auto;
 }
 
-.formHeading{
+.formHeading {
   margin: 2%;
   text-align: center;
 }
@@ -94,8 +98,7 @@ body {
 }
 
 .data-table {
-  margin: auto;
-  margin-top: 5%;
+  margin: 7% auto;
   width: 80%;
 }
 .loader {
@@ -108,19 +111,19 @@ body {
   margin: auto;
   margin-top: 10%;
   text-align: center;
-  width: 70%
+  width: 70%;
 }
 .firstNameField {
   float: left;
-  width: 49%
+  width: 49%;
 }
 .secondNameField {
   float: right;
-  width: 49%
+  width: 49%;
 }
 
 .products-grid {
-  margin: 10% auto;
+  margin: 5% auto;
   width: 80%;
 }
 
@@ -128,5 +131,9 @@ body {
   float: right;
 }
 .admin-product-actions a {
-  margin: auto
+  margin: auto;
+}
+
+a {
+  text-decoration: none;
 }

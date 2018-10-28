@@ -1,213 +1,272 @@
-import React, {Component} from 'react';
-import { Paper, InputLabel, Button, Input, FormControl, Typography, LinearProgress } from '@material-ui/core';
-import apiRequest from '../../apiRequest';
-import apiUrl from '../../apiUrl';
+import React, { Component } from "react";
+import {
+  Paper,
+  InputLabel,
+  Button,
+  Input,
+  FormControl,
+  Typography,
+  LinearProgress
+} from "@material-ui/core";
+import apiRequest from "../../apiRequest";
+import apiUrl from "../../apiUrl";
+import { emailRegex, passwordRegex } from "../validationRegex";
 
 export default class Register extends Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            firstName: '',
-            secondName: '',
-            email: '',
-            password: '',
-            firstNameError: false,
-            secondNameError: false,
-            emailError: false,
-            passwordError: false,
-            hideProgress : true,
-            emailExists : false,
-        };
+  constructor(props) {
+    super(props);
+    this.state = {
+      firstName: "",
+      secondName: "",
+      email: "",
+      password: "",
+      firstNameError: false,
+      secondNameError: false,
+      emailError: false,
+      passwordError: false,
+      hideProgress: true,
+      emailExists: false
+    };
 
-        this.handleEmailChange = this.handleEmailChange.bind(this);
-        this.handleFirstNameChange = this.handleFirstNameChange.bind(this);
-        this.handleSecondNameChange = this.handleSecondNameChange.bind(this);
-        this.handlePasswordChange = this.handlePasswordChange.bind(this);
-        this.registerSubmit = this.registerSubmit.bind(this);
-    }
+    this.handleEmailChange = this.handleEmailChange.bind(this);
+    this.handleFirstNameChange = this.handleFirstNameChange.bind(this);
+    this.handleSecondNameChange = this.handleSecondNameChange.bind(this);
+    this.handlePasswordChange = this.handlePasswordChange.bind(this);
+    this.registerSubmit = this.registerSubmit.bind(this);
+  }
 
-    handleFirstNameChange(e) {
-        this.setState({
-            firstName : e.target.value,
-            firstNameError: false
-        });
+  handleFirstNameChange(e) {
+    this.setState({
+      firstName: e.target.value,
+      firstNameError: false
+    });
+  }
+  handleSecondNameChange(e) {
+    this.setState({
+      secondName: e.target.value,
+      secondNameError: false
+    });
+  }
+  handleEmailChange(e) {
+    if (!emailRegex.test(e.target.value) && e.target.value !== "") {
+      this.setState({
+        emailError: true
+      });
+    } else {
+      this.setState({
+        emailError: false,
+        emailExists: false
+      });
     }
-    handleSecondNameChange(e) {
-        this.setState({
-            secondName : e.target.value,
-            secondNameError: false
-        });
+    this.setState({
+      email: e.target.value
+    });
+  }
+  handlePasswordChange(e) {
+    if (!passwordRegex.test(e.target.value) && e.target.value !== "") {
+      this.setState({
+        passwordError: true
+      });
+    } else {
+      this.setState({
+        passwordError: false
+      });
     }
-    handleEmailChange(e) {
-        const emailRegex = /^[a-zA-Z0-9]+@[a-zA-Z0-9]+\.[A-Za-z]+$/;
-        if ((!emailRegex.test(e.target.value)) && e.target.value !== '') {
-            this.setState({
-                emailError: true
-            });
-        } else {
-            this.setState({
-                emailError: false,
-                emailExists: false
-            });
-        }
-        this.setState({
-            email : e.target.value,
-        });
+    this.setState({ password: e.target.value });
+  }
+  registerSubmit(e) {
+    e.preventDefault();
+    if (this.state.firstName === "") {
+      this.setState({
+        firstNameError: true
+      });
     }
-    handlePasswordChange(e) {
-        const passwordRegex = /^.*(?=.{8,})((?=.*[!@#$%^&*()\-_=+{};:,<.>]){1})(?=.*\d)((?=.*[a-z]){1})((?=.*[A-Z]){1}).*$/;
-        if ((!passwordRegex.test(e.target.value)) && e.target.value !== '') {
-            this.setState({
-                passwordError: true
-            });
-        } else {
-            this.setState({
-                passwordError: false
-            });
-        }
-        this.setState(
-            {password: e.target.value}
-        );
+    if (this.state.secondName === "") {
+      this.setState({
+        secondNameError: true
+      });
     }
-    registerSubmit(e) {
-        e.preventDefault();
-        if (this.state.firstName === '') {
-            this.setState({
-                firstNameError: true
-            });
-        }
-        if (this.state.secondName === '') {
-            this.setState({
-                secondNameError: true
-            });
-        }
-        if (this.state.email === '') {
-            this.setState({
-                emailError: true
-            });
-        }
-        if (this.state.password === '') {
-            this.setState({
-                passwordError: true
-            });
-        }
-        if (this.state.firstNameError || this.state.secondNameError || this.state.emailError || this.state.passwordError || this.state.emailExists) {
-            return;
-        }
+    if (this.state.email === "") {
+      this.setState({
+        emailError: true
+      });
+    }
+    if (this.state.password === "") {
+      this.setState({
+        passwordError: true
+      });
+    }
+    if (
+      this.state.firstNameError ||
+      this.state.secondNameError ||
+      this.state.emailError ||
+      this.state.passwordError ||
+      this.state.emailExists
+    ) {
+      return;
+    }
+    this.setState({
+      hideProgress: false
+    });
+    const data = JSON.stringify({
+      firstName: this.state.firstName,
+      secondName: this.state.secondName,
+      email: this.state.email,
+      password: this.state.password,
+      role: 2
+    });
+    apiRequest(apiUrl + "/users/signup", "POST", data).then(result => {
+      if (result.status === 409) {
         this.setState({
-            hideProgress: false
+          emailExists: true,
+          hideProgress: true
         });
-        const data = JSON.stringify({
-            firstName: this.state.firstName,
-            secondName: this.state.secondName,
-            email: this.state.email,
-            password: this.state.password
+        return;
+      }
+      if (result.status === 500) {
+        this.setState({
+          hideProgress: true
         });
-        apiRequest(apiUrl+'/users/signup', 'POST', data)
-        .then(result => {
-            if (result.status === 409) {
-                this.setState({
-                    emailExists: true,
-                    hideProgress: true
-                });
-                return;
-            }
-            if (result.status === 500) {
-                this.setState({
-                    hideProgress: true
-                });
-                this.props.serverError(true);
-                return;
-            }
-            result.json()
-            .then( (json) => {
-                this.setState({
-                    hideProgress: true,
-                    jwtToken: json.token
-                });
-            this.props.userLogIn(true, json.token, json.id, json.role);
-                document.cookie = "token="+json.token+"; path=/";
-                document.cookie = "userId="+json.id+"; path=/";
-                document.cookie = "userRoleId="+json.role+"; path=/";
-            })
-            .catch((err) => {
-                console.log(err);
-                this.props.serverError(true);
-            })
+        this.props.serverError(true);
+        return;
+      }
+      result
+        .json()
+        .then(json => {
+          this.setState({
+            hideProgress: true,
+            jwtToken: json.token
+          });
+          this.props.userLogIn(true, json.token, json.id, json.role);
         })
-    }
-    render() {
-        const progressStyle = this.state.hideProgress ? {display: 'none'} : {};
-        const nameErrorStyle = this.state.nameError ? {display : 'block',  color : 'red'} :{display: 'none'};
-        const emailErrorStyle = this.state.emailError ? {display : 'block',  color : 'red'} :{display: 'none'};
-        const passwordErrorStyle = this.state.passwordError ? {display : 'block',  color : 'red'} :{display: 'none'};
-        const emailExistsStyle = this.state.emailExists ? {display: 'block', color: 'red'} : {display: 'none'};
-        document.title = "Register";
-        return (
-            <React.Fragment>
-                <form onSubmit = {this.registerSubmit}>
-                    <div className = 'formpaper'>
-                        <div className = 'progress' style = {progressStyle}>
-                            <LinearProgress/>
-                        </div>
-                        <Paper className = "innerpaper">
-                            <div className = "formcontent">
-                                <div className = 'formHeading'>
-                                    <Typography variant='headline' >Register</Typography>
-                                </div>
-                                    <FormControl margin = 'normal' required className="firstNameField" error = {this.state.secondNameError}>
-                                        <InputLabel htmlFor = 'firstName'>First Name</InputLabel>
-                                        <Input
-                                            type='text'
-                                            name='firstName'
-                                            value = {this.state.firstName}
-                                            onChange = {this.handleFirstNameChange}
-                                            autoComplete = "name"
-                                            required/>
-                                        <span style={nameErrorStyle}>Invalid Value</span>
-                                    </FormControl>
+        .catch(err => {
+          console.log(err);
+          this.props.serverError(true);
+        });
+    });
+  }
 
-                                    <FormControl margin = 'normal' required className="secondNameField" error = {this.state.secondNameError}>
-                                        <InputLabel htmlFor = 'secondName'>Second Name</InputLabel>
-                                        <Input
-                                            type='text'
-                                            name='secondName'
-                                            value = {this.state.secondName}
-                                            onChange = {this.handleSecondNameChange}
-                                            autoComplete = "name"
-                                            required/>
-                                        <span style={nameErrorStyle}>Invalid Value</span>
-                                    </FormControl>
+  render() {
+    document.title = "Register";
+    return (
+      <form onSubmit={this.registerSubmit} className="formpaper">
+        {this.state.hideProgress ? "" : <LinearProgress />}
+        <Paper className="formcontent">
+          <div className="formHeading">
+            <Typography variant="headline">Register</Typography>
+          </div>
+          <FormControl
+            margin="normal"
+            required
+            className="firstNameField"
+            error={this.state.firstNameError}
+          >
+            <InputLabel htmlFor="firstName">First Name</InputLabel>
+            <Input
+              type="text"
+              name="firstName"
+              value={this.state.firstName}
+              onChange={this.handleFirstNameChange}
+              autoComplete="name"
+              required
+            />
+            {this.state.firstNameError ? (
+              <span style={{ display: "block", color: "red" }}>
+                Invalid Value
+              </span>
+            ) : (
+              ""
+            )}
+          </FormControl>
 
-                                    <FormControl margin = 'normal' required fullWidth error = {this.state.emailError}>
-                                        <InputLabel htmlFor = 'email'>Email</InputLabel>
-                                        <Input
-                                            type='email'
-                                            name='email'
-                                            value = {this.state.email}
-                                            onChange = {this.handleEmailChange}
-                                            autoComplete = "email"
-                                            required/>
-                                        <span style={emailErrorStyle}>Invalid Value</span>
-                                        <span style={emailExistsStyle}>Email Already Exists!</span>
-                                    </FormControl>
+          <FormControl
+            margin="normal"
+            required
+            className="secondNameField"
+            error={this.state.secondNameError}
+          >
+            <InputLabel htmlFor="secondName">Second Name</InputLabel>
+            <Input
+              type="text"
+              name="secondName"
+              value={this.state.secondName}
+              onChange={this.handleSecondNameChange}
+              autoComplete="name"
+              required
+            />
+            {this.state.secondNameError ? (
+              <span style={{ display: "block", color: "red" }}>
+                Invalid Value
+              </span>
+            ) : (
+              ""
+            )}
+          </FormControl>
 
-                                    <FormControl margin = 'normal' required fullWidth error = {this.state.passwordError}>
-                                        <InputLabel htmlFor = 'password'>Password</InputLabel>
-                                        <Input
-                                            type='password'
-                                            name='password'
-                                            value = {this.state.password}
-                                            onChange = {this.handlePasswordChange}
-                                            required/>
-                                        <span style={passwordErrorStyle}>Invalid Value! Strong Password with Uppercase and Lowercase letters, digits and special characters</span>
-                                    </FormControl>
-                                    <Button className='formSubmit ' type = 'submit' color='primary' variant='raised' fullWidth>Register</Button>
-                                </div>
-                        </Paper>
-                    </div>
-                </form>
-            </React.Fragment>
-        );
-    }
-};
+          <FormControl
+            margin="normal"
+            required
+            fullWidth
+            error={this.state.emailError}
+          >
+            <InputLabel htmlFor="email">Email</InputLabel>
+            <Input
+              type="email"
+              name="email"
+              value={this.state.email}
+              onChange={this.handleEmailChange}
+              autoComplete="email"
+              required
+            />
+            {this.state.emailError ? (
+              <span style={{ display: "block", color: "red" }}>
+                Invalid Value
+              </span>
+            ) : (
+              ""
+            )}
+            {this.state.emailExists ? (
+              <span style={{ display: "block", color: "red" }}>
+                Email Exists!
+              </span>
+            ) : (
+              ""
+            )}
+          </FormControl>
+
+          <FormControl
+            margin="normal"
+            required
+            fullWidth
+            error={this.state.passwordError}
+          >
+            <InputLabel htmlFor="password">Password</InputLabel>
+            <Input
+              type="password"
+              name="password"
+              value={this.state.password}
+              onChange={this.handlePasswordChange}
+              required
+            />
+            {this.state.passwordError ? (
+              <span style={{ display: "block", color: "red" }}>
+                Invalid Value
+              </span>
+            ) : (
+              ""
+            )}
+          </FormControl>
+          <Button
+            className="formSubmit "
+            type="submit"
+            color="primary"
+            variant="raised"
+            fullWidth
+          >
+            Register
+          </Button>
+        </Paper>
+      </form>
+    );
+  }
+}
