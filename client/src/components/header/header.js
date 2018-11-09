@@ -22,7 +22,7 @@ class Header extends Component {
                 <div className="menu-items">
                   <Link to="/products">
                     <Typography color="inherit" variant="subheading">
-                      Products
+                      Shop
                     </Typography>
                   </Link>
                 </div>
@@ -50,7 +50,7 @@ class Header extends Component {
                     <div className="menu-items">
                       <Link to="/login">
                         <Typography color="inherit" variant="subheading">
-                          Log-In
+                          Login
                         </Typography>
                       </Link>
                     </div>

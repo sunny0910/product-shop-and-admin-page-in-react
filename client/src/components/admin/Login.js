@@ -107,7 +107,7 @@ class Login extends Component {
             <Person />
           </Avatar>
           <div className="formHeading">
-            <Typography variant="headline">Sign In</Typography>
+            <Typography variant="headline">Login</Typography>
           </div>
           <FormControl
             margin="normal"
@@ -150,7 +150,7 @@ class Login extends Component {
             variant="raised"
             color="primary"
           >
-            Sign In
+            LogIn
           </Button>
         </Paper>
       </form>
