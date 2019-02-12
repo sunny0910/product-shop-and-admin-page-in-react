@@ -206,27 +206,27 @@ class DataTable extends Component {
         let afirstName = a.firstName.toUpperCase();
         let bfirstName = b.firstName.toUpperCase();
         if (this.state.order === "asc") {
-          return afirstName > bfirstName;
+          return (afirstName < bfirstName) ? -1 : (afirstName > bfirstName) ? 1 : 0;
         } else {
-          return bfirstName > afirstName;
+          return (afirstName > bfirstName) ? -1 : (afirstName < bfirstName) ? 1 : 0;
         }
       }
       if (this.state.orderBy === "SecondName") {
         let asecondName = a.secondName.toUpperCase();
         let bsecondName = b.secondName.toUpperCase();
         if (this.state.order === "asc") {
-          return asecondName > bsecondName;
+          return (asecondName < bsecondName) ? -1 : (asecondName > bsecondName) ? 1 : 0;
         } else {
-          return bsecondName > asecondName;
+          return (asecondName > bsecondName) ? -1 : (asecondName < bsecondName) ? 1 : 0;
         }
       }
       if (this.state.orderBy === "Email") {
         let aemail = a.email.toUpperCase();
         let bemail = b.email.toUpperCase();
         if (this.state.order === "asc") {
-          return aemail > bemail;
+          return (aemail < bemail) ? -1 : (aemail > bemail) ? 1 : 0;
         } else {
-          return bemail > aemail;
+          return (aemail > bemail) ? -1 : (aemail < bemail) ? 1 : 0;
         }
       }
       return a - b;

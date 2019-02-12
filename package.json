@@ -9,22 +9,21 @@
     "start": "concurrently \"npm run server\" \"npm run client\" "
   },
   "dependencies": {
-    "aws-sdk": "^2.343.0",
-    "bcrypt": "^3.0.2",
-    "concurrently": "^4.0.1",
+    "aws-sdk": "^2.401.0",
+    "bcrypt": "^3.0.4",
+    "concurrently": "^4.1.0",
     "cookie-parser": "~1.4.3",
-    "cors": "^2.8.4",
+    "cors": "^2.8.5",
     "debug": "~2.6.9",
-    "dotenv": "^6.1.0",
+    "dotenv": "^6.2.0",
     "express": "^4.16.4",
     "http-errors": "~1.6.2",
-    "jade": "~1.11.0",
-    "jsonwebtoken": "^8.3.0",
-    "mongodb": "^3.1.8",
-    "mongoose": "^5.3.6",
+    "jsonwebtoken": "^8.4.0",
+    "mongodb": "^3.1.13",
+    "mongoose": "^5.4.11",
     "morgan": "^1.9.1",
     "node-gyp": "^3.8.0",
-    "nodemon": "^1.18.4",
-    "npm": "^6.4.1"
+    "nodemon": "^1.18.10",
+    "npm": "^6.7.0"
   }
 }
