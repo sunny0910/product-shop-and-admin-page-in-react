@@ -3,12 +3,15 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "client-install": "cd client && npm install",
+    "install app": "concurrently \"npm install server\" \"npm install client\" ",
+    "install server": "npm install",
+    "install client": "cd client && npm install",
     "server": "nodemon ./bin/www",
     "client": "cd client && npm start",
     "start": "concurrently \"npm run server\" \"npm run client\" "
   },
   "dependencies": {
+    "app": "^0.1.0",
     "aws-sdk": "^2.401.0",
     "bcrypt": "^3.0.4",
     "concurrently": "^4.1.0",

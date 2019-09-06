@@ -3,6 +3,7 @@ self.addEventListener('install', (event) => {
 var urlsToCache = [
   '/serviceworker.js',
   '/static/js/main.chunk.js',
+  '/offline.html'
 ];
     event.waitUntil(
         caches.open(cacheName)
@@ -43,8 +44,8 @@ self.addEventListener('fetch', function(event) {
           return fetch(event.request).then(
             function(response) {
               // Check if we received a valid response
-              if(!response || response.status !== 200 || response.type === 'basic' ) {
-                console.log(event.request.url, response)
+              if(!response || response.status !== 200) {
+                // console.log(event.request.url, response)
                 return response;
               }
               // IMPORTANT: Clone the response. A response is a stream
@@ -53,7 +54,7 @@ self.addEventListener('fetch', function(event) {
               // to clone it so we have two streams.
               var responseToCache = response.clone();
               // console.log(event.request.url)
-              // console.log('cloning response')
+              console.log('cloning response')
               caches.open(cacheName)
                 .then(function(cache) {
                   cache.put(event.request, responseToCache);
@@ -61,7 +62,11 @@ self.addEventListener('fetch', function(event) {
   
               return response;
             }
-          );
+          ).catch(() => {
+            console.log('catch')
+            console.log(cacheName)
+            return caches.open(cacheName).then(cache => {return cache.match('offline.html')})
+          })
         })
       );
   });
