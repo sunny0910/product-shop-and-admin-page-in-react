@@ -1,5 +1,5 @@
 function node() {
-    if (process.NODE_ENV === 'production') {
+    if (process.env.ENV === 'production') {
         return true;
     } else {
         return false
