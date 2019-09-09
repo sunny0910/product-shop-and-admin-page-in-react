@@ -4,7 +4,10 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 var mongoose = require('mongoose');
-const uri = 'mongodb://localhost:27017/products';
+let uri = 'mongodb://localhost:27017/products';
+if (process.NODE_ENV == "production") {
+  uri = "mongodb+srv://admin:MongoDb123@cluster0-7doi5.mongodb.net/products?retryWrites=true&w=majority"
+}
 const cors = require('cors');
 require('dotenv').config();
 

@@ -1,11 +1,11 @@
 function env() {
-    if (process.env.ENV === 'production') {
+    if (process.NODE_ENV === 'production') {
         return true;
     } else {
         return false
     }
 }
 const ROOT_URL = env()
-    ? '/api'
+    ? 'https://react-shop-store.herokuapp.com/api'
     : 'http://localhost:3001';
 module.exports = ROOT_URL;
