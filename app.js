@@ -4,11 +4,12 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 var mongoose = require('mongoose');
+const cors = require('cors');
+const path = require('path')
 let uri = 'mongodb://localhost:27017/products';
 if (process.env.ENV == "production") {
   uri = "mongodb+srv://admin:MongoDb123@cluster0-7doi5.mongodb.net/products?retryWrites=true&w=majority"
 }
-const cors = require('cors');
 require('dotenv').config();
 
 var productRouter = require('./api/routes/products');
@@ -33,7 +34,12 @@ app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
-app.use(express.static(path.join(__dirname, 'public')));
+// Serve static files from the React frontend app
+app.use(express.static(path.join(__dirname, 'client/build')))
+// Anything that doesn't match the above, send back index.html
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname + '/client/build/index.html'))
+})
 
 app.use((req, res, next) => {
   // res.append('Access-Control-Allow-Origin', ['*']);
