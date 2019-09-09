@@ -3,15 +3,14 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "install app": "concurrently \"npm install server\" \"npm install client\" ",
-    "install server": "npm install",
-    "install client": "cd client && npm install",
+    "install_app": "concurrently \"npm run-script install_server\" \"npm run-script install_client\" ",
+    "install_server": "npm install",
+    "install_client": "cd client && npm install",
     "server": "nodemon ./bin/www",
     "client": "cd client && npm start",
     "start": "concurrently \"npm run server\" \"npm run client\" "
   },
   "dependencies": {
-    "app": "^0.1.0",
     "aws-sdk": "^2.401.0",
     "bcrypt": "^3.0.4",
     "concurrently": "^4.1.0",
@@ -27,6 +26,6 @@
     "morgan": "^1.9.1",
     "node-gyp": "^3.8.0",
     "nodemon": "^1.18.10",
-    "npm": "^6.7.0"
+    "npm": "^6.11.3"
   }
 }

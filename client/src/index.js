@@ -6,7 +6,7 @@ import App from './App';
 
 ReactDOM.render(<App />, document.getElementById('root'));
 // registerServiceWorker();
-register()
+// register()
 
 function register() {
     if ('serviceWorker' in navigator) {
