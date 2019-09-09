@@ -8,7 +8,8 @@
     "install_client": "cd client && npm install",
     "server": "nodemon ./bin/www",
     "client": "cd client && npm start",
-    "start": "concurrently \"npm run server\" \"npm run client\" "
+    "start": "concurrently \"npm run server\" \"npm run client\" ",
+    "heroku-postbuild": "cd client && npm install && npm start"
   },
   "dependencies": {
     "aws-sdk": "^2.401.0",
