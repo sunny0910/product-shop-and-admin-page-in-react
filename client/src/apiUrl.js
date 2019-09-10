@@ -6,6 +6,6 @@ function node() {
     }
 }
 const ROOT_URL = node()
-    ? 'https://react-shop-store.herokuapp.com/api'
+    ? 'https://react-shop-store.herokuapp.com/api/v1'
     : 'http://localhost:3001/api/v1';
 export default ROOT_URL;
