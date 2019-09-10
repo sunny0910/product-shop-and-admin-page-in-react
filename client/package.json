@@ -2,7 +2,7 @@
   "name": "client",
   "version": "0.1.0",
   "private": true,
-  "proxy": "http://localhost:5000",
+  "proxy": "https://react-shop-store.herokuapp.com/",
   "dependencies": {
     "@material-ui/core": "^1.5.0",
     "@material-ui/icons": "^1.1.1",
