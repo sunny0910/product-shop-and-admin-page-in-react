@@ -10,6 +10,7 @@ class AddProduct extends Component {
         admin={this.props.admin}
         serverError={this.props.serverError}
         unAuthorised={this.props.unAuthorised}
+        history={this.props.history}
       />
     );
   }

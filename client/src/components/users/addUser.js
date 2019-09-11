@@ -10,6 +10,7 @@ class AddUser extends Component
                 serverError = {this.props.serverError}
                 token = {this.props.token}
                 roles = {this.props.roles}
+                history={this.props.history}
             />
         );
     }

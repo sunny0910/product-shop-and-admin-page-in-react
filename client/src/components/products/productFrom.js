@@ -135,6 +135,12 @@ class ProductForm extends Component {
             this.setState({
               sucessNotification: true,
               linearLoading: false
+            }, ()=> {
+              setTimeout(
+                () => {
+                  this.props.history.push('/products')
+                }, 500
+              )
             });
           }, 500);
         })
@@ -220,6 +226,7 @@ class ProductForm extends Component {
                     fullWidth
                     variant="raised"
                     color="primary"
+                    style={{backgroundColor: '#2196f3'}}
                   >
                     {buttonText}
                   </Button>

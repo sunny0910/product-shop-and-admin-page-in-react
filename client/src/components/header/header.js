@@ -69,7 +69,7 @@ class Header extends Component {
               {this.props.productsInCartCount !== 0 ? (
                 <Badge
                   badgeContent={this.props.productsInCartCount}
-                  color="primary"
+                  color="secondary"
                 >
                   <ShoppingCart />
                 </Badge>

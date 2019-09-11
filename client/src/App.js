@@ -250,13 +250,14 @@ class App extends Component {
               <Route
                 exact
                 path="/products/add"
-                render={() =>
+                render={(props) =>
                   checkIsAdmin(this.state.userRoleId) ? (
                     <AddProduct
                       admin={checkIsAdmin(this.state.userRoleId)}
                       serverError={this.serverError}
                       unAuthorised={this.unAuthorised}
                       token={this.state.jwtToken}
+                      {...props}
                       hideUnathorizedMessage={this.hideUnathorizedMessage}
                     />
                   ) : this.state.loggedIn ? (
@@ -269,7 +270,7 @@ class App extends Component {
               <Route
                 exact
                 path="/products/:id/edit"
-                render={props =>
+                render={(props) =>
                   checkIsAdmin(this.state.userRoleId) ? (
                     <EditProduct
                       admin={checkIsAdmin(this.state.userRoleId)}
@@ -330,11 +331,12 @@ class App extends Component {
               <Route
                 exact
                 path="/users/add"
-                render={() =>
+                render={(props) =>
                   checkIsAdmin(this.state.userRoleId) ? (
                     <AddUser
                       getUserRole={this.getUserRole}
                       roles={this.state.roles}
+                      {...props}
                       serverError={this.serverError}
                       token={this.state.jwtToken}
                       unAuthorised={this.unAuthorised}

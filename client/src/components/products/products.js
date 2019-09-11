@@ -196,9 +196,10 @@ class Products extends Component {
                         <Grid item xs={12} sm={this.props.admin ? 6 : 12}>
                           {this.props.productsInCart.includes(product.id) ? (
                             <Button
+                              style={{color: '#2196f3', borderColor: '#2196f3'}}
                               color="primary"
                               size="small"
-                              variant="contained"
+                              variant="outlined"
                               onClick={() =>
                                 this.props.removeFromCart(product.id)
                               }
