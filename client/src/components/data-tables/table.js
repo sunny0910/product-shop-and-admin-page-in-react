@@ -324,7 +324,7 @@ class DataTable extends Component {
                         <Link to={user.url.view} className="actions">
                           <Tooltip
                             title="View"
-                            enterDelay={300}
+                            enterDelay={100}
                             placement={"left"}
                           >
                             <IconButton aria-label="View">
@@ -337,7 +337,7 @@ class DataTable extends Component {
                         <Link to={user.url.edit} className="actions">
                           <Tooltip
                             title="Edit"
-                            enterDelay={300}
+                            enterDelay={100}
                             placement={"left"}
                           >
                             <IconButton aria-label="Edit">
@@ -349,7 +349,7 @@ class DataTable extends Component {
                       <TableCell>
                         <Tooltip
                           title="Delete"
-                          enterDelay={300}
+                          enterDelay={100}
                           placement={"left"}
                         >
                           <div>

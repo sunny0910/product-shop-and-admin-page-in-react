@@ -10,7 +10,8 @@ import {
   Typography,
   Snackbar,
   LinearProgress,
-  CircularProgress
+  CircularProgress,
+  Tooltip
 } from "@material-ui/core";
 import { Link } from "react-router-dom";
 
@@ -125,18 +126,20 @@ class Products extends Component {
             )}
             <br />
             {this.props.admin ? (
-              <Link to="/products/add" style={{ float: "right" }}>
-                {" "}
-                <Button
-                  variant="outlined"
-                  type="button"
-                  color="primary"
-                  size="medium"
-                  onClick={this.state.props}
-                >
-                  Add
-                </Button>{" "}
-              </Link>
+              <Tooltip title="Add Product" placement={"left"}>
+                <Link to="/products/add" style={{ float: "right" }}>
+                  {" "}
+                  <Button
+                    variant="outlined"
+                    type="button"
+                    color="primary"
+                    size="medium"
+                    onClick={this.state.props}
+                    >
+                    Add
+                  </Button>{" "}
+                </Link>
+              </Tooltip>
             ) : (
               ""
             )}
@@ -148,7 +151,7 @@ class Products extends Component {
               alignItems="center"
             >
               {this.state.products.map(product => (
-                <Grid item xs={4} key={product.id}>
+                <Grid item xs={12} sm={12} md={6} lg={4} key={product.id}>
                   <Card className="product-card">
                     <CardContent>
                       <Grid container>
@@ -190,7 +193,7 @@ class Products extends Component {
                         //   this.props.admin ? "space-around" : "flex-start"
                         // }
                       >
-                        <Grid item xs={this.props.admin ? 6 : 12}>
+                        <Grid item xs={12} sm={this.props.admin ? 6 : 12}>
                           {this.props.productsInCart.includes(product.id) ? (
                             <Button
                               color="primary"
@@ -205,6 +208,7 @@ class Products extends Component {
                             </Button>
                           ) : (
                             <Button
+                              style={{backgroundColor: '#2196f3'}}
                               color="primary"
                               size="small"
                               variant="contained"
@@ -217,9 +221,10 @@ class Products extends Component {
                         </Grid>
                         {this.props.admin ? (
                           <React.Fragment>
-                            <Grid item xs={3}>
+                            <Grid item xs={12} sm={3}>
                               <Link to={product.url.edit}>
                                 <Button
+                                  style={{backgroundColor: '#2196f3'}}
                                   color="primary"
                                   size="small"
                                   variant="contained"
@@ -229,8 +234,9 @@ class Products extends Component {
                                 </Button>
                               </Link>
                             </Grid>
-                            <Grid item xs={3}>
+                            <Grid item xs={12} sm={3}>
                               <Button
+                                style={{backgroundColor: '#2196f3'}}
                                 color="primary"
                                 size="small"
                                 fullWidth

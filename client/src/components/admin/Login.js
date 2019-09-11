@@ -11,7 +11,7 @@ import {
 } from "@material-ui/core";
 import Person from "@material-ui/icons/Person";
 import apiUrl from "../../apiUrl";
-import apiRequest from "../../apiRequest";
+import apiRequest, {handleErrors} from "../../apiRequest";
 import { emailRegex } from "../validationRegex";
 
 class Login extends Component {
@@ -22,7 +22,8 @@ class Login extends Component {
       password: "",
       hideProgress: true,
       emailError: false,
-      passwordError: false
+      passwordError: false,
+      loginError: false
     };
     this.loginSubmit = this.loginSubmit.bind(this);
     this.handleEmailChange = this.handleEmailChange.bind(this);
@@ -40,7 +41,8 @@ class Login extends Component {
       });
     }
     this.setState({
-      email: e.target.value
+      email: e.target.value,
+      loginError: false
     });
   }
 
@@ -51,7 +53,8 @@ class Login extends Component {
       });
     }
     this.setState({
-      password: e.target.value
+      password: e.target.value,
+      loginError: false
     });
   }
 
@@ -77,7 +80,7 @@ class Login extends Component {
       email: this.state.email,
       password: this.state.password
     });
-    apiRequest(apiUrl + "/users/login", "POST", data).then(result => {
+    apiRequest(apiUrl + "/users/login", "POST", data).then(handleErrors).then(result => {
       if (result.status === 500) {
         this.props.serverError(true);
         return;
@@ -94,7 +97,11 @@ class Login extends Component {
           console.log(err);
           this.props.serverError(true);
         });
-    });
+    }).catch(err => {
+      this.setState({
+        loginError: true
+      })
+    })
   }
 
   render() {
@@ -132,7 +139,7 @@ class Login extends Component {
               ""
             )}
           </FormControl>
-          <FormControl margin="normal" required fullWidth>
+          <FormControl margin="normal" required fullWidth error={this.state.passwordError}>
             <InputLabel htmlFor="password">Password: </InputLabel>
             <Input
               type="password"
@@ -143,6 +150,13 @@ class Login extends Component {
               required
             />
           </FormControl>
+          {this.state.loginError ? (
+              <span style={{ display: "block", color: "red" }}>
+                Invalid Email or Password
+              </span>
+            ) : (
+              ""
+            )}
           <Button
             className="formSubmit"
             type="submit"

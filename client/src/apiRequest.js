@@ -21,4 +21,11 @@ const apiRequest = (url, method, data, additonalHeaders = false) => {
       return result;
     });
 };
-module.exports = apiRequest;
+
+export function handleErrors(response) {
+  if (response.ok) {
+    return response
+  }
+  throw Error(response)
+}
+export default apiRequest

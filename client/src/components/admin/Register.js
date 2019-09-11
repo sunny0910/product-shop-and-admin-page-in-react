@@ -8,7 +8,7 @@ import {
   Typography,
   LinearProgress
 } from "@material-ui/core";
-import apiRequest from "../../apiRequest";
+import apiRequest, {handleErrors} from "../../apiRequest";
 import apiUrl from "../../apiUrl";
 import { emailRegex, passwordRegex } from "../validationRegex";
 
@@ -115,7 +115,7 @@ export default class Register extends Component {
       password: this.state.password,
       role: 2
     });
-    apiRequest(apiUrl + "/users/signup", "POST", data).then(result => {
+    apiRequest(apiUrl + "/users/signup", "POST", data).then(handleErrors).then(result => {
       if (result.status === 409) {
         this.setState({
           emailExists: true,
