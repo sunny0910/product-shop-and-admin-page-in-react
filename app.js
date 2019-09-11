@@ -7,7 +7,7 @@ var mongoose = require('mongoose');
 const cors = require('cors');
 let uri = 'mongodb://localhost:27017/products';
 if (process.env.ENV == "production") {
-  uri = "mongodb+srv://admin:MongoDb123@cluster0-7doi5.mongodb.net/products?retryWrites=true&w=majority"
+  uri = `mongodb+srv://${process.env.dbUserName}:${process.env.dbPassword}@cluster0-7doi5.mongodb.net/products?retryWrites=true&w=majority`
 }
 require('dotenv').config();
 
