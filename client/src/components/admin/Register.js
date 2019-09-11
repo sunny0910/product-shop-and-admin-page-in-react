@@ -48,31 +48,14 @@ export default class Register extends Component {
     });
   }
   handleEmailChange(e) {
-    if (!emailRegex.test(e.target.value) && e.target.value !== "") {
-      this.setState({
-        emailError: true
-      });
-    } else {
-      this.setState({
-        emailError: false,
-        emailExists: false
-      });
-    }
     this.setState({
-      email: e.target.value
+      email: e.target.value,
+      emailExists: false,
+      emailError: false
     });
   }
   handlePasswordChange(e) {
-    if (!passwordRegex.test(e.target.value) && e.target.value !== "") {
-      this.setState({
-        passwordError: true
-      });
-    } else {
-      this.setState({
-        passwordError: false
-      });
-    }
-    this.setState({ password: e.target.value });
+    this.setState({ password: e.target.value, passwordError: false });
   }
   registerSubmit(e) {
     e.preventDefault();
@@ -90,20 +73,25 @@ export default class Register extends Component {
       this.setState({
         emailError: true
       });
+      return
     }
     if (this.state.password === "") {
       this.setState({
         passwordError: true
       });
+      return
     }
-    if (
-      this.state.firstNameError ||
-      this.state.secondNameError ||
-      this.state.emailError ||
-      this.state.passwordError ||
-      this.state.emailExists
-    ) {
-      return;
+    if (!emailRegex.test(this.state.email) && this.state.email !== "") {
+      this.setState({
+        emailError: true
+      });
+      return
+    }
+    if (!passwordRegex.test(this.state.password) && this.state.password !== "") {
+      this.setState({
+        passwordError: true
+      });
+      return
     }
     this.setState({
       hideProgress: false
@@ -170,13 +158,6 @@ export default class Register extends Component {
               autoComplete="name"
               required
             />
-            {this.state.firstNameError ? (
-              <span style={{ display: "block", color: "red" }}>
-                Invalid Value
-              </span>
-            ) : (
-              ""
-            )}
           </FormControl>
 
           <FormControl
@@ -194,13 +175,6 @@ export default class Register extends Component {
               autoComplete="name"
               required
             />
-            {this.state.secondNameError ? (
-              <span style={{ display: "block", color: "red" }}>
-                Invalid Value
-              </span>
-            ) : (
-              ""
-            )}
           </FormControl>
 
           <FormControl
@@ -220,14 +194,14 @@ export default class Register extends Component {
             />
             {this.state.emailError ? (
               <span style={{ display: "block", color: "red" }}>
-                Invalid Value
+                Invalid Email
               </span>
             ) : (
               ""
             )}
             {this.state.emailExists ? (
               <span style={{ display: "block", color: "red" }}>
-                Email Exists!
+                Email Already Exists!
               </span>
             ) : (
               ""
@@ -250,7 +224,7 @@ export default class Register extends Component {
             />
             {this.state.passwordError ? (
               <span style={{ display: "block", color: "red" }}>
-                Invalid Value
+                Use A Strong Password
               </span>
             ) : (
               ""
@@ -261,6 +235,7 @@ export default class Register extends Component {
             type="submit"
             color="primary"
             variant="raised"
+            style={{backgroundColor: '#2196f3'}}
             fullWidth
           >
             Register

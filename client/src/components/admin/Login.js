@@ -21,8 +21,6 @@ class Login extends Component {
       email: "",
       password: "",
       hideProgress: true,
-      emailError: false,
-      passwordError: false,
       loginError: false
     };
     this.loginSubmit = this.loginSubmit.bind(this);
@@ -31,15 +29,6 @@ class Login extends Component {
   }
 
   handleEmailChange(e) {
-    if (!emailRegex.test(e.target.value) && e.target.value !== "") {
-      this.setState({
-        emailError: true
-      });
-    } else {
-      this.setState({
-        emailError: false
-      });
-    }
     this.setState({
       email: e.target.value,
       loginError: false
@@ -47,11 +36,6 @@ class Login extends Component {
   }
 
   handlePasswordChange(e) {
-    if (this.state.password !== "") {
-      this.setState({
-        passwordError: false
-      });
-    }
     this.setState({
       password: e.target.value,
       loginError: false
@@ -60,17 +44,10 @@ class Login extends Component {
 
   loginSubmit(event) {
     event.preventDefault();
-    if (this.state.email === "") {
+    if (this.state.email === "" || this.state.password === "" || !emailRegex.test(this.state.email)) {
       this.setState({
-        emailError: true
+        loginError: true,
       });
-    }
-    if (this.state.password === "") {
-      this.setState({
-        passwordError: true
-      });
-    }
-    if (this.state.emailError || this.state.passwordError) {
       return;
     }
     this.setState({
@@ -120,7 +97,7 @@ class Login extends Component {
             margin="normal"
             required
             fullWidth
-            error={this.state.emailError}
+            error={this.state.loginError}
           >
             <InputLabel htmlFor="email">Email: </InputLabel>
             <Input
@@ -131,15 +108,8 @@ class Login extends Component {
               autoComplete="email"
               required
             />
-            {this.state.emailError ? (
-              <span style={{ display: "block", color: "red" }}>
-                Invalid Value
-              </span>
-            ) : (
-              ""
-            )}
           </FormControl>
-          <FormControl margin="normal" required fullWidth error={this.state.passwordError}>
+          <FormControl margin="normal" required fullWidth error={this.state.loginError}>
             <InputLabel htmlFor="password">Password: </InputLabel>
             <Input
               type="password"
@@ -163,6 +133,7 @@ class Login extends Component {
             fullWidth
             variant="raised"
             color="primary"
+            style={{backgroundColor: '#2196f3'}}
           >
             LogIn
           </Button>
