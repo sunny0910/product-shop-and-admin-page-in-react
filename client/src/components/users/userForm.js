@@ -414,7 +414,7 @@ class UserForm extends Component {
                     fullWidth
                     error={this.state.passwordError}
                   >
-                    <InputLabel htmlFor="password">Password: </InputLabel>
+                    <InputLabel htmlFor="password">New Password: </InputLabel>
                     <Input
                       type="password"
                       name="password"

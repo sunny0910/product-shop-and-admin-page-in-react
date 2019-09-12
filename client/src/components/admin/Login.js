@@ -76,7 +76,8 @@ class Login extends Component {
         });
     }).catch(err => {
       this.setState({
-        loginError: true
+        loginError: true,
+        hideProgress: true
       })
     })
   }
