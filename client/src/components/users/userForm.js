@@ -66,18 +66,9 @@ class UserForm extends Component {
   }
 
   handleEmailChange(e) {
-    if (!emailRegex.test(e.target.value) && e.target.value !== "") {
-      this.setState({
-        emailError: true
-      });
-    } else {
-      this.setState({
-        emailError: false,
-        emailExists: false
-      });
-    }
     this.setState({
-      email: e.target.value
+      email: e.target.value,
+      emailError: false
     });
   }
 
@@ -208,6 +199,12 @@ class UserForm extends Component {
     ) {
       return;
     }
+    if (!emailRegex.test(this.state.email)) {
+      this.setState({
+        emailError: true,
+      });
+      return;
+    }
     this.setState({ linearLoading: true });
     let data = {
       firstName: this.state.firstName,
@@ -240,7 +237,8 @@ class UserForm extends Component {
       }
       if (result.status === 409) {
         this.setState({
-          emailExists: true
+          emailExists: true,
+          linearLoading: false
         });
         return;
       }
@@ -278,7 +276,7 @@ class UserForm extends Component {
 
   render() {
     const anchorOrigin = { horizontal: "center", vertical: "bottom" };
-    const buttonText = this.props.editPage ? "Update User" : "Add User";
+    const buttonText = this.props.editPage ? "Update" : "Add";
     return (
       <div className="editpaper">
         <Paper>
@@ -382,7 +380,7 @@ class UserForm extends Component {
                     )}
                     {this.state.emailExists ? (
                       <span style={{ display: "block", color: "red" }}>
-                        Invalid Value
+                        Email Already In Use
                       </span>
                     ) : (
                       ""

@@ -152,7 +152,7 @@ class ProductForm extends Component {
   }
 
   render() {
-    const buttonText = this.props.editPage ? "Edit" : "Add";
+    const buttonText = this.props.editPage ? "Update" : "Add";
     const anchorOrigin = { horizontal: "center", vertical: "bottom" };
     return (
       <div className="editpaper">
