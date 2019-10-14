@@ -1,18 +1,28 @@
-# Product-Shop-And-Admin-Page-In-React
-A Dynamic Product Shop and the Admin page build in react.
+# Products shop And Admin Page in React
+A Dynamic Products Shop and the Admin page build in react.
 
 ## Techincal Specifications
-* The Backend is a REST API built in Express which is an MVC web-application framework for NodeJs.
-* The Mongoose is used for the NoSQL Database along with ExpressJs in the backend Rest API. The Mongoose is an MongoDB ODM(object data modelling).
-* The Frontend is built using ReactJs along with React's Material-UI and React-Router.
-* The Project was built to learn Javascript and hence Javascript is used everywhere in the Project.
+* The Backend is a REST API built in ExpressJs which is an MVC web-application framework for NodeJs.
+* MongoDB is used as the NoSQL Database along with ExpressJs in the backend Rest API. Mongoose, a MongoDB ODM(Object Data Mapper) has also been used along with MongoDB in the database layer.
+* The Frontend is built using ReactJs along with React-Router and Material UI as component library.
 
 ## Project Specifications
-* The project has two resources as the Products and the Users.
-* The Project has two User Roles, the Admin and the User.
-* The Project has Login, Register pages for the Visitors(Non-LoggedIn), the Shop page for the LoggedIn users with user role as User, and Users page along with all action for CRUD operations for the User with user role as Admin.
+* The project has two resources: `Products` and `Users`.
+* The Project has two User Roles: `Admin` and `User`(A normal shopper).
+* The Project has Login & Register pages for the non logged-in users, a Shop page for the Logged-in users with user role as User, and Users page only visible to Admin along with actions to perform CRUD operations.
 * The Admin has the right to carry out the CRUD operation on both the resources.
-* When a visitor(Non-LoggedIn) or a LoggedIn user with role as user visits the site, they will only be able to view the Shop page which will have the list of products in grid format.
-* They can Add/Remove the Products to the cart. They can also view the single Product page by clicking on the product.
-* When a LoggedIn user with role as Admin visits the site, he will be able to see the Shop page as well as the Users page.
-* The Admin will be able to Perform Create, Read, Update, and Delete operations on both the resources.
+* They can Add/Remove/Edit/Delete the Products and the Users listed/have access on the site.
+* The Project was primarily built to learn Javascript and how to run it on the backend using NodeJs. Also to experiment with NoSQL Databases.
+
+## Requirements
+* Express 4.x
+* MongoDB 3.x
+* Mongoose 5.x
+* Node 8.x
+* React-Router 5.x
+
+## Installation
+Clone the repository and Run the following commands in the terminal:
+* ```npm run install_app``` (This will install the server's and the client's dependency packages)
+* ```npm start``` (This will start the backend server. Alternatively, you can also run `npm run start_dev` to start the server with `nodemon`, which will look for the changes in the files and restart the server everytime)
+* ```cd view && npm start``` (This will start the Frontend React application for Dev Environment. For Production, run `npm build` to build the FrontEnd for deployment)
