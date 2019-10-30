@@ -11,10 +11,9 @@ class Users extends Component
             users : [],
             count: 0
         };
-        this.updateUserList = this.updateUserList.bind(this);
     }
 
-    componentDidMount() {
+    componentDidMount = () => {
         apiRequest(apiUrl+'/users','GET', '', this.props.token)
         .then((result) => {
             if (result.status === 500) {
@@ -39,7 +38,7 @@ class Users extends Component
         })
     }
 
-    updateUserList(userId) {
+    updateUserList = (userId) => {
         let users = this.state.users.slice(0);
         if (typeof(userId) === "object") {
             users = users.filter((user) => { return !userId.includes(user.id)});

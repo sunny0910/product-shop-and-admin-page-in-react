@@ -16,7 +16,7 @@ class ViewUser extends Component
         }
     }
 
-    componentDidMount() {
+    componentDidMount = () => {
         setTimeout(() => {
             apiRequest(apiUrl+'/users/'+this.props.match.params.id, 'GET', '', this.props.token)
             .then((result) => {

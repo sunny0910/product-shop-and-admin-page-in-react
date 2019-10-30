@@ -23,26 +23,23 @@ class Login extends Component {
       hideProgress: true,
       loginError: false
     };
-    this.loginSubmit = this.loginSubmit.bind(this);
-    this.handleEmailChange = this.handleEmailChange.bind(this);
-    this.handlePasswordChange = this.handlePasswordChange.bind(this);
   }
 
-  handleEmailChange(e) {
+  handleEmailChange = (e) => {
     this.setState({
       email: e.target.value,
       loginError: false
     });
   }
 
-  handlePasswordChange(e) {
+  handlePasswordChange = (e) => {
     this.setState({
       password: e.target.value,
       loginError: false
     });
   }
 
-  loginSubmit(event) {
+  loginSubmit = (event) => {
     event.preventDefault();
     if (this.state.email === "" || this.state.password === "" || !emailRegex.test(this.state.email)) {
       this.setState({

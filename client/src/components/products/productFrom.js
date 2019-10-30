@@ -22,33 +22,35 @@ class ProductForm extends Component {
       price: 0,
       sucessNotification: false,
       linearLoading: false,
-      spinnerLoading: true
+      spinnerLoading: true,
+      priceError: false
     };
-    this.handleNameChange = this.handleNameChange.bind(this);
-    this.handleDescriptionChange = this.handleDescriptionChange.bind(this);
-    this.handlePriceChange = this.handlePriceChange.bind(this);
-    this.handleSubmit = this.handleSubmit.bind(this);
   }
 
-  handleNameChange(e) {
+  handleNameChange = (e) => {
     this.setState({
       name: e.target.value
     });
   }
 
-  handleDescriptionChange(e) {
+  handleDescriptionChange = (e) => {
     this.setState({
       description: e.target.value
     });
   }
 
-  handlePriceChange(e) {
+  handlePriceChange = (e) => {
+    if (Math.sign(e.target.value) === -1 || Math.sign(e.target.value) === -0) {
+      this.setState({priceError: true})
+    } else {
+      this.setState({priceError: false})
+    }
     this.setState({
       price: e.target.value
     });
   }
 
-  componentDidMount() {
+  componentDidMount = () => {
     if (!this.props.editPage) {
       this.setState({ spinnerLoading: false });
       return;
@@ -90,12 +92,13 @@ class ProductForm extends Component {
     }, 500);
   }
 
-  handleSubmit(e) {
+  handleSubmit = (e) => {
     e.preventDefault();
     if (
       this.state.name === "" ||
       this.state.description === "" ||
-      this.state.price === 0
+      this.state.price === 0 ||
+      this.state.priceError
     ) {
       return;
     }
@@ -217,6 +220,7 @@ class ProductForm extends Component {
                       name="price"
                       value={this.state.price}
                       onChange={this.handlePriceChange}
+                      error={this.state.priceError}
                       required
                     />
                   </FormControl>

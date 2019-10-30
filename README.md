@@ -1,6 +1,11 @@
 # Products shop And Admin Page in React
 A Dynamic Products Shop and the Admin page build in react.
 
+## Demo
+* For the demonstration, the code has been hosted on Heroku.
+* You can access this [link](https://react-shop-store.herokuapp.com/) to view the application.
+* You can register with the `Admin` user role to view all the pages
+
 ## Techincal Specifications
 * The Backend is a REST API built in ExpressJs which is an MVC web-application framework for NodeJs.
 * MongoDB is used as the NoSQL Database along with ExpressJs in the backend Rest API. Mongoose, a MongoDB ODM(Object Data Mapper) has also been used along with MongoDB in the database layer.
@@ -25,4 +30,4 @@ A Dynamic Products Shop and the Admin page build in react.
 Clone the repository and Run the following commands in the terminal:
 * ```npm run install_app``` (This will install the server's and the client's dependency packages)
 * ```npm start``` (This will start the backend server. Alternatively, you can also run `npm run start_dev` to start the server with `nodemon`, which will look for the changes in the files and restart the server everytime)
-* ```cd view && npm start``` (This will start the Frontend React application for Dev Environment. For Production, run `npm build` to build the FrontEnd for deployment)
+* ```cd client && npm start``` (This will start the Frontend React application for Dev Environment. For Production, run `npm build` to build the FrontEnd for deployment)

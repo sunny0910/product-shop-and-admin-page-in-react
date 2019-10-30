@@ -37,42 +37,30 @@ class UserForm extends Component {
       spinnerLoading: true,
       linearLoading: false
     };
-    this.handleFirstNameChange = this.handleFirstNameChange.bind(this);
-    this.handleSecondNameChange = this.handleSecondNameChange.bind(this);
-    this.handleEmailChange = this.handleEmailChange.bind(this);
-    this.handlePasswordChange = this.handlePasswordChange.bind(this);
-    this.handleConfirmPasswordChange = this.handleConfirmPasswordChange.bind(
-      this
-    );
-    this.hideUpdatedMessage = this.hideUpdatedMessage.bind(this);
-    this.errorMessageStyle = this.errorMessageStyle.bind(this);
-    this.handleSubmit = this.handleSubmit.bind(this);
-    this.checkBothPasswords = this.checkBothPasswords.bind(this);
-    this.handleRoleChange = this.handleRoleChange.bind(this);
   }
 
-  handleFirstNameChange(e) {
+  handleFirstNameChange = (e) => {
     this.setState({
       firstName: e.target.value,
       firstNameError: false
     });
   }
 
-  handleSecondNameChange(e) {
+  handleSecondNameChange = (e) => {
     this.setState({
       secondName: e.target.value,
       secondNameError: false
     });
   }
 
-  handleEmailChange(e) {
+  handleEmailChange = (e) => {
     this.setState({
       email: e.target.value,
       emailError: false
     });
   }
 
-  checkBothPasswords() {
+  checkBothPasswords = () => {
     if (this.state.password !== "" && this.state.confirmPassword !== "") {
       if (this.state.password !== this.state.confirmPassword) {
         this.setState({
@@ -87,7 +75,7 @@ class UserForm extends Component {
     }
   }
 
-  handlePasswordChange(e) {
+  handlePasswordChange = (e) => {
     if (!passwordRegex.test(e.target.value) && e.target.value !== "") {
       this.setState({
         passwordError: true
@@ -102,7 +90,7 @@ class UserForm extends Component {
     );
   }
 
-  handleConfirmPasswordChange(e) {
+  handleConfirmPasswordChange = (e) => {
     if (!passwordRegex.test(e.target.value) && e.target.value !== "") {
       this.setState({
         confirmPasswordError: true
@@ -117,17 +105,17 @@ class UserForm extends Component {
     );
   }
 
-  hideUpdatedMessage() {
+  hideUpdatedMessage = () => {
     this.setState({
       sucessNotification: false
     });
   }
 
-  errorMessageStyle(field) {
+  errorMessageStyle = (field) => {
     return field ? { display: "block", color: "red" } : { display: "none" };
   }
 
-  componentDidMount() {
+  componentDidMount = () => {
     if (!this.props.editPage) {
       this.setState({ spinnerLoading: false });
       return;
@@ -170,7 +158,7 @@ class UserForm extends Component {
     }, 500);
   }
 
-  handleSubmit(e) {
+  handleSubmit = (e) => {
     e.preventDefault();
     if (this.state.firstName === "") {
       this.setState({
@@ -263,7 +251,7 @@ class UserForm extends Component {
     });
   }
 
-  handleRoleChange(e) {
+  handleRoleChange = (e) => {
     let roleError = false;
     if (e.target.value === "") {
       roleError = true;

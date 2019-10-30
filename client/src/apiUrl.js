@@ -1,4 +1,4 @@
-function node() {
+let node = () => {
     if (process.env.NODE_ENV === 'production') {
         return true;
     } else {

@@ -6,9 +6,11 @@ import {
   Input,
   FormControl,
   Typography,
-  LinearProgress
+  LinearProgress,
+  Select,
+  MenuItem
 } from "@material-ui/core";
-import apiRequest, {handleErrors} from "../../apiRequest";
+import apiRequest from "../../apiRequest";
 import apiUrl from "../../apiUrl";
 import { emailRegex, passwordRegex } from "../validationRegex";
 
@@ -25,39 +27,50 @@ export default class Register extends Component {
       emailError: false,
       passwordError: false,
       hideProgress: true,
-      emailExists: false
+      emailExists: false,
+      role: "",
+      roleError: false
     };
-
-    this.handleEmailChange = this.handleEmailChange.bind(this);
-    this.handleFirstNameChange = this.handleFirstNameChange.bind(this);
-    this.handleSecondNameChange = this.handleSecondNameChange.bind(this);
-    this.handlePasswordChange = this.handlePasswordChange.bind(this);
-    this.registerSubmit = this.registerSubmit.bind(this);
   }
 
-  handleFirstNameChange(e) {
+  handleFirstNameChange = (e) => {
     this.setState({
       firstName: e.target.value,
       firstNameError: false
     });
   }
-  handleSecondNameChange(e) {
+
+  handleSecondNameChange = (e) => {
     this.setState({
       secondName: e.target.value,
       secondNameError: false
     });
   }
-  handleEmailChange(e) {
+
+  handleEmailChange = (e) => {
     this.setState({
       email: e.target.value,
       emailExists: false,
       emailError: false
     });
   }
-  handlePasswordChange(e) {
+
+  handlePasswordChange = (e) => {
     this.setState({ password: e.target.value, passwordError: false });
   }
-  registerSubmit(e) {
+
+  handleRoleChange = (e) => {
+    let roleError = false;
+    if (e.target.value === "") {
+      roleError = true;
+    }
+    this.setState({
+      role: e.target.value,
+      roleError: roleError
+    });
+  }
+
+  registerSubmit = (e) => {
     e.preventDefault();
     if (this.state.firstName === "") {
       this.setState({
@@ -81,6 +94,12 @@ export default class Register extends Component {
       });
       return
     }
+    if (this.state.role === "") {
+      this.setState({
+        roleError: true
+      });
+      return
+    }
     if (!emailRegex.test(this.state.email) && this.state.email !== "") {
       this.setState({
         emailError: true
@@ -101,9 +120,9 @@ export default class Register extends Component {
       secondName: this.state.secondName,
       email: this.state.email,
       password: this.state.password,
-      role: 2
+      role: this.state.role
     });
-    apiRequest(apiUrl + "/users/signup", "POST", data).then(handleErrors).then(result => {
+    apiRequest(apiUrl + "/users/signup", "POST", data).then(result => {
       if (result.status === 409) {
         this.setState({
           emailExists: true,
@@ -208,6 +227,27 @@ export default class Register extends Component {
             )}
           </FormControl>
 
+          <FormControl
+            margin="normal"
+            fullWidth
+            required
+            error={this.state.roleError}
+          >
+            <InputLabel htmlFor="role">Role: </InputLabel>
+            <Select
+              type="text"
+              name="role"
+              value={this.state.role}
+              onChange={this.handleRoleChange}
+              required
+            >
+              {this.props.roles.map(role => (
+                <MenuItem key={role.id} value={role.id}>
+                  {role.name}
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
           <FormControl
             margin="normal"
             required

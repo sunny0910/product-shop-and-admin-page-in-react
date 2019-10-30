@@ -25,12 +25,9 @@ class Products extends Component {
       linearLoading: false,
       deleteNotification: false
     };
-    // console.log(this.props.match.params.unathorized);
-    this.deleteProduct = this.deleteProduct.bind(this);
-    this.hideDeleteNotification = this.hideDeleteNotification.bind(this);
   }
 
-  componentDidMount() {
+  componentDidMount = () => {
     apiRequest(apiUrl + "/products", "GET").then(result => {
       if (result.status === 500) {
         this.props.serverError(true);
@@ -54,13 +51,13 @@ class Products extends Component {
     }, 500);
   }
 
-  hideDeleteNotification() {
+  hideDeleteNotification = () => {
     this.setState({
       deleteNotification: false
     });
   }
 
-  deleteProduct(id) {
+  deleteProduct = (id) => {
     this.setState({ linearLoading: true });
     apiRequest(apiUrl + "/products/" + id, "DELETE", "", this.props.token)
       .then(result => {

@@ -39,19 +39,9 @@ class DataTable extends Component {
       orderBy: "Email",
       order: "asc"
     };
-    this.mainCheckboxOnChange = this.mainCheckboxOnChange.bind(this);
-    this.checkboxOnChange = this.checkboxOnChange.bind(this);
-    this.isSelected = this.isSelected.bind(this);
-    this.deleteRow = this.deleteRow.bind(this);
-    this.deleteMultipleRows = this.deleteMultipleRows.bind(this);
-    this.hideDeleteNotification = this.hideDeleteNotification.bind(this);
-    this.handlePageChange = this.handlePageChange.bind(this);
-    this.handleChangeRowsPerPage = this.handleChangeRowsPerPage.bind(this);
-    this.changeOrderOrOrderBy = this.changeOrderOrOrderBy.bind(this);
-    this.stableSort = this.stableSort.bind(this);
   }
 
-  mainCheckboxOnChange(e) {
+  mainCheckboxOnChange = (e) => {
     this.setState((state, props) => ({
       selected: state.mainCheckBoxSelected
         ? []
@@ -62,7 +52,7 @@ class DataTable extends Component {
     }));
   }
 
-  checkboxOnChange(e, id) {
+  checkboxOnChange = (e, id) => {
     let mainCheckBoxColor, mainCheckBoxSelected;
 
     let newSelectedArray = this.state.selected.slice(0);
@@ -89,14 +79,14 @@ class DataTable extends Component {
     }));
   }
 
-  isSelected(id) {
+  isSelected = (id) => {
     if (this.state.selected.indexOf(id) === -1) {
       return false;
     }
     return true;
   }
 
-  deleteRow(id) {
+  deleteRow = (id) => {
     this.setState({ linearLoading: true });
     apiRequest(apiUrl + "/users/" + id, "DELETE", "", this.props.token)
       .then(result => {
@@ -127,7 +117,7 @@ class DataTable extends Component {
       });
   }
 
-  deleteMultipleRows() {
+  deleteMultipleRows = () => {
     this.setState({ linearLoading: true });
     let data = JSON.stringify(this.state.selected);
     apiRequest(apiUrl + "/users", "DELETE", data, this.props.token)
@@ -164,25 +154,25 @@ class DataTable extends Component {
       });
   }
 
-  hideDeleteNotification() {
+  hideDeleteNotification = () => {
     this.setState({
       deleteNotification: false
     });
   }
 
-  handlePageChange(event, page) {
+  handlePageChange = (event, page) => {
     this.setState({
       page: page
     });
   }
 
-  handleChangeRowsPerPage(event) {
+  handleChangeRowsPerPage = (event) => {
     this.setState({
       rowsPerPage: event.target.value
     });
   }
 
-  changeOrderOrOrderBy(event, column) {
+  changeOrderOrOrderBy = (event, column) => {
     let order = "asc";
     if (column === this.state.orderBy && this.state.order === "asc") {
       order = "desc";
@@ -193,7 +183,7 @@ class DataTable extends Component {
     });
   }
 
-  stableSort(allUsers) {
+  stableSort = (allUsers) => {
     allUsers.sort((a, b) => {
       if (this.state.orderBy === "Role") {
         if (this.state.order === "asc") {
@@ -237,7 +227,7 @@ class DataTable extends Component {
     return users;
   }
 
-  componentDidMount() {
+  componentDidMount = () => {
     setTimeout(() => {
       this.setState({ spinnerLoading: false });
     }, 500);

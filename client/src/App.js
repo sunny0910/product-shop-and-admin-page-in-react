@@ -36,26 +36,16 @@ class App extends Component {
       productsInCart: getDataFromCookie("productsInCart"),
       roles: []
     };
-    this.userLogIn = this.userLogIn.bind(this);
-    this.serverError = this.serverError.bind(this);
-    this.hideErrorMessage = this.hideErrorMessage.bind(this);
-    this.unAuthorised = this.unAuthorised.bind(this);
-    this.hideUnathorizedMessage = this.hideUnathorizedMessage.bind(this);
-    this.logOut = this.logOut.bind(this);
-    this.getUserRole = this.getUserRole.bind(this);
-    this.addToCart = this.addToCart.bind(this);
-    this.removeFromCart = this.removeFromCart.bind(this);
-    this.storeCartDataInCookie = this.storeCartDataInCookie.bind(this);
   }
 
-  storeCartDataInCookie() {
+  storeCartDataInCookie = () => {
     document.cookie =
       "productsInCart=" + this.state.productsInCart.join(", ") + "; path=/";
     document.cookie =
       "productsInCartCount=" + this.state.productsInCartCount + "; path=/";
   }
 
-  addToCart(productId) {
+  addToCart = (productId) => {
     this.setState(
       prevState => ({
         poductsInCart: prevState.productsInCart.push(productId),
@@ -65,7 +55,7 @@ class App extends Component {
     );
   }
 
-  removeFromCart(productId) {
+  removeFromCart = (productId) => {
     this.setState(
       prevState => ({
         productsInCart: prevState.productsInCart.filter(id => {
@@ -77,7 +67,7 @@ class App extends Component {
     );
   }
 
-  componentDidMount() {
+  componentDidMount = () => {
     apiRequest(apiUrl + "/roles", "GET", "").then(result => {
       if (result.status === 500) {
         this.serverError(true);
@@ -101,7 +91,7 @@ class App extends Component {
     });
   }
 
-  userLogIn(loggedIn, token, id, userRoleId) {
+  userLogIn = (loggedIn, token, id, userRoleId) => {
     this.setState({
       userId: id,
       userRoleId: userRoleId,
@@ -114,24 +104,24 @@ class App extends Component {
     return true;
   }
 
-  serverError(value) {
+  serverError = (value) => {
     this.setState({
       serverError: value
     });
   }
 
-  hideErrorMessage() {
+  hideErrorMessage = () => {
     this.setState({
       unAuthorised: false,
       serverError: false
     });
   }
 
-  hideUnathorizedMessage() {
+  hideUnathorizedMessage = () => {
     this.setState({ unAuthorised: false });
   }
 
-  unAuthorised(response) {
+  unAuthorised = (response) => {
     let loggedIn = this.state.loggedIn;
     response
       .json()
@@ -153,7 +143,7 @@ class App extends Component {
       .catch(err => console.log(err));
   }
 
-  logOut() {
+  logOut = () => {
     this.setState({
       loggedIn: false,
       userId: 0,
@@ -169,7 +159,7 @@ class App extends Component {
     document.cookie = "productsInCartCount =; expires = 01-10-1995; path=/;";
   }
 
-  getUserRole(id) {
+  getUserRole = (id) => {
     if (this.state.roles.length === 0) {
       return;
     }
@@ -393,6 +383,7 @@ class App extends Component {
                     <Register
                       userLogIn={this.userLogIn}
                       serverError={this.serverError}
+                      roles={this.state.roles}
                     />
                   )
                 }
