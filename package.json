@@ -2,6 +2,9 @@
   "name": "product-shop-and-checkout-page-in-react",
   "version": "0.0.0",
   "private": true,
+  "engines": {
+    "node": "8.12.0"
+  },
   "scripts": {
     "install_app": "npm install && cd client && npm install",
     "start_dev": "nodemon ./bin/www",
