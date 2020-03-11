@@ -5,11 +5,12 @@ var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 var mongoose = require('mongoose');
 const cors = require('cors');
+require('dotenv').config();
+
 let uri = 'mongodb://localhost:27017/products';
 if (process.env.ENV == "production") {
   uri = `mongodb+srv://${process.env.dbUserName}:${process.env.dbPassword}@cluster0-7doi5.mongodb.net/products?retryWrites=true&w=majority`
 }
-require('dotenv').config();
 
 var productRouter = require('./api/routes/products');
 var userRouter = require('./api/routes/user');

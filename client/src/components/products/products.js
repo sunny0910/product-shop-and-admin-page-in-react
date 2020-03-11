@@ -13,22 +13,33 @@ import {
   CircularProgress,
   Tooltip
 } from "@material-ui/core";
+import Pagination from '@material-ui/lab/Pagination';
 import { Link } from "react-router-dom";
+import getDataFromCookie from "../getDataFromCookie";
 
 class Products extends Component {
   constructor(props) {
     super(props);
     this.state = {
       products: [],
-      count: 0,
+      productsCount: 0,
+      productsPerPage: 10,
+      page: 1,
+      totalPages: getDataFromCookie("totalPages"),
       spinnerLoading: true,
       linearLoading: false,
       deleteNotification: false
     };
   }
 
-  componentDidMount = () => {
-    apiRequest(apiUrl + "/products", "GET").then(result => {
+  pageChange = (e, value) => {
+    this.setState({page: value}, () => {
+      this.updateProducts(this.state.page)
+    })
+  }
+
+  updateProducts = (page) => {
+    apiRequest(apiUrl + `/products?page=${this.state.page}`, "GET").then(result => {
       if (result.status === 500) {
         this.props.serverError(true);
         return;
@@ -36,19 +47,28 @@ class Products extends Component {
       result
         .json()
         .then(json => {
+          let totalPages = Math.ceil(json.totalCount/json.productsPerPage)
           this.setState({
             products: json.products,
-            count: json.count
+            productsCount: json.totalCount,
+            productsPerPage: json.productsPerPage,
+            spinnerLoading: false,
           });
+          if (this.state.totalPages !== totalPages) {
+            this.setState({totalPages: totalPages})
+            document.cookie = "totalPages=" + this.state.totalPages + "; path=/";
+          }
         })
         .catch(err => {
           console.log(err);
           this.props.serverError(true);
         });
     });
-    setTimeout(() => {
-      this.setState({ spinnerLoading: false });
-    }, 500);
+
+  }
+
+  componentDidMount = () => {
+    this.updateProducts(this.state.page)
   }
 
   hideDeleteNotification = () => {
@@ -93,6 +113,7 @@ class Products extends Component {
 
   render() {
     document.title = "Products";
+    let productInfoStyles = {'height': '40px'}
     const anchorOrigin = { horizontal: "center", vertical: "bottom" };
     return (
       <div className="products-grid">
@@ -107,7 +128,6 @@ class Products extends Component {
         ) : (
           ""
         )}
-        {/* {(this.props.match.params.unathorized) ? <Snackbar autoHideDuration={1500} anchorOrigin={anchorOrigin} open onClose={this.props.hideUnathorizedMessage} message="You are Not Authorized to view this page!" />:''} */}
         {this.state.spinnerLoading ? (
           <CircularProgress
             color="primary"
@@ -157,7 +177,7 @@ class Products extends Component {
                             <b>Name:</b>
                           </Typography>
                         </Grid>
-                        <Grid item xs={6}>
+                        <Grid item xs={6} style={productInfoStyles}>
                           <Typography component="p">{product.name}</Typography>
                         </Grid>
                         <Grid item xs={6}>
@@ -165,9 +185,9 @@ class Products extends Component {
                             <b>Description:</b>
                           </Typography>
                         </Grid>
-                        <Grid item xs={6}>
+                        <Grid item xs={6} style={productInfoStyles}>
                           <Typography component="p">
-                            {product.description}
+                            {product.description.length > 30 ? product.description.substr(0, 30) + " ..." : product.description}
                           </Typography>
                         </Grid>
                         <Grid item xs={6}>
@@ -186,9 +206,6 @@ class Products extends Component {
                         spacing={8}
                         direction="row"
                         justify="space-around"
-                        // justify={
-                        //   this.props.admin ? "space-around" : "flex-start"
-                        // }
                       >
                         <Grid item xs={12} sm={this.props.admin ? 6 : 12}>
                           {this.props.productsInCart.includes(product.id) ? (
@@ -254,6 +271,11 @@ class Products extends Component {
                 </Grid>
               ))}
             </Grid>
+            {this.state.spinnerLoading ? (""):
+            (<div id="product-pagination">
+              <Pagination count={parseInt(this.state.totalPages)} shape="rounded" variant="outlined" page={parseInt(this.state.page)} style={{color: "rgb(33, 150, 243)", position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)'}} onChange={this.pageChange} />
+            </div>)
+            }
           </React.Fragment>
         )}
       </div>

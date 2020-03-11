@@ -1,33 +1,71 @@
 const Product = require("../models/productsModel");
 
 const getAllProducts = (req, res) => {
-  Product.find()
-    .select("price description name _id")
-    .exec()
-    .then(docs => {
+
+  const productsPerPage = 9
+
+  const getProducts = (pageNumber) => (
+    new Promise((resolve, reject) =>{
+      Product.find()
+        .select("price description name _id")
+        .skip((pageNumber - 1) * productsPerPage)
+        .limit(productsPerPage)
+        .exec()
+        .then(docs => {
+          resolve(docs)
+        })
+        .catch(err => {
+          reject(err)
+        });
+      })
+    )
+  const productsCount = () => (
+    new Promise((resolve, reject) => {
+      Product.find().countDocuments().exec()
+      .then(count => {
+        resolve(count)
+        })
+      .catch(err => {
+        reject(err)
+        })
+      })
+    )
+    const getProductsAndCount = async (pageNumber) => {
+      let products = await getProducts(pageNumber)
+      let count = await productsCount()
+      return {"products": products, 'count': count}
+    }
+
+    const pageNumber = req.query.page
+    getProductsAndCount(pageNumber)
+    .then(result => {
+      products = result['products']
+      count = result['count']
       const response = {
-        count: docs.length,
-        products: docs.map(doc => {
+        totalCount: count,
+        pageCount: products.length,
+        productsPerPage: productsPerPage,
+        products: products.map(product => {
           return {
-            id: doc._id,
-            name: doc.name,
-            description: doc.description,
-            price: doc.price,
+            id: product._id,
+            name: product.name,
+            description: product.description,
+            price: product.price,
             url: {
-              view: "/products/" + doc._id,
-              edit: "/products/" + doc._id + "/edit",
-              delete: "/products" + doc._id + "/delete"
+              view: "/products/" + product._id,
+              edit: "/products/" + product._id + "/edit",
+              delete: "/products" + product._id + "/delete"
             }
           };
         })
       };
       res.json(response);
     })
-    .catch(err => {
+    .catch((err) => {
       res.status(500).json({
         error: err
       });
-    });
+    })
 };
 
 const createProduct = (req, res) => {

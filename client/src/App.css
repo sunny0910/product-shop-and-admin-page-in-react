@@ -124,7 +124,7 @@ body {
 
 .products-grid {
   margin: 5% auto;
-  width: 80%;
+  width: 85%;
 }
 
 .admin-product-actions {
@@ -136,4 +136,10 @@ body {
 
 a {
   text-decoration: none;
+}
+
+#product-pagination {
+  width: 70%;
+  margin: 3% auto;
+  position: relative
 }
