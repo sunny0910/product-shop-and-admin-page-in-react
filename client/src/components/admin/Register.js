@@ -160,7 +160,7 @@ export default class Register extends Component {
         {this.state.hideProgress ? "" : <LinearProgress />}
         <Paper className="formcontent">
           <div className="formHeading">
-            <Typography variant="headline">Register</Typography>
+            <Typography variant="h5">Register</Typography>
           </div>
           <FormControl
             margin="normal"
@@ -274,7 +274,7 @@ export default class Register extends Component {
             className="formSubmit "
             type="submit"
             color="primary"
-            variant="raised"
+            variant="contained"
             style={{backgroundColor: '#2196f3'}}
             fullWidth
           >

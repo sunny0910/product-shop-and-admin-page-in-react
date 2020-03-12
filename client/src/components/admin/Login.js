@@ -89,7 +89,7 @@ class Login extends Component {
             <Person />
           </Avatar>
           <div className="formHeading">
-            <Typography variant="headline">Login</Typography>
+            <Typography variant="h5">Login</Typography>
           </div>
           <FormControl
             margin="normal"
@@ -129,7 +129,7 @@ class Login extends Component {
             className="formSubmit"
             type="submit"
             fullWidth
-            variant="raised"
+            variant="contained"
             color="primary"
             style={{backgroundColor: '#2196f3'}}
           >

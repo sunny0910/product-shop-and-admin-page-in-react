@@ -34,7 +34,7 @@ class DataTable extends Component {
       mainCheckBoxSelected: false,
       mainCheckBoxColor: "inherit",
       deleteNotification: false,
-      rowsPerPage: 5,
+      rowsPerPage: 10,
       page: 0,
       orderBy: "Email",
       order: "asc"
@@ -264,10 +264,10 @@ class DataTable extends Component {
           <React.Fragment>
             <Table padding="checkbox">
               <TableHead>
-                <TableRow>
-                  <TableCell>
+                <TableRow style={{height: '56px'}}>
+                  <TableCell style={{paddingLeft: '1%'}}>
                     <CheckBox
-                      checked={true}
+                      checked={false}
                       color={this.state.mainCheckBoxColor}
                       value="main"
                       onClick={this.mainCheckboxOnChange}
@@ -275,7 +275,7 @@ class DataTable extends Component {
                   </TableCell>
                   {this.props.columns.map((column, index) => {
                     return (
-                      <TableCell key={index}>
+                      <TableCell key={index} variant="head" padding="checkbox">
                         <Tooltip title="Sort" placement={"left"}>
                           <TableSortLabel
                             direction={this.state.order}
@@ -297,7 +297,7 @@ class DataTable extends Component {
                   const isSelected = this.isSelected(user.id);
                   return (
                     <TableRow key={index} hover selected={isSelected}>
-                      <TableCell>
+                      <TableCell style={{paddingLeft: '1%'}} variant='body'>
                         <CheckBox
                           selected={isSelected}
                           onClick={event =>

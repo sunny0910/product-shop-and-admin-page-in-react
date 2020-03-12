@@ -57,7 +57,7 @@ class ViewUser extends Component
         return (
             <React.Fragment>
                 <Paper className="formpaper">
-                    <Grid container spacing={24}>
+                    <Grid container spacing={3}>
                         {(this.state.spinnerLoading) ? 
                             <CircularProgress color="primary" variant="indeterminate" className="loader"/>:
                             <React.Fragment>

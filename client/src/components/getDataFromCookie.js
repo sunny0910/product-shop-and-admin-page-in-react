@@ -15,9 +15,10 @@ const getDataFromCookie = key => {
   } else if (key === "productsInCartCount") {
     x = a.filter(row => row[0] === "productsInCartCount");
     return x.length === 0 ? 0 : Number(x[0][1]);
+  } else if (key === "totalPages") {
+    x = a.filter(row => row[0] === "totalPages")
   }
-  x = a.filter(row => row[0] === "totalPages")
-  return x !== "" && x.length === 0 ? "" : x[0][1];
+  return x.length === 0 ? "" : x[0][1];
 };
 
 export default getDataFromCookie;

@@ -284,9 +284,9 @@ class UserForm extends Component {
             <div className="formcontent">
               <div className="formHeading">
                 {this.props.editPage ? (
-                  <Typography variant="headline">Edit User</Typography>
+                  <Typography variant="h5">Edit User</Typography>
                 ) : (
-                  <Typography variant="headline"> Add User</Typography>
+                  <Typography variant="h5"> Add User</Typography>
                 )}
               </div>
               {this.state.spinnerLoading ? (
@@ -443,7 +443,7 @@ class UserForm extends Component {
                     className="formSubmit"
                     type="submit"
                     fullWidth
-                    variant="raised"
+                    variant="contained"
                     color="primary"
                     style={{backgroundColor: '#2196f3'}}
                   >

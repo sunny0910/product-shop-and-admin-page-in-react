@@ -12,7 +12,7 @@ class Header extends Component {
           <Toolbar variant="dense">
             <div className="logo">
               <Link to="/">
-                <Typography color="inherit" variant="headline">
+                <Typography color="inherit" variant="h5">
                   React Project
                 </Typography>
               </Link>
@@ -21,7 +21,7 @@ class Header extends Component {
               <div className="menu-items-wrapper">
                 <div className="menu-items">
                   <Link to="/products">
-                    <Typography color="inherit" variant="subheading">
+                    <Typography color="inherit" variant="subtitle1">
                       Shop
                     </Typography>
                   </Link>
@@ -29,7 +29,7 @@ class Header extends Component {
                 {this.props.admin ? (
                   <div className="menu-items">
                     <Link to="/users">
-                      <Typography color="inherit" variant="subheading">
+                      <Typography color="inherit" variant="subtitle1">
                         Users
                       </Typography>
                     </Link>
@@ -40,7 +40,7 @@ class Header extends Component {
                 {this.props.loggedIn ? (
                   <div className="menu-items">
                     <Link to="/logout" onClick={this.props.logOut}>
-                      <Typography color="inherit" variant="subheading">
+                      <Typography color="inherit" variant="subtitle1">
                         Logout
                       </Typography>
                     </Link>
@@ -49,14 +49,14 @@ class Header extends Component {
                   <React.Fragment>
                     <div className="menu-items">
                       <Link to="/login">
-                        <Typography color="inherit" variant="subheading">
+                        <Typography color="inherit" variant="subtitle1">
                           Login
                         </Typography>
                       </Link>
                     </div>
                     <div className="menu-items">
                       <Link to="/register">
-                        <Typography color="inherit" variant="subheading">
+                        <Typography color="inherit" variant="subtitle1">
                           Register
                         </Typography>
                       </Link>

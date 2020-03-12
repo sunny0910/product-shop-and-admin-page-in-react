@@ -162,7 +162,7 @@ class Products extends Component {
             )}
             <Grid
               container
-              spacing={40}
+              spacing={5}
               direction="row"
               justify="flex-start"
               alignItems="center"
@@ -172,38 +172,40 @@ class Products extends Component {
                   <Card className="product-card">
                     <CardContent>
                       <Grid container>
-                        <Grid item xs={6}>
+                        <Grid item xs={4}>
                           <Typography component="p">
                             <b>Name:</b>
                           </Typography>
                         </Grid>
-                        <Grid item xs={6} style={productInfoStyles}>
-                          <Typography component="p">{product.name}</Typography>
+                        <Grid item xs={8} style={productInfoStyles}>
+                          <Typography component="p" style={{fontSize: '0.9rem'}}>
+                            {product.name.length > 50 ? product.name.substr(0, 50) + '...' : product.name}
+                          </Typography>
                         </Grid>
-                        <Grid item xs={6}>
+                        <Grid item xs={4}>
                           <Typography component="p">
                             <b>Description:</b>
                           </Typography>
                         </Grid>
-                        <Grid item xs={6} style={productInfoStyles}>
-                          <Typography component="p">
-                            {product.description.length > 30 ? product.description.substr(0, 30) + " ..." : product.description}
+                        <Grid item xs={8} style={productInfoStyles}>
+                          <Typography component="p" style={{fontSize: '0.9rem'}}>
+                            {product.description.length > 50 ? product.description.substr(0, 50) + " ..." : product.description}
                           </Typography>
                         </Grid>
-                        <Grid item xs={6}>
+                        <Grid item xs={4}>
                           <Typography component="p">
                             <b>Price:</b>
                           </Typography>
                         </Grid>
-                        <Grid item xs={6}>
-                          <Typography component="p">{product.price}</Typography>
+                        <Grid item xs={8}>
+                          <Typography component="p" style={{fontSize: '0.9rem'}}>{product.price}</Typography>
                         </Grid>
                       </Grid>
                     </CardContent>
                     <CardActions>
                       <Grid
                         container
-                        spacing={8}
+                        spacing={1}
                         direction="row"
                         justify="space-around"
                       >

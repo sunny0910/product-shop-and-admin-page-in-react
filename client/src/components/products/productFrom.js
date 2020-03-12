@@ -8,7 +8,8 @@ import {
   Button,
   Snackbar,
   CircularProgress,
-  LinearProgress
+  LinearProgress,
+  TextField
 } from "@material-ui/core";
 import apiUrl from "../../apiUrl";
 import apiRequest from "../../apiRequest";
@@ -178,9 +179,9 @@ class ProductForm extends Component {
             <div className="formcontent">
               <div className="formHeading">
                 {this.props.editPage ? (
-                  <Typography variant="headline">Edit Product</Typography>
+                  <Typography variant="h5">Edit Product</Typography>
                 ) : (
-                  <Typography variant="headline">Add Product</Typography>
+                  <Typography variant="h5">Add Product</Typography>
                 )}
               </div>
               {this.state.spinnerLoading ? (
@@ -204,10 +205,12 @@ class ProductForm extends Component {
                     />
                   </FormControl>
                   <FormControl margin="normal" required fullWidth>
-                    <InputLabel htmlFor="description">Description: </InputLabel>
-                    <Input
-                      type="text"
-                      name="description"
+                    <TextField
+                      label="Description"
+                      multiline
+                      rows="10"
+                      rowsMax='20'
+                      size='medium'
                       value={this.state.description}
                       onChange={this.handleDescriptionChange}
                       required
@@ -228,7 +231,7 @@ class ProductForm extends Component {
                     className="formSubmit"
                     type="submit"
                     fullWidth
-                    variant="raised"
+                    variant="contained"
                     color="primary"
                     style={{backgroundColor: '#2196f3'}}
                   >

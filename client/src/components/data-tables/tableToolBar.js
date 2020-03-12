@@ -11,10 +11,10 @@ class TableToolBar extends Component
             <Toolbar style={style}>
                 <div className='table-title-left'>
                     {   this.props.selectedCount > 0 ?
-                        (<Typography color='inherit' variant='subheading'>
+                        (<Typography color='inherit' variant='subtitle1'>
                             {this.props.selectedCount} Selected    
                         </Typography>):
-                        <Typography color= 'inherit' variant='subheading'>
+                        <Typography color= 'inherit' variant='subtitle1'>
                             All Users
                         </Typography>
                     }
@@ -22,8 +22,8 @@ class TableToolBar extends Component
                 <div className='table-title-right'>
                     {this.props.selectedCount > 0 ? 
                         (<Tooltip title="Delete">
-                            <IconButton aria-label="Delete">
-                                <Delete style={style} onClick={this.props.deleteMultipleRows} onClose={this.hideDeleteNotification}/>
+                            <IconButton aria-label="Delete" onClick={this.props.deleteMultipleRows}>
+                                <Delete style={style} onClose={this.hideDeleteNotification}/>
                             </IconButton>
                         </Tooltip>):
                         <Tooltip title="Add">
